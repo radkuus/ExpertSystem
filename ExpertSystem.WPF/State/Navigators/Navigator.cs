@@ -1,0 +1,32 @@
+﻿using ExpertSystem.WPF.ViewModels;
+using ExpertSystem.WPF.Commands;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using ExpertSystem.WPF.Core;
+using ExpertSystem.WPF.ViewModels.Factories;
+
+namespace ExpertSystem.WPF.State.Navigators
+{
+    public class Navigator : ObservableObject, INavigator
+    {
+        private BaseViewModel _currentViewModel;
+        public BaseViewModel CurrentViewModel
+        {
+            get
+            {
+                return _currentViewModel;
+            }
+            set
+            {
+                _currentViewModel = value;
+                OnPropertyChanged(nameof(CurrentViewModel));
+            }
+        }
+    }
+}

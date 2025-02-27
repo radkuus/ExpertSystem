@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ExpertSystem.WPF.Controls.NavigationBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpertSystem.WPF.Controls"
+             
+             xmlns:navigator="clr-namespace:ExpertSystem.WPF.State.Navigators"
+             xmlns:vm="clr-namespace:ExpertSystem.WPF.ViewModels"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="{StaticResource DarkBlueBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <RadioButton Grid.Column="0" Content = "Pulpit" 
+                         Command="{Binding UpdateCurrentViewModelCommand}" 
+                         CommandParameter="{x:Static navigator:ViewType.Home}"/>
+            <RadioButton Grid.Column="1" Content = "Analiza danych" 
+                         Command="{Binding UpdateCurrentViewModelCommand}" 
+                         CommandParameter="{x:Static navigator:ViewType.Analysis}"/>
+
+        </Grid>
+        
+    </Grid>
+</UserControl>
