@@ -41,7 +41,7 @@
                 <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="passwordpb" Grid.Row="1"/>
             </Grid>
 
-            <Button Grid.Row="2" Grid.Column="2" Width="200" HorizontalAlignment="Center" IsDefault="True" Content="Login" Click="LoginButton"/>
+            <Button Grid.Row="2" Grid.Column="2" Width="200" HorizontalAlignment="Center" IsDefault="True" Content="Login" Click="LoginButton" Style="{StaticResource CustomButtonStyle}"/>
         </Grid>
     </Grid>
 </UserControl>
