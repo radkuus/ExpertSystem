@@ -6,15 +6,15 @@
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Grid.IsSharedSizeScope="True">
+    <Grid Grid.IsSharedSizeScope="True" Background="{StaticResource DeepSkyBlueBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" FontSize="40" Text="Expert System" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" FontSize="40"  Text="Expert System" HorizontalAlignment="Center"/>
 
-        <Grid Grid.Row="1" Margin="0 40">
+        <Grid Grid.Row="1" Margin="0 40" Background="{StaticResource AquaBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
