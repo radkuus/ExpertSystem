@@ -52,7 +52,7 @@
                 <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="passwordpb" Grid.Row="1"/>
             </Grid>
 
-            <Button Grid.Row="3" Grid.Column="2" Width="200" HorizontalAlignment="Center" IsDefault="True" Content="Register" Click="RegisterButton" Style="{StaticResource CustomButtonStyle}"/>
+            <Button Grid.Row="3" Grid.Column="2" Width="200" HorizontalAlignment="Center" IsDefault="True" Content="Register"  Style="{StaticResource CustomButtonStyle}"/>
         </Grid>
     </Grid>
 </UserControl>
