@@ -16,6 +16,9 @@ namespace ExpertSystem.Domain.Models
 
         public bool IsAdmin { get; set; }
 
+        public ICollection<Database> Databases { get; set; }
+        public ICollection<Experiment> Experiments { get; set; }
+
 
         public User(string nickname, string passwordHashed, string email, bool isAdmin)
         {
