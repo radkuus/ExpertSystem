@@ -2,13 +2,14 @@
 using ExpertSystem.Domain.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ExpertSystem.WPF.State.Authenticators
 {
-    public interface IAuthenticator
+    public interface IAuthenticator :INotifyPropertyChanged
     {
         User CurrentUser { get; }
         bool IsLoggedIn { get;  }

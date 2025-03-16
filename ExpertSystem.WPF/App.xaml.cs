@@ -23,8 +23,8 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         IServiceProvider serviceProvider = CreateServiceProvider();
-        //IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
-        //authentication.Register("admin", "1234", "1234", "admin@gmail.com", true);
+        IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
+        authentication.Register("kamil", "1234", "1234", "kamil@gmail.com", true);
 
         Window window  = serviceProvider.GetRequiredService<MainWindow>();
         window.Show();
