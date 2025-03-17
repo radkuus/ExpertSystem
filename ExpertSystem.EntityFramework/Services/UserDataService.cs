@@ -26,6 +26,14 @@ namespace ExpertSystem.EntityFramework.Services
             }
         }
 
+        public async Task<User> GetById(int id)
+        {
+            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            {
+                return await context.Users.FirstOrDefaultAsync(a => a.Id == id);
+            }
+        }
+
         public async Task<User> GetByNickname(string nickname)
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
