@@ -11,5 +11,6 @@ namespace ExpertSystem.Domain.Services
     {
         Task<User> GetByNickname(string nickname);
         Task<User> GetByEmail(string email);
+        Task<User> GetById(int id);
     }
 }
