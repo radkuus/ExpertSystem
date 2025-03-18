@@ -7,8 +7,11 @@ using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.Domain.Services
 {
-    public interface ILoginUserService
+    public interface IDatasetService
     {
         Task AddDatabase(Database database);
+        Task RemoveDatabase(int id);
+        Task<List<Database>> GetAll();
+        Task<Database> GetDatabaseById(int id);
     }
 }
