@@ -9,9 +9,9 @@ namespace ExpertSystem.Domain.Services
 {
     public interface IDatasetService
     {
-        Task AddDatabase(Database database);
-        Task RemoveDatabase(int id);
-        Task<List<Database>> GetAll();
-        Task<Database> GetDatabaseById(int id);
+        Task AddDataset(Dataset dataset);
+        Task RemoveDataset(int id);
+        Task<List<Dataset>> GetAll();
+        Task<Dataset> GetDatasetById(int id);
     }
 }

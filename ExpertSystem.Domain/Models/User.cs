@@ -16,7 +16,7 @@ namespace ExpertSystem.Domain.Models
 
         public bool IsAdmin { get; set; }
 
-        public ICollection<Database> Databases { get; set; }
+        public ICollection<Dataset> Datasets { get; set; }
         public ICollection<Experiment> Experiments { get; set; }
 
 

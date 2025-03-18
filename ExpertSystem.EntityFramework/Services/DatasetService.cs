@@ -20,40 +20,40 @@ namespace ExpertSystem.WPF.Services
             _contextFactory = contextFactory;
         }
 
-        public async Task AddDatabase(Database database)
+        public async Task AddDataset(Dataset dataset)
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                context.Databases.Add(database);
+                context.Datasets.Add(dataset);
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task<Database> GetDatabaseById(int id)
+        public async Task<Dataset> GetDatasetById(int id)
         {
             using(ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                var weather = await context.Databases.SingleOrDefaultAsync(x => x.Id == id);
-                return weather;
+                var dataset = await context.Datasets.SingleOrDefaultAsync(x => x.Id == id);
+                return dataset;
             }
         }
 
-        public async Task<List<Database>> GetAll()
+        public async Task<List<Dataset>> GetAll()
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                return await context.Databases.ToListAsync();
+                return await context.Datasets.ToListAsync();
             }
         }
 
-        public async Task RemoveDatabase(int id)
+        public async Task RemoveDataset(int id)
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                var database = await GetDatabaseById(id);
-                if (database != null)
+                var dataset = await GetDatasetById(id);
+                if (dataset != null)
                 {
-                    context.Databases.Remove(database);
+                    context.Datasets.Remove(dataset);
                     await context.SaveChangesAsync();
                 }
             }
