@@ -13,21 +13,36 @@ namespace ExpertSystem.WPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IExpertSystemViewModelAbstractFactory _viewModelAbstractFactory;
+        private readonly IExpertSystemViewModelFactory _viewModelAbstractFactory;
+        private readonly INavigator _navigator;
+        private readonly IAuthenticator _authenticator;
 
-        public INavigator Navigator { get; set; }
-        public IAuthenticator Authenticator { get; }
+        public bool IsLoggedIn => _authenticator.IsLoggedIn;
+        public BaseViewModel CurrentViewModel => _navigator.CurrentViewModel;
+
         public ICommand UpdateCurrentViewModelCommand { get; }
 
-        public MainViewModel(INavigator navigator, IExpertSystemViewModelAbstractFactory viewModelAbstractFactory, IAuthenticator authenticator)
+        public MainViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator)
         {
-            Navigator = navigator;
-            Authenticator = authenticator;
+            _navigator = navigator;
+            _authenticator = authenticator;
             _viewModelAbstractFactory = viewModelAbstractFactory;
 
-            UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
+            _navigator.StateChanged += Navigator_StateChanged;
+            _authenticator.StateChanged += Authenticator_StateChanged;
 
+            UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             UpdateCurrentViewModelCommand.Execute(ViewType.Login);
+        }
+
+        public void Navigator_StateChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
+
+        public void Authenticator_StateChanged()
+        {
+            OnPropertyChanged(nameof(IsLoggedIn));
         }
     }
 }

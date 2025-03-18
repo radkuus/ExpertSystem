@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid Grid.IsSharedSizeScope="True" Background="{StaticResource DeepSkyBlueBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -16,6 +19,9 @@
 
         <Grid Grid.Row="1" Margin="0 40" Background="{StaticResource AquaBrush}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -39,7 +45,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"  Text="E-mail"/>
-                <TextBox Grid.Column="1" Margin="20 0 0 0" Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Column="1" Margin="20 0 0 0" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
             <Grid Grid.Row="2" Margin="0 5 0 10" HorizontalAlignment="Center">
@@ -52,7 +58,40 @@
                 <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="passwordpb" Grid.Row="1"/>
             </Grid>
 
-            <Button Grid.Row="3" Grid.Column="2" Width="200" HorizontalAlignment="Center" IsDefault="True" Content="Register"  Style="{StaticResource CustomButtonStyle}"/>
+            <Grid Grid.Row="3" Margin="0 5 0 10" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Confirm password"/>
+                <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="password2pb" Grid.Row="1"/>
+            </Grid>
+
+
+
+            <Button Grid.Row="4" Grid.Column="2" Width="200" 
+                    HorizontalAlignment="Center" 
+                    Click="RegisterButton"
+                    IsDefault="True" 
+                    Content="Register"  
+                    Style="{StaticResource CustomButtonStyle}"/>
+
+            <TextBlock Grid.Row="5" Margin="0,5,0,5"
+                       HorizontalAlignment="Center"
+                       DataContext="{Binding ErrorMessageViewModel}"
+                       Foreground="Red"
+                       Text="{Binding Message}"
+                       Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+            <Button Grid.Row="6" Grid.Column="2" Width="100" 
+                    Background="Transparent"
+                    Foreground="Blue"
+                    HorizontalAlignment="Center" 
+                    IsDefault="True" 
+                    Content="Login"
+                    Command="{Binding GoToViewLoginCommand}"/>
+            
         </Grid>
     </Grid>
 </UserControl>

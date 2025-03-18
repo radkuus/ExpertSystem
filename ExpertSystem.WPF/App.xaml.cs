@@ -44,25 +44,40 @@ public partial class App : Application
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
-        services.AddSingleton<IExpertSystemViewModelAbstractFactory, ExpertSystemViewModelAbstractFactory>();
-        services.AddSingleton<IExpertSystemViewModelFactory<HomeViewModel>, HomeViewModelFactory>();
-        services.AddSingleton<IExpertSystemViewModelFactory<AnalysisViewModel>, AnalysisViewModelFactory>();
+        services.AddSingleton<IExpertSystemViewModelFactory, ExpertSystemViewModelAbstractFactory>();
 
-        services.AddSingleton<IExpertSystemViewModelFactory<LoginViewModel>>((services) =>
-            new LoginViewModelFactory(services.GetRequiredService<IAuthenticator>(), 
-            new ViewModelFactoryRenavigator<HomeViewModel>(services.GetRequiredService<INavigator>(),
-            services.GetRequiredService< IExpertSystemViewModelFactory < HomeViewModel >>())));
+        services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
+        {
+            return () => new HomeViewModel(services.GetRequiredService<IAuthenticator>());
+        });
+        services.AddSingleton<CreateViewModel<AnalysisViewModel>>(services =>
+        {
+            return () => new AnalysisViewModel();
+        });
 
-        //services.AddSingleton<IExpertSystemViewModelFactory<LoginViewModel>>((services) =>
-        //    new LoginViewModelFactory(services.GetRequiredService<IAuthenticator>(),
-        //    new ViewModelFactoryRenavigator<AnalysisViewModel>(services.GetRequiredService<INavigator>(),
-        //    services.GetRequiredService<IExpertSystemViewModelFactory<AnalysisViewModel>>())));
+        services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();
+        services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>
+        {
+            return () => new RegisterViewModel(
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<ViewModelFactoryRenavigator<LoginViewModel>>());
+        });
+
+        services.AddSingleton<ViewModelFactoryRenavigator<RegisterViewModel>>();
+        services.AddSingleton<ViewModelFactoryRenavigator<HomeViewModel>>();
+        services.AddSingleton<CreateViewModel<LoginViewModel>>(services =>
+        {
+            return () => new LoginViewModel(
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<ViewModelFactoryRenavigator<HomeViewModel>>(),
+                services.GetRequiredService<ViewModelFactoryRenavigator<RegisterViewModel>>());
+        });
 
         services.AddScoped<INavigator, Navigator>();
         services.AddScoped<IAuthenticator, Authenticator>();
         services.AddScoped<MainViewModel>();
 
-        services.AddScoped<MainWindow>(s => new MainWindow(s.GetRequiredService<MainViewModel>()));
+        services.AddScoped<MainWindow>(services => new MainWindow(services.GetRequiredService<MainViewModel>()));
 
         return services.BuildServiceProvider();
     }

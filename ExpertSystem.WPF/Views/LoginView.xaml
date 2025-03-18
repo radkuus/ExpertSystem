@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+    </UserControl.Resources>
     <Grid Grid.IsSharedSizeScope="True" Background="{StaticResource DeepSkyBlueBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -16,6 +19,8 @@
 
         <Grid Grid.Row="1" Margin="0 40" Background="{StaticResource AquaBrush}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -41,7 +46,28 @@
                 <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="passwordpb" Grid.Row="1"/>
             </Grid>
 
-            <Button Grid.Row="2" Grid.Column="2" Width="200" HorizontalAlignment="Center" IsDefault="True" Content="Login" Click="LoginButton" Style="{StaticResource CustomButtonStyle}"/>
+            <Button Grid.Row="2" Grid.Column="2" Width="200" 
+                    HorizontalAlignment="Center" 
+                    IsDefault="True" 
+                    Content="Login" 
+                    Click="LoginButton" 
+                    Style="{StaticResource CustomButtonStyle}"/>
+
+            <TextBlock Grid.Row="3" Margin="0,5,0,5"
+                       HorizontalAlignment="Center"
+                       DataContext="{Binding ErrorMessageViewModel}"
+                       Foreground="Red"
+                       Text="{Binding Message}"
+                       Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+            <Button Grid.Row="4" Grid.Column="2" Width="100" 
+                    Background="Transparent"
+                    Foreground="Blue"
+                    HorizontalAlignment="Center" 
+                    IsDefault="True" 
+                    Content="Register"
+                    Command="{Binding GoToViewRegisterCommand}"/>
+
         </Grid>
     </Grid>
 </UserControl>

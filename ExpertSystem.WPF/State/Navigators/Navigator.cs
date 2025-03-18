@@ -13,7 +13,7 @@ using ExpertSystem.WPF.ViewModels.Factories;
 
 namespace ExpertSystem.WPF.State.Navigators
 {
-    public class Navigator : ObservableObject, INavigator
+    public class Navigator : INavigator
     {
         private BaseViewModel _currentViewModel;
         public BaseViewModel CurrentViewModel
@@ -25,8 +25,10 @@ namespace ExpertSystem.WPF.State.Navigators
             set
             {
                 _currentViewModel = value;
-                OnPropertyChanged(nameof(CurrentViewModel));
+                StateChanged?.Invoke();
             }
         }
+
+        public event Action StateChanged;
     }
 }

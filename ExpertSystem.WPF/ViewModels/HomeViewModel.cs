@@ -26,14 +26,6 @@ namespace ExpertSystem.WPF.ViewModels
         {
             _authenticator = authenticator;
             Nickname = _authenticator.CurrentUser.Nickname;
-
-            //_authenticator.PropertyChanged += (sender, e) =>
-            //{
-            //    if (e.PropertyName == nameof(_authenticator.CurrentUser))
-            //    {
-            //        Nickname = _authenticator.CurrentUser.Nickname;
-            //    }
-            //};
         }
     }
 }

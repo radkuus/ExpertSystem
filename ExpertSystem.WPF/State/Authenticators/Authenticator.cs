@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ExpertSystem.WPF.State.Authenticators
 {
-    public class Authenticator : ObservableObject, IAuthenticator
+    public class Authenticator : IAuthenticator
     {
         private readonly IAuthenticationService _authenticationService;
 
@@ -19,35 +19,27 @@ namespace ExpertSystem.WPF.State.Authenticators
             _authenticationService = authenticationService;
         }
 
-        private User _curremtUser;
+        private User _currentUser;
         public User CurrentUser
         {
             get
             {
-                return _curremtUser;
+                return _currentUser;
             }
             private set
             {
-                _curremtUser = value;
-                OnPropertyChanged(nameof(CurrentUser));
-                OnPropertyChanged(nameof(IsLoggedIn));
+                _currentUser = value;
+                StateChanged?.Invoke();
             }
         }
 
         public bool IsLoggedIn => CurrentUser != null;
 
-        public async Task<bool> Login(string nickname, string password)
+        public event Action StateChanged;
+
+        public async Task Login(string nickname, string password)
         {
-            bool success = true;
-            try
-            {
-                CurrentUser = await _authenticationService.Login(nickname, password);
-            }
-            catch (Exception)
-            {
-                success = false;
-            }
-            return success;
+            CurrentUser = await _authenticationService.Login(nickname, password);
         }
 
         public void Logout()

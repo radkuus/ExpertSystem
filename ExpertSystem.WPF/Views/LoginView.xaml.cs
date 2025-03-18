@@ -26,8 +26,14 @@ namespace ExpertSystem.WPF.Views
 
         public ICommand LoginCommand
         {
-            get { return (ICommand)GetValue(LoginCommandProperty); }
-            set { SetValue(LoginCommandProperty, value); }
+            get
+            {
+                return (ICommand)GetValue(LoginCommandProperty);
+            }
+            set
+            {
+                SetValue(LoginCommandProperty, value);
+            }
         }
 
         public LoginView()

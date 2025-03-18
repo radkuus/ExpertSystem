@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace ExpertSystem.WPF.ViewModels
 {
+    public delegate TViewModel CreateViewModel<TViewModel>() where TViewModel : BaseViewModel;
+
     public class BaseViewModel : ObservableObject
     {
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExpertSystem.WPF.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,33 @@ namespace ExpertSystem.WPF.Views
     /// </summary>
     public partial class RegisterView : UserControl
     {
+        public static readonly DependencyProperty RegisterCommandProperty =
+    DependencyProperty.Register("RegisterCommand", typeof(ICommand), typeof(RegisterView), new PropertyMetadata(null));
+
+        public ICommand RegisterCommand
+        {
+            get
+            {
+                return (ICommand)GetValue(RegisterCommandProperty);
+            }
+            set
+            {
+                SetValue(RegisterCommandProperty, value);
+            }
+        }
+
         public RegisterView()
         {
             InitializeComponent();
+        }
+
+        private void RegisterButton(object sender, RoutedEventArgs e)
+        {
+            if (RegisterCommand != null)
+            {
+                var passwordData = (passwordpb.Password, password2pb.Password);
+                RegisterCommand.Execute(passwordData);
+            }
         }
     }
 }

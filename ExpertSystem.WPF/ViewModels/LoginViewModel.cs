@@ -13,7 +13,7 @@ namespace ExpertSystem.WPF.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private string _nickname;
+        private string _nickname = "";
         public string Nickname
         {
             get
@@ -24,14 +24,28 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _nickname = value;
                 OnPropertyChanged(nameof(Nickname));
+                OnPropertyChanged(nameof(CanLogin));
             }
         }
 
         public ICommand LoginCommand { get; }
+        public ICommand GoToViewRegisterCommand { get; }
 
-        public LoginViewModel(IAuthenticator authenticator, IRenavigator renavigator)
+        public LoginViewModel(IAuthenticator authenticator, IRenavigator loginRenavigator, IRenavigator goToRegisterRenavigator)
         {
-            LoginCommand = new LoginCommand(this, authenticator, renavigator);
+            ErrorMessageViewModel = new MessageViewModel();
+
+            LoginCommand = new LoginCommand(this, authenticator, loginRenavigator);
+            GoToViewRegisterCommand = new RenavigateCommand(goToRegisterRenavigator);
         }
+
+        public MessageViewModel ErrorMessageViewModel { get; }
+
+        public string ErrorMessage
+        {
+            set => ErrorMessageViewModel.Message = value;
+        }
+
+        public bool CanLogin => !string.IsNullOrEmpty(Nickname);
     }
 }

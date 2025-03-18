@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     [DbContext(typeof(ExpertSystemDbContext))]
-    [Migration("20250314145318_Initial")]
+    [Migration("20250318103601_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

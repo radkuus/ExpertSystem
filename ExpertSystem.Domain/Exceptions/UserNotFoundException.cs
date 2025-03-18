@@ -8,21 +8,21 @@ namespace ExpertSystem.Domain.Exceptions
 {
     public class UserNotFoundException : Exception
     {
-        public string Username { get; set; }
+        public string Nickanme { get; set; }
 
-        public UserNotFoundException(string username)
+        public UserNotFoundException(string nickname)
         {
-            Username = username;
+            Nickanme = nickname;
         }
 
-        public UserNotFoundException(string message, string username) : base(message)
+        public UserNotFoundException(string message, string nickname) : base(message)
         {
-            Username = username;
+            Nickanme = nickname;
         }
 
-        public UserNotFoundException(string message, Exception innerException, string username) : base(message, innerException)
+        public UserNotFoundException(string message, Exception innerException, string nickname) : base(message, innerException)
         {
-            Username = username;
+            Nickanme = nickname;
         }
     }
 }
