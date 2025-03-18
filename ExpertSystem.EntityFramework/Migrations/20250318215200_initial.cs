@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,19 +37,19 @@ namespace ExpertSystem.EntityFramework.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Databases",
+                name: "Datasets",
                 columns: table => new
                 {
-                    DatabaseId = table.Column<int>(type: "integer", nullable: false)
+                    DatasetId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Databases", x => x.DatabaseId);
+                    table.PrimaryKey("PK_Datasets", x => x.DatasetId);
                     table.ForeignKey(
-                        name: "FK_Databases_Users_UserId",
+                        name: "FK_Datasets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -69,10 +69,10 @@ namespace ExpertSystem.EntityFramework.Migrations
                 {
                     table.PrimaryKey("PK_Experiments", x => x.ExperimentId);
                     table.ForeignKey(
-                        name: "FK_Experiments_Databases_DatabaseID",
+                        name: "FK_Experiments_Datasets_DatabaseID",
                         column: x => x.DatabaseID,
-                        principalTable: "Databases",
-                        principalColumn: "DatabaseId",
+                        principalTable: "Datasets",
+                        principalColumn: "DatasetId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Experiments_Users_UserId",
@@ -173,8 +173,8 @@ namespace ExpertSystem.EntityFramework.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Databases_UserId",
-                table: "Databases",
+                name: "IX_Datasets_UserId",
+                table: "Datasets",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -227,7 +227,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                 name: "Experiments");
 
             migrationBuilder.DropTable(
-                name: "Databases");
+                name: "Datasets");
 
             migrationBuilder.DropTable(
                 name: "Users");

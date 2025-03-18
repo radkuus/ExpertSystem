@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExpertSystem.Domain.Models
 {
-    public class Database : BaseObject
+    public class Dataset : BaseObject
     {
         public int UserId { get; set; }
         public string Name { get; set; }

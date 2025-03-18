@@ -12,7 +12,7 @@ namespace ExpertSystem.Domain.Models
         public int DatabaseID { get; set; }
 
         public User User { get; set; }
-        public Database Database { get; set; }
+        public Dataset Dataset { get; set; }
 
         public ICollection<ModelConfiguration> ModelConfigurations { get; set; }
         public ICollection<DecisionRule> DecisionRules { get; set; }

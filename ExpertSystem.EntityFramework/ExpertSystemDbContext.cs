@@ -15,7 +15,7 @@ namespace ExpertSystem.EntityFramework
     {
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Database> Databases { get; set; }
+        public DbSet<Dataset> Datasets { get; set; }
 
         public DbSet<Experiment> Experiments { get; set; }
 
@@ -77,7 +77,7 @@ namespace ExpertSystem.EntityFramework
 
 
             modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("UserId");
-            modelBuilder.Entity<Database>().Property(d => d.Id).HasColumnName("DatabaseId");
+            modelBuilder.Entity<Dataset>().Property(d => d.Id).HasColumnName("DatasetId");
             modelBuilder.Entity<Experiment>().Property(e => e.Id).HasColumnName("ExperimentId");
             modelBuilder.Entity<ModelConfiguration>().Property(mc => mc.Id).HasColumnName("ConfigId");
             modelBuilder.Entity<ModelResult>().Property(mr => mr.Id).HasColumnName("ResultId");
@@ -86,9 +86,9 @@ namespace ExpertSystem.EntityFramework
 
             // creating FK and relations 
 
-            modelBuilder.Entity<Database>()
+            modelBuilder.Entity<Dataset>()
                 .HasOne(d => d.User)
-                .WithMany(u => u.Databases)
+                .WithMany(u => u.Datasets)
                 .HasForeignKey(d => d.UserId);
 
             modelBuilder.Entity<Experiment>()
@@ -97,7 +97,7 @@ namespace ExpertSystem.EntityFramework
                 .HasForeignKey(e => e.UserId);
 
            modelBuilder.Entity<Experiment>()
-                .HasOne(e => e.Database)
+                .HasOne(e => e.Dataset)
                 .WithMany(d => d.Experiments)
                 .HasForeignKey(e => e.DatabaseID);
 

@@ -28,12 +28,12 @@ namespace ExpertSystem.EntityFramework.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "set_type", new[] { "training_set", "validation_set", "test_set" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ExpertSystem.Domain.Models.Database", b =>
+            modelBuilder.Entity("ExpertSystem.Domain.Models.Dataset", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("DatabaseId");
+                        .HasColumnName("DatasetId");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -48,7 +48,7 @@ namespace ExpertSystem.EntityFramework.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Databases");
+                    b.ToTable("Datasets");
                 });
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.DecisionRule", b =>
@@ -224,10 +224,10 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ExpertSystem.Domain.Models.Database", b =>
+            modelBuilder.Entity("ExpertSystem.Domain.Models.Dataset", b =>
                 {
                     b.HasOne("ExpertSystem.Domain.Models.User", "User")
-                        .WithMany("Databases")
+                        .WithMany("Datasets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -248,7 +248,7 @@ namespace ExpertSystem.EntityFramework.Migrations
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.Experiment", b =>
                 {
-                    b.HasOne("ExpertSystem.Domain.Models.Database", "Database")
+                    b.HasOne("ExpertSystem.Domain.Models.Dataset", "Dataset")
                         .WithMany("Experiments")
                         .HasForeignKey("DatabaseID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -260,7 +260,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Database");
+                    b.Navigation("Dataset");
 
                     b.Navigation("User");
                 });
@@ -298,7 +298,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Navigation("ModelResult");
                 });
 
-            modelBuilder.Entity("ExpertSystem.Domain.Models.Database", b =>
+            modelBuilder.Entity("ExpertSystem.Domain.Models.Dataset", b =>
                 {
                     b.Navigation("Experiments");
                 });
@@ -322,7 +322,7 @@ namespace ExpertSystem.EntityFramework.Migrations
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.User", b =>
                 {
-                    b.Navigation("Databases");
+                    b.Navigation("Datasets");
 
                     b.Navigation("Experiments");
                 });
