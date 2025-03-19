@@ -2,6 +2,7 @@
 using ExpertSystem.Domain.Services;
 using ExpertSystem.EntityFramework;
 using ExpertSystem.EntityFramework.Services;
+using ExpertSystem.WPF.Services;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.ViewModels;
@@ -26,7 +27,7 @@ public partial class App : Application
         IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
         authentication.Register("kamil", "1234", "1234", "kamil@gmail.com", true);
 
-        Window window  = serviceProvider.GetRequiredService<MainWindow>();
+        Window window = serviceProvider.GetRequiredService<MainWindow>();
         window.Show();
 
         base.OnStartup(e);
@@ -36,24 +37,46 @@ public partial class App : Application
     {
         IServiceCollection services = new ServiceCollection();
 
-        services.AddSingleton <ExpertSystemDbContextFactory>();
+        services.AddSingleton<ExpertSystemDbContextFactory>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         //services.AddSingleton<IDataService<User>, GenericDataService<User>>();
         services.AddSingleton<IUserService, UserDataService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
-
+        services.AddSingleton<IDatasetService, DatasetService>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         services.AddSingleton<IExpertSystemViewModelFactory, ExpertSystemViewModelAbstractFactory>();
 
+<<<<<<< HEAD
         services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
         {
             return () => new HomeViewModel(services.GetRequiredService<IAuthenticator>());
         });
+=======
+<<<<<<< Updated upstream
+        services.AddSingleton<IExpertSystemViewModelFactory<LoginViewModel>>((services) =>
+            new LoginViewModelFactory(services.GetRequiredService<IAuthenticator>(), 
+            new ViewModelFactoryRenavigator<HomeViewModel>(services.GetRequiredService<INavigator>(),
+            services.GetRequiredService< IExpertSystemViewModelFactory < HomeViewModel >>())));
+=======
+        services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
+        {
+            return () => new HomeViewModel(
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<IDatasetService>(),
+                services.GetRequiredService<IFileDialogService>()
+            );
+        });
+
+>>>>>>> Adam
         services.AddSingleton<CreateViewModel<AnalysisViewModel>>(services =>
         {
             return () => new AnalysisViewModel();
         });
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> Adam
 
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();
         services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>
@@ -74,6 +97,7 @@ public partial class App : Application
         });
 
         services.AddScoped<INavigator, Navigator>();
+        services.AddSingleton<IFileDialogService, FileDialogService>();
         services.AddScoped<IAuthenticator, Authenticator>();
         services.AddScoped<MainViewModel>();
 

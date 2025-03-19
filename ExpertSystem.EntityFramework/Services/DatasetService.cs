@@ -11,7 +11,11 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ExpertSystem.WPF.Services
 {
+<<<<<<< HEAD
     class DatasetService : IDatasetService
+=======
+    public class DatasetService : IDatasetService
+>>>>>>> Adam
     {
         private readonly ExpertSystemDbContextFactory _contextFactory;
 
@@ -24,8 +28,27 @@ namespace ExpertSystem.WPF.Services
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
+<<<<<<< HEAD
                 context.Datasets.Add(dataset);
                 await context.SaveChangesAsync();
+=======
+                try
+                {
+                    var existingDataset = await context.Datasets
+                        .FirstOrDefaultAsync(d => d.UserId == dataset.UserId && d.Name == dataset.Name);
+
+                    if (existingDataset != null)
+                    {
+                        throw new InvalidOperationException($"The user with ID {dataset.UserId} already has a database named '{dataset.Name}'.");
+                    }
+                    context.Datasets.Add(dataset);
+                    int affectedRows = await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw; 
+                }
+>>>>>>> Adam
             }
         }
 
