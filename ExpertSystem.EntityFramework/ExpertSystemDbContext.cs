@@ -99,7 +99,7 @@ namespace ExpertSystem.EntityFramework
            modelBuilder.Entity<Experiment>()
                 .HasOne(e => e.Database)
                 .WithMany(d => d.Experiments)
-                .HasForeignKey(e => e.DatabaseID);
+                .HasForeignKey(e => e.DatasetID);
 
            modelBuilder.Entity<ModelConfiguration>()
                 .HasOne(mc => mc.Experiment)

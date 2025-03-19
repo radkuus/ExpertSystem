@@ -8,9 +8,28 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+	</ItemGroup>	
+	
   <ItemGroup>
     <ProjectReference Include="..\ExpertSystem.Domain\ExpertSystem.Domain.csproj" />
     <ProjectReference Include="..\ExpertSystem.EntityFramework\ExpertSystem.EntityFramework.csproj" />
   </ItemGroup>
+<<<<<<< Updated upstream
+=======
+	
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+>>>>>>> Stashed changes
 
 </Project>
