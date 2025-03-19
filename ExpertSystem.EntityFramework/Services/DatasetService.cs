@@ -25,8 +25,6 @@ namespace ExpertSystem.WPF.Services
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                context.Datasets.Add(dataset);
-                await context.SaveChangesAsync();
                 try
                 {
                     var existingDataset = await context.Datasets
