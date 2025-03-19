@@ -11,11 +11,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ExpertSystem.WPF.Services
 {
-<<<<<<< HEAD
-    class DatasetService : IDatasetService
-=======
+
     public class DatasetService : IDatasetService
->>>>>>> Adam
     {
         private readonly ExpertSystemDbContextFactory _contextFactory;
 
@@ -28,10 +25,8 @@ namespace ExpertSystem.WPF.Services
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-<<<<<<< HEAD
                 context.Datasets.Add(dataset);
                 await context.SaveChangesAsync();
-=======
                 try
                 {
                     var existingDataset = await context.Datasets
@@ -48,7 +43,6 @@ namespace ExpertSystem.WPF.Services
                 {
                     throw; 
                 }
->>>>>>> Adam
             }
         }
 

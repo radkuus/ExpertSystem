@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,14 +63,14 @@ namespace ExpertSystem.EntityFramework.Migrations
                     ExperimentId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    DatabaseID = table.Column<int>(type: "integer", nullable: false)
+                    DatasetID = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Experiments", x => x.ExperimentId);
                     table.ForeignKey(
-                        name: "FK_Experiments_Datasets_DatabaseID",
-                        column: x => x.DatabaseID,
+                        name: "FK_Experiments_Datasets_DatasetID",
+                        column: x => x.DatasetID,
                         principalTable: "Datasets",
                         principalColumn: "DatasetId",
                         onDelete: ReferentialAction.Cascade);
@@ -183,9 +183,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                 column: "ExperimentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Experiments_DatabaseID",
+                name: "IX_Experiments_DatasetID",
                 table: "Experiments",
-                column: "DatabaseID");
+                column: "DatasetID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Experiments_UserId",

@@ -47,18 +47,6 @@ public partial class App : Application
 
         services.AddSingleton<IExpertSystemViewModelFactory, ExpertSystemViewModelAbstractFactory>();
 
-<<<<<<< HEAD
-        services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
-        {
-            return () => new HomeViewModel(services.GetRequiredService<IAuthenticator>());
-        });
-=======
-<<<<<<< Updated upstream
-        services.AddSingleton<IExpertSystemViewModelFactory<LoginViewModel>>((services) =>
-            new LoginViewModelFactory(services.GetRequiredService<IAuthenticator>(), 
-            new ViewModelFactoryRenavigator<HomeViewModel>(services.GetRequiredService<INavigator>(),
-            services.GetRequiredService< IExpertSystemViewModelFactory < HomeViewModel >>())));
-=======
         services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
         {
             return () => new HomeViewModel(
@@ -68,15 +56,10 @@ public partial class App : Application
             );
         });
 
->>>>>>> Adam
         services.AddSingleton<CreateViewModel<AnalysisViewModel>>(services =>
         {
             return () => new AnalysisViewModel();
         });
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> Adam
 
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();
         services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>

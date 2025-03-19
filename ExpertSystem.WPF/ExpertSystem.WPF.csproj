@@ -22,15 +22,6 @@
     <ProjectReference Include="..\ExpertSystem.Domain\ExpertSystem.Domain.csproj" />
     <ProjectReference Include="..\ExpertSystem.EntityFramework\ExpertSystem.EntityFramework.csproj" />
   </ItemGroup>
-<<<<<<< Updated upstream
-=======
-	
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
->>>>>>> Stashed changes
 
   <ItemGroup>
     <None Update="appsettings.json">
