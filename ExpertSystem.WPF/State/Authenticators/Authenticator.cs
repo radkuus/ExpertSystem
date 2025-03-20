@@ -42,9 +42,10 @@ namespace ExpertSystem.WPF.State.Authenticators
             CurrentUser = await _authenticationService.Login(nickname, password);
         }
 
-        public void Logout()
+        public async Task Logout()
         {
             CurrentUser = null;
+            await Task.CompletedTask;
         }
 
         public async Task<RegistrationResult> Register(string email, string nickname, string password, string confirmPassword, bool isAdmin)

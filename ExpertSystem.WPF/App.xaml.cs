@@ -52,7 +52,9 @@ public partial class App : Application
             return () => new HomeViewModel(
                 services.GetRequiredService<IAuthenticator>(),
                 services.GetRequiredService<IDatasetService>(),
-                services.GetRequiredService<IFileDialogService>()
+                services.GetRequiredService<IFileDialogService>(),
+                services.GetRequiredService<CreateViewModel<LoginViewModel>>(),
+                services.GetRequiredService<INavigator>()
             );
         });
 

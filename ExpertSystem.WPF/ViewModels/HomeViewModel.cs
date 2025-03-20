@@ -9,6 +9,7 @@ using System.Windows.Input;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Commands;
 using ExpertSystem.WPF.State.Authenticators;
+using ExpertSystem.WPF.State.Navigators;
 
 
 namespace ExpertSystem.WPF.ViewModels
@@ -18,6 +19,8 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IAuthenticator _authenticator;
         private readonly IDatasetService _datasetService;
         private readonly IFileDialogService _fileDialogService;
+        private readonly CreateViewModel<LoginViewModel> _createLoginViewModel;
+        private readonly INavigator _navigator;
         private string _selectedFilePath;
 
         private string _nickname;
@@ -31,18 +34,21 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService)
+        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, INavigator navigator)
         {
             _authenticator = authenticator;
             _datasetService = datasetService;
             _fileDialogService = fileDialogService;
+            _createLoginViewModel = createLoginViewModel;
+            _navigator = navigator;
+            LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             AddDatabaseCommand = new AddDatabaseCommand(this, fileDialogService, datasetService, authenticator);
             _authenticator.StateChanged += () => CommandManager.InvalidateRequerySuggested();
             Nickname = _authenticator.CurrentUser.Nickname;
         }
 
         public ICommand AddDatabaseCommand { get; }
-
+        public ICommand LogoutCommand { get; }
         public string SelectedFilePath
         {
             get => _selectedFilePath;

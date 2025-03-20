@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace ExpertSystem.WPF.State.Authenticators
 {
-    public interface IAuthenticator 
+    public interface IAuthenticator
     {
         User CurrentUser { get; }
-        bool IsLoggedIn { get;  }
+        bool IsLoggedIn { get; }
 
         event Action StateChanged;
 
@@ -36,6 +36,6 @@ namespace ExpertSystem.WPF.State.Authenticators
         /// <exception cref="InvalidPasswordException">Raised when the password is incorrect.</exception>
         /// <exception cref="Exception">Raised when unexpected error occurs.</exception>
         Task Login(string nickname, string password);
-        void Logout();
+        Task Logout();
     }
 }
