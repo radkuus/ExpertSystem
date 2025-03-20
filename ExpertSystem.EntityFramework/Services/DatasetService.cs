@@ -44,11 +44,20 @@ namespace ExpertSystem.WPF.Services
             }
         }
 
-        public async Task<Dataset> GetDatasetById(int id)
+        public async Task<List<Dataset>> GetUserDatasets(int userId)
         {
             using(ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                var dataset = await context.Datasets.SingleOrDefaultAsync(x => x.Id == id);
+                var datasets = await context.Datasets.Where(x => x.UserId == userId).ToListAsync();
+                return datasets;
+            }
+        }
+
+        public async Task<Dataset> GetDatasetById(int datasetId)
+        {
+            using(ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            {
+                var dataset = await context.Datasets.SingleOrDefaultAsync(x => x.Id == datasetId);
                 return dataset;
             }
         }
@@ -61,11 +70,11 @@ namespace ExpertSystem.WPF.Services
             }
         }
 
-        public async Task RemoveDataset(int id)
+        public async Task RemoveDataset(int datasetId)
         {
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                var dataset = await GetDatasetById(id);
+                var dataset = await GetDatasetById(datasetId);
                 if (dataset != null)
                 {
                     context.Datasets.Remove(dataset);
