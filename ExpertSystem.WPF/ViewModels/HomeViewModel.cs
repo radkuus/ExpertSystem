@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Commands;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Navigators;
-
 
 namespace ExpertSystem.WPF.ViewModels
 {
@@ -34,21 +31,13 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, INavigator navigator)
-        {
-            _authenticator = authenticator;
-            _datasetService = datasetService;
-            _fileDialogService = fileDialogService;
-            _createLoginViewModel = createLoginViewModel;
-            _navigator = navigator;
-            LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
-            AddDatabaseCommand = new AddDatabaseCommand(this, fileDialogService, datasetService, authenticator);
-            _authenticator.StateChanged += () => CommandManager.InvalidateRequerySuggested();
-            Nickname = _authenticator.CurrentUser.Nickname;
-        }
+        public ObservableCollection<Dataset> UserDatasets { get; } = new(); 
 
+        public ICommand RemoveDatasetCommand { get; }
+        public ICommand DisplayUserDatasetsCommand { get; }
         public ICommand AddDatabaseCommand { get; }
         public ICommand LogoutCommand { get; }
+        
         public string SelectedFilePath
         {
             get => _selectedFilePath;
@@ -59,12 +48,23 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
+        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, INavigator navigator)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            _authenticator = authenticator;
+            _datasetService = datasetService;
+            _fileDialogService = fileDialogService;
+            _createLoginViewModel = createLoginViewModel;
+            _navigator = navigator;
+            
+            LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
+            AddDatabaseCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
+            DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(this, authenticator, datasetService);
+            RemoveDatasetCommand = new RemoveDatasetCommand(this, authenticator, datasetService);
 
+            _authenticator.StateChanged += () => CommandManager.InvalidateRequerySuggested();
+            Nickname = _authenticator.CurrentUser.Nickname;
+
+            DisplayUserDatasetsCommand.Execute(null);
+        }
     }
 }

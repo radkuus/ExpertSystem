@@ -15,7 +15,7 @@ using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class AddDatabaseCommand : ICommand
+    public class AddDatasetCommand : ICommand
     {
         private readonly HomeViewModel _viewModel;
         private readonly IFileDialogService _fileDialogService;
@@ -24,7 +24,7 @@ namespace ExpertSystem.WPF.Commands
 
         public event EventHandler? CanExecuteChanged;
 
-        public AddDatabaseCommand(HomeViewModel viewModel, IFileDialogService fileDialogService, IDatasetService datasetService, IAuthenticator authenticator)
+        public AddDatasetCommand(HomeViewModel viewModel, IFileDialogService fileDialogService, IDatasetService datasetService, IAuthenticator authenticator)
         {
             _viewModel = viewModel;
             _fileDialogService = fileDialogService;
@@ -71,6 +71,7 @@ namespace ExpertSystem.WPF.Commands
             try
             {
                 await _datasetService.AddDataset(dataset);
+                _viewModel.DisplayUserDatasetsCommand.Execute(null);
             }
             catch (InvalidOperationException ex)
             {
