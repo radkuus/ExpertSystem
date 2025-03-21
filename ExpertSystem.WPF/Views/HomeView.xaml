@@ -34,13 +34,10 @@
         <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
             <Grid>
                 <Grid.RowDefinitions>
-                    <!-- Pierwszy wiersz dla nagłówka (wysokość Auto) -->
                     <RowDefinition Height="Auto"/>
-                    <!-- Drugi wiersz dla ListView (wysokość * - rozciąganie) -->
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Nagłówek z przyciskiem Add database -->
                 <Grid Margin="10" Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -51,11 +48,9 @@
                     <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" Grid.Column="1" HorizontalAlignment="Center" Height="41" Style="{StaticResource CustomButtonStyle}" VerticalAlignment="Top" />
                 </Grid>
 
-                <!-- Lista zbiorów danych -->
                 <ListView ItemsSource="{Binding UserDatasets}" Margin="10" Grid.Row="1">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="DatabaseId" DisplayMemberBinding="{Binding Id}" Width="auto"/>
                             <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
                             <GridViewColumn Width="auto">
                                 <GridViewColumn.CellTemplate>
