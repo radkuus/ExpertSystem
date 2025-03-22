@@ -61,7 +61,10 @@ public partial class App : Application
 
         services.AddSingleton<CreateViewModel<AnalysisViewModel>>(services =>
         {
-            return () => new AnalysisViewModel();
+            return () => new AnalysisViewModel(
+                services.GetRequiredService<INavigator>(),
+                services.GetRequiredService<IExpertSystemViewModelFactory>()
+                );
         });
 
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();

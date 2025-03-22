@@ -4,9 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
+             xmlns:navigator="clr-namespace:ExpertSystem.WPF.State.Navigators"
+             xmlns:vm="clr-namespace:ExpertSystem.WPF.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Data analysis"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Content="Back"
+                Grid.Row="1"
+                Margin = "10"
+                Style="{StaticResource CustomButtonStyle}"
+                Command="{Binding UpdateCurrentViewModelCommand}" 
+                CommandParameter="{x:Static navigator:ViewType.Home}"/>
     </Grid>
+
 </UserControl>

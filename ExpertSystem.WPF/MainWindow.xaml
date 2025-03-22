@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpertSystem.WPF"
-        xmlns:controls="clr-namespace:ExpertSystem.WPF.Controls"
         
         mc:Ignorable="d"
         Title="Expert System" Height="600" Width="950">
@@ -25,7 +24,6 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-            <controls:NavigationBar/>
         </Grid>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
