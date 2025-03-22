@@ -20,6 +20,7 @@ namespace ExpertSystem.WPF.ViewModels
         public bool IsLoggedIn => _authenticator.IsLoggedIn;
         public BaseViewModel CurrentViewModel => _navigator.CurrentViewModel;
 
+
         public ICommand UpdateCurrentViewModelCommand { get; }
 
         public MainViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator)
@@ -30,6 +31,7 @@ namespace ExpertSystem.WPF.ViewModels
 
             _navigator.StateChanged += Navigator_StateChanged;
             _authenticator.StateChanged += Authenticator_StateChanged;
+
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             UpdateCurrentViewModelCommand.Execute(ViewType.Login);
