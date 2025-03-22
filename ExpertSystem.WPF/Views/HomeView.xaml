@@ -4,48 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
+             xmlns:navigator="clr-namespace:ExpertSystem.WPF.State.Navigators"
+             xmlns:vm="clr-namespace:ExpertSystem.WPF.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
+    <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
                    Text="{Binding Nickname, StringFormat='Hi {0}!'}" 
-                   FontSize="20" FontWeight="Bold" 
+                   FontSize="30" FontWeight="Bold" 
                    VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"/>
 
-        <Button Grid.Column="1" Content="View your results" 
-                Width="auto" Margin="0 5 5 5" HorizontalAlignment="Right" 
-                Style="{StaticResource CustomButtonStyle}"/>
+        <Button Content="Start Analysis" 
+        Margin="200 10 10 10"
+        Style="{StaticResource CustomButtonStyle}"
+        Command="{Binding UpdateCurrentViewModelCommand}" 
+        CommandParameter="{x:Static navigator:ViewType.Analysis}" />
 
         <Button Content="Logout" Command="{Binding LogoutCommand}" 
-                Grid.Column="0" HorizontalAlignment="Right" Height="Auto" 
+                Grid.Column="1" Margin="0 5 5 5" HorizontalAlignment="Right" Height="Auto" 
                 Style="{StaticResource CustomButtonStyle}" />
 
         <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Grid Margin="10" Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Your Datasets" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
-                    <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" Grid.Column="1" HorizontalAlignment="Center" Height="41" Style="{StaticResource CustomButtonStyle}" VerticalAlignment="Top" />
+                    <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" 
+                        Grid.Column="1" HorizontalAlignment="Center" Height="41" 
+                        Style="{StaticResource CustomButtonStyle}" VerticalAlignment="Top" />
                 </Grid>
 
                 <ListView ItemsSource="{Binding UserDatasets}" Margin="10" Grid.Row="1">
@@ -56,9 +62,9 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Remove" 
-                                        Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                        FontSize="12" Padding="5"
-                                        CommandParameter="{Binding}"/>
+                                            Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            FontSize="12" Padding="5"
+                                            CommandParameter="{Binding}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -68,5 +74,36 @@
             </Grid>
         </Border>
 
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="10" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Your Results" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                </Grid>
+
+                <ListView Margin="10" Grid.Row="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

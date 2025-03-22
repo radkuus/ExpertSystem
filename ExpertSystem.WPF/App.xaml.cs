@@ -54,7 +54,8 @@ public partial class App : Application
                 services.GetRequiredService<IDatasetService>(),
                 services.GetRequiredService<IFileDialogService>(),
                 services.GetRequiredService<CreateViewModel<LoginViewModel>>(),
-                services.GetRequiredService<INavigator>()
+                services.GetRequiredService<INavigator>(),
+                services.GetRequiredService<IExpertSystemViewModelFactory>()
             );
         });
 

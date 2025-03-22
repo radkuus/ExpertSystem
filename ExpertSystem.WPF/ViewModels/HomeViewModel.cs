@@ -8,6 +8,7 @@ using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Commands;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Navigators;
+using ExpertSystem.WPF.ViewModels.Factories;
 
 namespace ExpertSystem.WPF.ViewModels
 {
@@ -16,6 +17,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IAuthenticator _authenticator;
         private readonly IDatasetService _datasetService;
         private readonly IFileDialogService _fileDialogService;
+        private readonly IExpertSystemViewModelFactory _viewModelAbstractFactory;
         private readonly CreateViewModel<LoginViewModel> _createLoginViewModel;
         private readonly INavigator _navigator;
         private string _selectedFilePath;
@@ -37,7 +39,8 @@ namespace ExpertSystem.WPF.ViewModels
         public ICommand DisplayUserDatasetsCommand { get; }
         public ICommand AddDatabaseCommand { get; }
         public ICommand LogoutCommand { get; }
-        
+        public ICommand UpdateCurrentViewModelCommand {  get; }
+
         public string SelectedFilePath
         {
             get => _selectedFilePath;
@@ -48,18 +51,20 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, INavigator navigator)
+        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory)
         {
             _authenticator = authenticator;
             _datasetService = datasetService;
             _fileDialogService = fileDialogService;
             _createLoginViewModel = createLoginViewModel;
             _navigator = navigator;
+            _viewModelAbstractFactory = viewModelAbstractFactory;
             
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             AddDatabaseCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
             DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(this, authenticator, datasetService);
             RemoveDatasetCommand = new RemoveDatasetCommand(this, authenticator, datasetService);
+            UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
 
             _authenticator.StateChanged += () => CommandManager.InvalidateRequerySuggested();
             Nickname = _authenticator.CurrentUser.Nickname;
