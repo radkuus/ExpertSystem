@@ -11,19 +11,62 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Button Content="Back"
-                Grid.Row="1"
+                Width="200"
+                Grid.Row="0"
                 Margin = "10"
+                HorizontalAlignment="Left"
                 Style="{StaticResource CustomButtonStyle}"
                 Command="{Binding UpdateCurrentViewModelCommand}" 
                 CommandParameter="{x:Static navigator:ViewType.Home}"/>
+
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <!-- Nagłówek -->
+                    <RowDefinition Height="*" />
+                    <!-- ListView zajmuje całą dostępną przestrzeń -->
+                </Grid.RowDefinitions>
+
+                <!-- Nagłówek -->
+                <Grid Margin="10" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Your Experiments" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- ListView -->
+                <ListView Margin="10" Grid.Row="1"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
+                            <GridViewColumn Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Remove"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
+
+
     </Grid>
 
 </UserControl>
