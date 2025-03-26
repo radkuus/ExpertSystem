@@ -17,7 +17,9 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly INavigator _navigator;
         private readonly IAuthenticator _authenticator;
 
-        public bool IsLoggedIn => _authenticator.IsLoggedIn;
+        public bool IsUserLoggedIn => _authenticator.IsUserLoggedIn;
+        public bool IsAdminLoggedIn => _authenticator.IsAdminLoggedIn;
+
         public BaseViewModel CurrentViewModel => _navigator.CurrentViewModel;
 
 
@@ -44,7 +46,8 @@ namespace ExpertSystem.WPF.ViewModels
 
         public void Authenticator_StateChanged()
         {
-            OnPropertyChanged(nameof(IsLoggedIn));
+            OnPropertyChanged(nameof(IsUserLoggedIn));
+            OnPropertyChanged(nameof(IsAdminLoggedIn));
         }
     }
 }

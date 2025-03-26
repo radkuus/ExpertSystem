@@ -40,7 +40,7 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
-            if (!_authenticator.IsLoggedIn)
+            if (!_authenticator.IsUserLoggedIn)
             {
                 return;
             }

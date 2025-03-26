@@ -1,6 +1,7 @@
 ﻿using ExpertSystem.WPF.Commands;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Navigators;
+using ExpertSystem.Domain.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,9 @@ using System.Windows.Input;
 
 namespace ExpertSystem.WPF.ViewModels
 {
-    public class RegisterViewModel : BaseViewModel
+    public class RegisterViewModel : BaseViewModel, IRegistrationData
     {
         private string _nickname;
-
         public string Nickname
         {
             get

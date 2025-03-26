@@ -15,13 +15,13 @@ namespace ExpertSystem.WPF.Commands
 {
     public class DisplayUserDatasetsCommand :ICommand
     {
-        private readonly HomeViewModel _viewModel;
+        private readonly HomeViewModel _homeViewModel;
         private readonly IAuthenticator _authenticator;
         private readonly IDatasetService _datasetService;
 
-        public DisplayUserDatasetsCommand(HomeViewModel viewModel, IAuthenticator authenticator, IDatasetService datasetService)
+        public DisplayUserDatasetsCommand(HomeViewModel homeViewModel, IAuthenticator authenticator, IDatasetService datasetService)
         {
-            _viewModel = viewModel;
+            _homeViewModel = homeViewModel;
             _authenticator = authenticator;
             _datasetService = datasetService;
         }
@@ -32,10 +32,10 @@ namespace ExpertSystem.WPF.Commands
         public async void Execute(object? parameter)
         {
             var datasets = await _datasetService.GetUserDatasets(_authenticator.CurrentUser.Id);
-            _viewModel.UserDatasets.Clear();
+            _homeViewModel.UserDatasets.Clear();
             foreach (var dataset in datasets)
             {
-                _viewModel.UserDatasets.Add(dataset);
+                _homeViewModel.UserDatasets.Add(dataset);
             }
         }
     }

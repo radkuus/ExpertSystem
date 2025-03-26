@@ -9,16 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExpertSystem.Domain.Contracts;
 
 namespace ExpertSystem.WPF.Commands
 {
     public class RegisterCommand : BaseAsyncCommand
     {
-        private readonly RegisterViewModel _registerViewModel;
+        private readonly IRegistrationData _registerViewModel;
         private readonly IAuthenticator _authenticator;
         private readonly IRenavigator _renavigator;
 
-        public RegisterCommand(RegisterViewModel registerViewModel, IAuthenticator authenticator, IRenavigator renavigator)
+        public RegisterCommand(IRegistrationData registerViewModel, IAuthenticator authenticator, IRenavigator? renavigator)
         {
             _registerViewModel = registerViewModel;
             _authenticator = authenticator;
@@ -40,7 +41,10 @@ namespace ExpertSystem.WPF.Commands
                 switch (registrationResult)
                 {
                     case RegistrationResult.Success:
-                        _renavigator.Renavigate();
+                        if (_authenticator.CurrentUser == null)
+                        {
+                            _renavigator.Renavigate();
+                        }
                         break;
                     case RegistrationResult.PasswordsDoNotMatch:
                         _registerViewModel.ErrorMessage = "Password does not match confirm password.";

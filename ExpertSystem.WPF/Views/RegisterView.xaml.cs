@@ -22,7 +22,7 @@ namespace ExpertSystem.WPF.Views
     public partial class RegisterView : UserControl
     {
         public static readonly DependencyProperty RegisterCommandProperty =
-    DependencyProperty.Register("RegisterCommand", typeof(ICommand), typeof(RegisterView), new PropertyMetadata(null));
+            DependencyProperty.Register("RegisterCommand", typeof(ICommand), typeof(RegisterView), new PropertyMetadata(null));
 
         public ICommand RegisterCommand
         {

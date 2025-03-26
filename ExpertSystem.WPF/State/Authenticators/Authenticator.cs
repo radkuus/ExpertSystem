@@ -33,7 +33,9 @@ namespace ExpertSystem.WPF.State.Authenticators
             }
         }
 
-        public bool IsLoggedIn => CurrentUser != null;
+        public bool IsUserLoggedIn => CurrentUser != null && !CurrentUser.IsAdmin;
+
+        public bool IsAdminLoggedIn => CurrentUser != null && CurrentUser.IsAdmin;
 
         public event Action StateChanged;
 
@@ -51,6 +53,11 @@ namespace ExpertSystem.WPF.State.Authenticators
         public async Task<RegistrationResult> Register(string email, string nickname, string password, string confirmPassword, bool isAdmin)
         {
             return await _authenticationService.Register(nickname, password, confirmPassword, email, isAdmin);
+        }
+
+        public async Task<EditResult> Edit(int id, string nickname, string password, string confirmPassword, string email)
+        {
+            return await _authenticationService.Edit(id, nickname, password, confirmPassword, email);
         }
     }
 }

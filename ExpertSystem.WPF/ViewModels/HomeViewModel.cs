@@ -51,7 +51,9 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory)
+        public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, 
+            IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, 
+            INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory)
         {
             _authenticator = authenticator;
             _datasetService = datasetService;

@@ -19,13 +19,16 @@ namespace ExpertSystem.WPF.Commands
     {
         private readonly LoginViewModel _loginViewModel;
         private readonly IAuthenticator _authenticator;
-        private readonly IRenavigator _renavigator;
+        private readonly IRenavigator _goToHomeRenavigator;
+        private readonly IRenavigator _goToAdminRenavigator;
 
-        public LoginCommand(LoginViewModel loginViewModel, IAuthenticator authenticator, IRenavigator renavigator)
+        public LoginCommand(LoginViewModel loginViewModel, IAuthenticator authenticator, 
+            IRenavigator goToHomeRenavigator, IRenavigator goToAdminRenavigator)
         {
             _loginViewModel = loginViewModel;
             _authenticator = authenticator;
-            _renavigator = renavigator;
+            _goToHomeRenavigator = goToHomeRenavigator;
+            _goToAdminRenavigator = goToAdminRenavigator;
         }
 
         public override async Task ExecuteAsync(object? parameter)
@@ -33,7 +36,15 @@ namespace ExpertSystem.WPF.Commands
             try
             {
                 await _authenticator.Login(_loginViewModel.Nickname, parameter.ToString());
-                _renavigator.Renavigate();
+                if (_authenticator.IsUserLoggedIn)
+                {
+                    _goToHomeRenavigator.Renavigate();
+                }
+                else if (_authenticator.IsAdminLoggedIn)
+                {
+                    _goToAdminRenavigator.Renavigate();
+                }
+
             }
             catch (UserNotFoundException)
             {

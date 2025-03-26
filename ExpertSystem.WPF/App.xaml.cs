@@ -75,15 +75,26 @@ public partial class App : Application
                 services.GetRequiredService<ViewModelFactoryRenavigator<LoginViewModel>>());
         });
 
+        services.AddSingleton<CreateViewModel<AdminViewModel>>(services =>
+        {
+            return () => new AdminViewModel(
+                services.GetRequiredService<IUserService>(),
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<INavigator>(),
+                services.GetRequiredService<CreateViewModel<LoginViewModel>>());
+        });
+
         services.AddSingleton<ViewModelFactoryRenavigator<RegisterViewModel>>();
         services.AddSingleton<ViewModelFactoryRenavigator<HomeViewModel>>();
+        services.AddSingleton<ViewModelFactoryRenavigator<AdminViewModel>>();
         services.AddSingleton<CreateViewModel<LoginViewModel>>(services =>
         {
             return () => new LoginViewModel(
                 services.GetRequiredService<IAuthenticator>(),
                 services.GetRequiredService<ViewModelFactoryRenavigator<HomeViewModel>>(),
-                services.GetRequiredService<ViewModelFactoryRenavigator<RegisterViewModel>>());
-        });
+                services.GetRequiredService<ViewModelFactoryRenavigator<RegisterViewModel>>(),
+                services.GetRequiredService<ViewModelFactoryRenavigator<AdminViewModel>>());
+    });
 
         services.AddScoped<INavigator, Navigator>();
         services.AddSingleton<IFileDialogService, FileDialogService>();

@@ -31,11 +31,12 @@ namespace ExpertSystem.WPF.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand GoToViewRegisterCommand { get; }
 
-        public LoginViewModel(IAuthenticator authenticator, IRenavigator loginRenavigator, IRenavigator goToRegisterRenavigator)
+        public LoginViewModel(IAuthenticator authenticator, IRenavigator goToHomeRenavigator, 
+            IRenavigator goToRegisterRenavigator, IRenavigator goToAdminRenavigator)
         {
             ErrorMessageViewModel = new MessageViewModel();
 
-            LoginCommand = new LoginCommand(this, authenticator, loginRenavigator);
+            LoginCommand = new LoginCommand(this, authenticator, goToHomeRenavigator, goToAdminRenavigator);
             GoToViewRegisterCommand = new RenavigateCommand(goToRegisterRenavigator);
         }
 
