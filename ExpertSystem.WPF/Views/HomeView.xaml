@@ -25,12 +25,6 @@
                    FontSize="30" FontWeight="Bold" 
                    VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"/>
 
-        <Button Content="Start Analysis" 
-        Margin="200 10 10 10"
-        Style="{StaticResource CustomButtonStyle}"
-        Command="{Binding UpdateCurrentViewModelCommand}" 
-        CommandParameter="{x:Static navigator:ViewType.Analysis}" />
-
         <Button Content="Logout" Command="{Binding LogoutCommand}" 
                 Grid.Column="1" Margin="0 5 5 5" HorizontalAlignment="Right" Height="Auto" 
                 Style="{StaticResource CustomButtonStyle}" />
