@@ -16,7 +16,10 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="{StaticResource DarkBlueBrush}">
+        <Grid Grid.Row="0" RenderOptions.EdgeMode="Aliased" Background="{StaticResource DarkBlueBrush}">
+            <Grid.Resources>
+                <Style TargetType="RadioButton" BasedOn="{StaticResource NavigationButton}"/>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
