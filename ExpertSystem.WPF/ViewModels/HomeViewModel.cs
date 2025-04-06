@@ -7,6 +7,7 @@ using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Commands;
 using ExpertSystem.WPF.State.Authenticators;
+using ExpertSystem.WPF.State.Datasets;
 using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.ViewModels.Factories;
 
@@ -20,6 +21,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IExpertSystemViewModelFactory _viewModelAbstractFactory;
         private readonly CreateViewModel<LoginViewModel> _createLoginViewModel;
         private readonly INavigator _navigator;
+        private readonly IDatasetStore _datasetStore;
         private string _selectedFilePath;
 
         private string _nickname;
@@ -32,8 +34,6 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(Nickname));
             }
         }
-
-        public ObservableCollection<Dataset> UserDatasets { get; } = new(); 
 
         public ICommand RemoveDatasetCommand { get; }
         public ICommand DisplayUserDatasetsCommand { get; }
@@ -53,7 +53,7 @@ namespace ExpertSystem.WPF.ViewModels
 
         public HomeViewModel(IAuthenticator authenticator, IDatasetService datasetService, 
             IFileDialogService fileDialogService, CreateViewModel<LoginViewModel> createLoginViewModel, 
-            INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory)
+            INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IDatasetStore datasetStore)
         {
             _authenticator = authenticator;
             _datasetService = datasetService;
@@ -61,10 +61,11 @@ namespace ExpertSystem.WPF.ViewModels
             _createLoginViewModel = createLoginViewModel;
             _navigator = navigator;
             _viewModelAbstractFactory = viewModelAbstractFactory;
+            _datasetStore = datasetStore;
             
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             AddDatabaseCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
-            DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(this, authenticator, datasetService);
+            DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(authenticator, datasetService, datasetStore);
             RemoveDatasetCommand = new RemoveDatasetCommand(this, authenticator, datasetService);
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
 
@@ -73,5 +74,7 @@ namespace ExpertSystem.WPF.ViewModels
 
             DisplayUserDatasetsCommand.Execute(null);
         }
+
+        public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
     }
 }

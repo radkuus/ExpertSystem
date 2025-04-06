@@ -4,6 +4,7 @@ using ExpertSystem.EntityFramework;
 using ExpertSystem.EntityFramework.Services;
 using ExpertSystem.WPF.Services;
 using ExpertSystem.WPF.State.Authenticators;
+using ExpertSystem.WPF.State.Datasets;
 using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.ViewModels;
 using ExpertSystem.WPF.ViewModels.Factories;
@@ -55,7 +56,8 @@ public partial class App : Application
                 services.GetRequiredService<IFileDialogService>(),
                 services.GetRequiredService<CreateViewModel<LoginViewModel>>(),
                 services.GetRequiredService<INavigator>(),
-                services.GetRequiredService<IExpertSystemViewModelFactory>()
+                services.GetRequiredService<IExpertSystemViewModelFactory>(),
+                services.GetRequiredService<IDatasetStore>()
             );
         });
 
@@ -63,8 +65,10 @@ public partial class App : Application
         {
             return () => new AnalysisViewModel(
                 services.GetRequiredService<INavigator>(),
-                services.GetRequiredService<IExpertSystemViewModelFactory>()
-                );
+                services.GetRequiredService<IExpertSystemViewModelFactory>(),
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<IDatasetService>(),
+                services.GetRequiredService<IDatasetStore>());
         });
 
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();
@@ -94,8 +98,9 @@ public partial class App : Application
                 services.GetRequiredService<ViewModelFactoryRenavigator<HomeViewModel>>(),
                 services.GetRequiredService<ViewModelFactoryRenavigator<RegisterViewModel>>(),
                 services.GetRequiredService<ViewModelFactoryRenavigator<AdminViewModel>>());
-    });
+        });
 
+        services.AddSingleton<IDatasetStore, DatasetStore>();
         services.AddScoped<INavigator, Navigator>();
         services.AddSingleton<IFileDialogService, FileDialogService>();
         services.AddScoped<IAuthenticator, Authenticator>();
