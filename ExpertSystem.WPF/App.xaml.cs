@@ -45,6 +45,7 @@ public partial class App : Application
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<IDatasetService, DatasetService>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<IDataFrameDialogService, DataFrameDialogService>();
 
         services.AddSingleton<IExpertSystemViewModelFactory, ExpertSystemViewModelAbstractFactory>();
 
@@ -68,7 +69,8 @@ public partial class App : Application
                 services.GetRequiredService<IExpertSystemViewModelFactory>(),
                 services.GetRequiredService<IAuthenticator>(),
                 services.GetRequiredService<IDatasetService>(),
-                services.GetRequiredService<IDatasetStore>());
+                services.GetRequiredService<IDatasetStore>(),
+                services.GetRequiredService<IDataFrameDialogService>());
         });
 
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();

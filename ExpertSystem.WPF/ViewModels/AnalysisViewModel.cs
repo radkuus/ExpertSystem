@@ -22,6 +22,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IAuthenticator _authenticator;
         private readonly IDatasetService _datasetService;
         private readonly IDatasetStore _datasetStore;
+        private readonly IDataFrameDialogService _dataFrameDialogService;
         private bool _isKnnChecked;
         private bool _isLinearRegressionChecked;
         private bool _isBayesChecked;
@@ -32,16 +33,19 @@ namespace ExpertSystem.WPF.ViewModels
         private Dataset _selectedDataset;
 
         public ICommand UpdateCurrentViewModelCommand { get; }
+        public ICommand DisplayDatasetAsDataFrameCommand { get; }
 
-        public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore)
+        public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore, IDataFrameDialogService dataFrameDialogService)
         {
             _navigator = navigator;
             _viewModelAbstractFactory = viewModelAbstractFactory;
             _authenticator = authenticator;
             _datasetService = datasetService;
             _datasetStore = datasetStore;
+            _dataFrameDialogService = dataFrameDialogService; 
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
+            DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService);
         }
 
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
@@ -101,13 +105,13 @@ namespace ExpertSystem.WPF.ViewModels
         }
         
 
-        public bool IsLinearRegressionChcecked
+        public bool IsLinearRegressionChecked
         {
             get => _isLinearRegressionChecked;
             set
             {
                 _isLinearRegressionChecked = value;
-                OnPropertyChanged(nameof(IsLinearRegressionChcecked));
+                OnPropertyChanged(nameof(IsLinearRegressionChecked));
             }
         }
 
