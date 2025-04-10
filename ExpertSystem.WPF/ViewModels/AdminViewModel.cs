@@ -64,6 +64,17 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     _selectedUser = value;
                     OnPropertyChanged(nameof(SelectedUser));
+                    if (_selectedUser != null)
+                    {
+                        Nickname = _selectedUser.Nickname;
+                        Email = _selectedUser.Email;
+                    }
+                    else
+                    {
+
+                        Nickname = string.Empty;
+                        Email = string.Empty;
+                    }
                 }
             }
         }
@@ -71,10 +82,7 @@ namespace ExpertSystem.WPF.ViewModels
         private string _nickname;
         public string Nickname
         {
-            get
-            {
-                return _nickname;
-            }
+            get { return _nickname; }
             set
             {
                 _nickname = value;
@@ -85,14 +93,34 @@ namespace ExpertSystem.WPF.ViewModels
         private string _email;
         public string Email
         {
-            get
-            {
-                return _email;
-            }
+            get { return _email; }
             set
             {
                 _email = value;
                 OnPropertyChanged(nameof(Email));
+            }
+        }
+
+
+        private string _password;
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+
+        private string _confirmPassword;
+        public string ConfirmPassword
+        {
+            get { return _confirmPassword; }
+            set
+            {
+                _confirmPassword = value;
+                OnPropertyChanged(nameof(ConfirmPassword));
             }
         }
 

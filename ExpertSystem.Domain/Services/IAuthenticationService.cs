@@ -13,18 +13,25 @@ namespace ExpertSystem.Domain.Services
         Success,
         PasswordsDoNotMatch,
         EmailAlreadyTaken,
-        NicknameAlreadyTaken
+        NicknameAlreadyTaken,
+        InvalidNicknameFormat,
+        InvalidPasswordFormat,
+        InvalidEmailFormat
     }
 
+    // NOTE: Order is important (must match with enum above)
     public enum EditResult
     {
         Success,
-        UserNotFound,
-        OnlyOnePasswordEntered,
         PasswordsDoNotMatch,
         EmailAlreadyTaken,
         NicknameAlreadyTaken,
-        NoChangesDetected
+        InvalidNicknameFormat,
+        InvalidPasswordFormat,
+        InvalidEmailFormat,
+        UserNotFound,
+        OnlyOnePasswordEntered,
+        NoChangesDetected,
     }
 
     public interface IAuthenticationService

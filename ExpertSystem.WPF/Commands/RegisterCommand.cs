@@ -46,14 +46,23 @@ namespace ExpertSystem.WPF.Commands
                             _renavigator.Renavigate();
                         }
                         break;
+                    case RegistrationResult.NicknameAlreadyTaken:
+                        _registerViewModel.ErrorMessage = "An account for this username already exists.";
+                        break;
+                    case RegistrationResult.InvalidNicknameFormat:
+                        _registerViewModel.ErrorMessage = "The username must be between 3 and 15 characters long and must begin with a letter or a number";
+                        break;
                     case RegistrationResult.PasswordsDoNotMatch:
                         _registerViewModel.ErrorMessage = "Password does not match confirm password.";
+                        break;
+                    case RegistrationResult.InvalidPasswordFormat:
+                        _registerViewModel.ErrorMessage = "The password must be between 8 and 20 characters long and contain at least one capital letter and one number.";
                         break;
                     case RegistrationResult.EmailAlreadyTaken:
                         _registerViewModel.ErrorMessage = "An account for this email already exists.";
                         break;
-                    case RegistrationResult.NicknameAlreadyTaken:
-                        _registerViewModel.ErrorMessage = "An account for this username already exists.";
+                    case RegistrationResult.InvalidEmailFormat:
+                        _registerViewModel.ErrorMessage = "The email must be in a valid format (e.g., something@domain.com) and the domain extension must be at least 2 characters long.";
                         break;
                     default:
                         _registerViewModel.ErrorMessage = "Registration failed.";
@@ -62,7 +71,7 @@ namespace ExpertSystem.WPF.Commands
             }
             catch (Exception)
             {
-                _registerViewModel.ErrorMessage = "Registration failed.";
+                _registerViewModel.ErrorMessage = "An unexpected error occurred during registration.";
             }
         }
     }

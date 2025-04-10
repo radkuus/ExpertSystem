@@ -26,8 +26,7 @@ public partial class App : Application
     {
         IServiceProvider serviceProvider = CreateServiceProvider();
         IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
-        authentication.Register("kamil", "1234", "1234", "kamil@gmail.com", true);
-
+        authentication.Register("kamil", "Testowanko1", "Testowanko1", "kamil.kamil@gmail.com", true);
         Window window = serviceProvider.GetRequiredService<MainWindow>();
         window.Show();
 

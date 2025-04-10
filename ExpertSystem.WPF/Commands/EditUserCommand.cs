@@ -28,47 +28,73 @@ namespace ExpertSystem.WPF.Commands
             try
             {
                 if (_adminViewModel.SelectedUser == null)
+                {
+                    _adminViewModel.ErrorMessage = "No user selected.";
                     return;
+                }
 
-                var (password1, password2) = ((string, string))parameter!;
+                var (password1, password2) = parameter is Tuple<string, string> passwordData
+                   ? (passwordData.Item1, passwordData.Item2)
+                   : (string.Empty, string.Empty);
+
+
+
+                string? nicknameToEdit = string.IsNullOrEmpty(_adminViewModel.Nickname) ? null : _adminViewModel.Nickname;
+                string? emailToEdit = string.IsNullOrEmpty(_adminViewModel.Email) ? null : _adminViewModel.Email;
+                string? passwordToEdit = string.IsNullOrEmpty(password1) ? null : password1;
+                string? confirmPasswordToEdit = string.IsNullOrEmpty(password2) ? null : password2;
+
+                System.Diagnostics.Debug.WriteLine($"Raw: '{password1}', '{password2}'");
+                System.Diagnostics.Debug.WriteLine($"Final: '{passwordToEdit}', '{confirmPasswordToEdit}'");
+
                 EditResult editResult = await _authenticator.Edit(
                     _adminViewModel.SelectedUser.Id,
-                    _adminViewModel.Nickname,
-                    password1,
-                    password2,
-                    _adminViewModel.Email);
+                    nicknameToEdit,
+                    passwordToEdit,
+                    confirmPasswordToEdit,
+                    emailToEdit);
 
                 switch (editResult)
                 {
                     case EditResult.Success:
                         _adminViewModel.ErrorMessage = "Edition ended successfully.";
-                        break;
-                    case EditResult.PasswordsDoNotMatch:
-                        _adminViewModel.ErrorMessage = "Password does not match confirm password.";
-                        break;
-                    case EditResult.EmailAlreadyTaken:
-                        _adminViewModel.ErrorMessage = "An account for this email already exists.";
-                        break;
-                    case EditResult.NicknameAlreadyTaken:
-                        _adminViewModel.ErrorMessage = "An account for this username already exists.";
+                        await ((BaseAsyncCommand)_adminViewModel.DisplayUsersCommand).ExecuteAsync(null);
                         break;
                     case EditResult.UserNotFound:
                         _adminViewModel.ErrorMessage = "User not found.";
                         break;
+                    case EditResult.NicknameAlreadyTaken:
+                        _adminViewModel.ErrorMessage = "An account for this username already exists.";
+                        break;
+                    case EditResult.InvalidNicknameFormat:
+                        _adminViewModel.ErrorMessage = "The username must be between 3 and 15 characters long and must begin with a letter or a number.";
+                        break;
                     case EditResult.OnlyOnePasswordEntered:
-                        _adminViewModel.ErrorMessage = "Only one password was entered.";
+                        _adminViewModel.ErrorMessage = "Both password and confirmation must be provided or both left empty.";
+                        break;
+                    case EditResult.PasswordsDoNotMatch:
+                        _adminViewModel.ErrorMessage = "Password does not match confirm password.";
+                        break;
+                    case EditResult.InvalidPasswordFormat:
+                        _adminViewModel.ErrorMessage = "The password must be between 8 and 20 characters long and contain at least one capital letter and one number.";
+                        break;
+                    case EditResult.EmailAlreadyTaken:
+                        _adminViewModel.ErrorMessage = "An account for this email already exists.";
+                        break;
+                    case EditResult.InvalidEmailFormat:
+                        _adminViewModel.ErrorMessage = "The email must be in a valid format (e.g., something@domain.com) with a domain extension of at least 2 characters.";
                         break;
                     case EditResult.NoChangesDetected:
                         _adminViewModel.ErrorMessage = "No changes detected.";
                         break;
                     default:
-                        _adminViewModel.ErrorMessage = "Registration failed.";
+                        _adminViewModel.ErrorMessage = "Edit failed.";
                         break;
                 }
             }
             catch (Exception)
             {
-                _adminViewModel.ErrorMessage = "Registration failed.";
+                _adminViewModel.ErrorMessage = "An unexpected error occurred during edit.";
             }
         }
 
