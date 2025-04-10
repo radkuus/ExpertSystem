@@ -120,5 +120,40 @@ namespace ExpertSystem.WPF.Services
                 }
             }
         }
+
+        public async Task<List<string>> GetDatasetColumnNames(int datasetId)
+        {
+            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            {
+                var dataset = await GetDatasetById(datasetId);
+                if (dataset != null)
+                {
+                    var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                    var projectDir = Directory.GetParent(baseDir).Parent.Parent.Parent.Parent.FullName;
+                    var fileName = dataset.Name;
+                    var filePath = Path.Combine(projectDir, "Datasets", fileName);
+                    if (File.Exists(filePath))
+                    {
+                        var dataTable = new DataTable();
+                        using (var reader = new StreamReader(filePath))
+                        using (var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture))
+                        using (var dr = new CsvHelper.CsvDataReader(csv))
+                        {
+                            dataTable.Load(dr);
+                        }
+
+                        return  dataTable.Columns.Cast<DataColumn>().Select(col => col.ColumnName).ToList();
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("CSV file not found.", filePath);
+                    }
+                }
+                else
+                {
+                    throw new FileNotFoundException("Dataset not found.");
+                }
+            }
+        }
     }
 }

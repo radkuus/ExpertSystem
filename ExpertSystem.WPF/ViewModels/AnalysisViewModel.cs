@@ -32,9 +32,11 @@ namespace ExpertSystem.WPF.ViewModels
         private string _selectedLayers;
         private Dataset _selectedDataset;
         private string _selectedResultColumn;
+        private List<string> _datasetColumnNames;
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
+        public ICommand LoadDatasetColumnNames {  get; }
 
         public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore, IDataFrameDialogService dataFrameDialogService)
         {
@@ -47,6 +49,7 @@ namespace ExpertSystem.WPF.ViewModels
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService);
+            LoadDatasetColumnNames = new LoadDatasetColumnNames(datasetService, this);
         }
 
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
@@ -173,6 +176,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedDataset = value;
                 OnPropertyChanged(nameof(SelectedDataset));
+                LoadDatasetColumnNames.Execute(_selectedDataset);
             }
         }
 
@@ -188,5 +192,18 @@ namespace ExpertSystem.WPF.ViewModels
 
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
         public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+
+        public List<string> DatasetColumnNames
+        {
+            get => _datasetColumnNames;
+            set
+            {
+                _datasetColumnNames = value;
+                OnPropertyChanged(nameof(DatasetColumnNames));
+            }
+        }
+
+
+
     }
 }
