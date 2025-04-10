@@ -7,28 +7,28 @@
         xmlns:controls="clr-namespace:ExpertSystem.WPF.Controls"
         
         mc:Ignorable="d"
-        Title="Expert System" Height="600" Width="950"><Grid>
+        Title="Expert System" Height="750" Width="1200">
+     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <Grid.RowDefinitions>
-        <RowDefinition Height="auto"/>
-        <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
-
-    <Grid Grid.Row="0">
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Style.Triggers>
+        <Grid Grid.Row="0">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
                         <DataTrigger Binding="{Binding IsUserLoggedIn}" Value="False">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
         <controls:NavigationBar/>
-    </Grid>
+        </Grid>
 
-    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
-    </ScrollViewer>
-</Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
+        </ScrollViewer>
+     </Grid>
 </Window>
