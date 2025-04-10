@@ -16,5 +16,6 @@ namespace ExpertSystem.Domain.Services
         Task<List<Dataset>> GetAll();
         Task<Dataset> GetDatasetById(int datasetId);
         Task<DataTable> GetDatasetAsDataTable(int datasetId);
+        Task<List<String>> GetDatasetColumnNames(int datasetId);
     }
 }
