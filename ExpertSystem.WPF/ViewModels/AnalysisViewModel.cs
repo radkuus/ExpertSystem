@@ -31,6 +31,7 @@ namespace ExpertSystem.WPF.ViewModels
         private string _selectedNeighbours;
         private string _selectedLayers;
         private Dataset _selectedDataset;
+        private string _selectedResultColumn;
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
@@ -59,10 +60,13 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     _isKnnChecked = value;
                     OnPropertyChanged(nameof(IsKnnChecked));
+                    OnPropertyChanged(nameof(IsModelWithParametersChecked));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
                 }
                 if(!_isKnnChecked)
                 {
                     SelectedNeighbours = null;
+                    SelectedResultColumn = null;
                 }
             }
         }
@@ -86,10 +90,13 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     _isNeuralNetworkChecked = value;
                     OnPropertyChanged(nameof(IsNeuralNetworkChecked));
+                    OnPropertyChanged(nameof(IsModelWithParametersChecked));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
                 }
                 if (!_isNeuralNetworkChecked)
                 {
                     SelectedLayers = null;
+                    SelectedResultColumn = null;
                 } 
             }
         }
@@ -110,8 +117,16 @@ namespace ExpertSystem.WPF.ViewModels
             get => _isLinearRegressionChecked;
             set
             {
-                _isLinearRegressionChecked = value;
-                OnPropertyChanged(nameof(IsLinearRegressionChecked));
+                if (_isLinearRegressionChecked != value)
+                {
+                    _isLinearRegressionChecked = value;
+                    OnPropertyChanged(nameof(IsLinearRegressionChecked));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                }
+                if (!_isLinearRegressionChecked)
+                {
+                    SelectedResultColumn = null;
+                }
             }
         }
 
@@ -120,8 +135,16 @@ namespace ExpertSystem.WPF.ViewModels
             get => _isBayesChecked;
             set
             {
-                _isBayesChecked = value;
-                OnPropertyChanged(nameof(IsBayesChecked));
+                if (_isBayesChecked != value)
+                {
+                    _isBayesChecked = value;
+                    OnPropertyChanged(nameof(IsBayesChecked));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                }
+                if (!_isBayesChecked) 
+                {
+                    SelectedResultColumn = null;
+                }
             }
         }
 
@@ -130,11 +153,18 @@ namespace ExpertSystem.WPF.ViewModels
             get => _isOwnChecked;
             set
             {
-                _isOwnChecked = value;
-                OnPropertyChanged(nameof(IsOwnChecked));
+                if (_isOwnChecked != value)
+                {
+                    _isOwnChecked = value;
+                    OnPropertyChanged(nameof(IsOwnChecked));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                }
+                if (!_isOwnChecked)
+                {
+                    SelectedResultColumn = null;
+                }
             }
         }
-
 
         public Dataset SelectedDataset
         {
@@ -145,5 +175,18 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(SelectedDataset));
             }
         }
+
+        public string SelectedResultColumn
+        {
+            get => _selectedResultColumn;
+            set
+            {
+                _selectedResultColumn = value;
+                OnPropertyChanged(nameof(SelectedResultColumn));
+            }
+        }
+
+        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
     }
 }
