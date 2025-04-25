@@ -185,7 +185,13 @@
                             <ComboBox Width="100" FontSize="15" ItemsSource="{Binding DatasetColumnNames}" SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"></ComboBox>
                         </StackPanel>
                     </Grid>
-
+                    <Button Content="Generate Results" 
+                    Command="{Binding GenerateResultsCommand}" 
+                    FontSize="15" 
+                    Margin="0,10,0,0" 
+                    Padding="10,5" 
+                    HorizontalAlignment="Center" 
+                    IsEnabled="{Binding CanGenerateResults}"/>
                 </StackPanel>
 
 

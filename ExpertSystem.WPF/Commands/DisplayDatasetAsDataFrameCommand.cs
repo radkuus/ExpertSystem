@@ -14,9 +14,9 @@ namespace ExpertSystem.WPF.Commands
     public class DisplayDatasetAsDataFrameCommand : ICommand
     {
         private readonly IDatasetService _datasetService;
-        private readonly IDataFrameDialogService _dataFrameDialogService;
+        private readonly IDialogService _dataFrameDialogService;
 
-        public DisplayDatasetAsDataFrameCommand(IDatasetService datasetService, IDataFrameDialogService dataFrameDialogService)
+        public DisplayDatasetAsDataFrameCommand(IDatasetService datasetService, IDialogService dataFrameDialogService)
         {
             _datasetService = datasetService;
             _dataFrameDialogService = dataFrameDialogService;
@@ -37,7 +37,7 @@ namespace ExpertSystem.WPF.Commands
                 var dataTable = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 if (dataTable != null)
                 {
-                    _dataFrameDialogService.ShowDataFrame(dataTable);
+                    _dataFrameDialogService.ShowDataFrameDialog(dataTable);
                 }
             }
         }

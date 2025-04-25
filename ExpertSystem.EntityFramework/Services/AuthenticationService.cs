@@ -22,11 +22,12 @@ namespace ExpertSystem.EntityFramework.Services
 
         private (bool IsValid, RegistrationResult Result) ValidateInput(string email, string nickname, string password, string confirmPassword) // private () X () => return tuple 
         {
+            if (string.IsNullOrEmpty(nickname))
+                return (false, RegistrationResult.InvalidNicknameFormat);
+
             if (string.IsNullOrEmpty(email))
                 return (false, RegistrationResult.InvalidEmailFormat);
 
-            if (string.IsNullOrEmpty(nickname))
-                return (false, RegistrationResult.InvalidNicknameFormat);
 
             if (string.IsNullOrEmpty(password))
                 return (false, RegistrationResult.InvalidPasswordFormat);
@@ -72,6 +73,10 @@ namespace ExpertSystem.EntityFramework.Services
         public async Task<RegistrationResult> Register(string nickname, string password, string confirmPassword, string email, bool isAdmin)
         {
 
+            // validation
+            var (isValid, validationResult) = ValidateInput(email, nickname, password, confirmPassword);
+            if (!isValid)
+                return validationResult;
 
             // check for duplicates 
             User nicknameUser = await _userService.GetByNickname(nickname.ToLower());
@@ -88,10 +93,6 @@ namespace ExpertSystem.EntityFramework.Services
                     return RegistrationResult.EmailAlreadyTaken;
             }
 
-            // validation
-            var (isValid, validationResult) = ValidateInput(email, nickname, password, confirmPassword);
-            if (!isValid)
-                return validationResult;
 
             string passwordHashed = _passwordHasher.HashPassword(password);
 
