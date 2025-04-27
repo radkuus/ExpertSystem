@@ -63,14 +63,17 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<int>("ExperimentID")
                         .HasColumnType("integer");
 
-                    b.Property<int>("LogicOperator")
-                        .HasColumnType("logic_operator");
+                    b.Property<string>("LogicOperator")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("Metric")
-                        .HasColumnType("metric");
+                    b.Property<string>("Metric")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("Operator")
-                        .HasColumnType("operator");
+                    b.Property<string>("Operator")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<double>("Threshold")
                         .HasColumnType("double precision");
@@ -122,8 +125,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.Property<int>("ModelType")
-                        .HasColumnType("model_type");
+                    b.Property<string>("ModelType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -148,7 +152,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("F1Score")
                         .HasColumnType("integer");
@@ -159,8 +163,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<int>("Recall")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SetType")
-                        .HasColumnType("set_type");
+                    b.Property<string>("SetType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -182,8 +187,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("PlotType")
-                        .HasColumnType("plot_type");
+                    b.Property<string>("PlotType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("ResultId")
                         .HasColumnType("integer");

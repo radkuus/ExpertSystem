@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace ExpertSystem.EntityFramework.Migrations
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:Enum:logic_operator", "and,or")
                 .Annotation("Npgsql:Enum:metric", "accuracy,f1score,precision,recall")
-                .Annotation("Npgsql:Enum:model_type", "knn,linear_regression")
+                .Annotation("Npgsql:Enum:model_type", "knn,linear_regression,bayes,neural_network,own")
                 .Annotation("Npgsql:Enum:operator", "greater_than,greater_than_or_equal,less_than,less_than_or_equal")
                 .Annotation("Npgsql:Enum:plot_type", "confusion_matrix,roc")
                 .Annotation("Npgsql:Enum:set_type", "training_set,validation_set,test_set");
@@ -89,10 +89,10 @@ namespace ExpertSystem.EntityFramework.Migrations
                     RuleId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExperimentID = table.Column<int>(type: "integer", nullable: false),
-                    Metric = table.Column<int>(type: "metric", nullable: false),
-                    Operator = table.Column<int>(type: "operator", nullable: false),
+                    Metric = table.Column<string>(type: "text", nullable: false),
+                    Operator = table.Column<string>(type: "text", nullable: false),
                     Threshold = table.Column<double>(type: "double precision", nullable: false),
-                    LogicOperator = table.Column<int>(type: "logic_operator", nullable: false)
+                    LogicOperator = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,7 +112,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     ConfigId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExperimentId = table.Column<int>(type: "integer", nullable: false),
-                    ModelType = table.Column<int>(type: "model_type", nullable: false),
+                    ModelType = table.Column<string>(type: "text", nullable: false),
                     Hyperparameters = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
@@ -133,12 +133,12 @@ namespace ExpertSystem.EntityFramework.Migrations
                     ResultId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ConfigId = table.Column<int>(type: "integer", nullable: false),
-                    SetType = table.Column<int>(type: "set_type", nullable: false),
+                    SetType = table.Column<string>(type: "text", nullable: false),
                     Accuracy = table.Column<int>(type: "integer", nullable: false),
                     F1Score = table.Column<int>(type: "integer", nullable: false),
                     Precision = table.Column<int>(type: "integer", nullable: false),
                     Recall = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,7 +158,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     PlotId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ResultId = table.Column<int>(type: "integer", nullable: false),
-                    PlotType = table.Column<int>(type: "plot_type", nullable: false),
+                    PlotType = table.Column<string>(type: "text", nullable: false),
                     FilePath = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>

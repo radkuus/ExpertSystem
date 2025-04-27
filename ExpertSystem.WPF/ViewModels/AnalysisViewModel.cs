@@ -24,6 +24,8 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IDatasetStore _datasetStore;
         private readonly IDialogService _dataFrameDialogService;
         private readonly IDialogService _resultsDialog;
+        private readonly IApiService _apiService;
+        private readonly IExperimentService _experimentService;
         private bool _isKnnChecked;
         private bool _isLinearRegressionChecked;
         private bool _isBayesChecked;
@@ -37,21 +39,25 @@ namespace ExpertSystem.WPF.ViewModels
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
-        public ICommand LoadDatasetColumnNames {  get; }
+        public ICommand LoadDatasetColumnNames { get; }
         public ICommand GenerateResultsCommand { get; }
-        public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore, IDialogService dataFrameDialogService, IDialogService resultsDialog)
+
+        public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore,
+            IDialogService dataFrameDialogService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService)
         {
             _navigator = navigator;
             _viewModelAbstractFactory = viewModelAbstractFactory;
             _authenticator = authenticator;
             _datasetService = datasetService;
             _datasetStore = datasetStore;
-            _dataFrameDialogService = dataFrameDialogService; 
+            _dataFrameDialogService = dataFrameDialogService;
             _resultsDialog = resultsDialog;
+            _apiService = apiService;
+            _experimentService = experimentService;
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService);
             LoadDatasetColumnNames = new LoadDatasetColumnNames(datasetService, this);
-            GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog); 
+            GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService);
 
         }
 
@@ -92,10 +98,10 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public bool IsNeuralNetworkChecked 
-        { 
+        public bool IsNeuralNetworkChecked
+        {
             get => _isNeuralNetworkChecked;
-            set 
+            set
             {
                 if (_isNeuralNetworkChecked != value)
                 {
@@ -110,7 +116,7 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     SelectedLayers = null;
                     SelectedResultColumn = null;
-                } 
+                }
             }
         }
 
@@ -125,7 +131,7 @@ namespace ExpertSystem.WPF.ViewModels
 
             }
         }
-        
+
 
         public bool IsLinearRegressionChecked
         {
@@ -160,7 +166,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(CanGenerateResults));
 
                 }
-                if (!_isBayesChecked) 
+                if (!_isBayesChecked)
                 {
                     SelectedResultColumn = null;
                 }
@@ -220,6 +226,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _datasetColumnNames = value;
                 OnPropertyChanged(nameof(DatasetColumnNames));
+                OnPropertyChanged(nameof(CanGenerateResults));
             }
         }
 

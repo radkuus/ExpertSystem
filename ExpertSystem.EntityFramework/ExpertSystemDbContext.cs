@@ -1,80 +1,96 @@
-﻿using ExpertSystem.Domain.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.EntityFramework
 {
     public class ExpertSystemDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-
         public DbSet<Dataset> Datasets { get; set; }
-
         public DbSet<Experiment> Experiments { get; set; }
-
         public DbSet<ModelConfiguration> ModelConfigurations { get; set; }
-
         public DbSet<ModelResult> ModelResults { get; set; }
-
         public DbSet<Plot> Plots { get; set; }
-
         public DbSet<DecisionRule> DecisionRules { get; set; }
+
         public ExpertSystemDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasPostgresEnum<ModelType>();
+            base.OnModelCreating(modelBuilder);
 
+            // converter
+            var modelTypeConverter = new ValueConverter<ModelType, string>(
+                v => v.ToString(),
+                v => Enum.Parse<ModelType>(v)
+            );
+
+            modelBuilder.HasPostgresEnum<ModelType>();
             modelBuilder.Entity<ModelConfiguration>()
                 .Property(e => e.ModelType)
-                .HasColumnType("model_type");
+                .HasConversion(modelTypeConverter);
+
+            // converter
+            var setTypeConverter = new ValueConverter<SetType, string>(
+                v => v.ToString(),
+                v => Enum.Parse<SetType>(v)
+            );
 
             modelBuilder.HasPostgresEnum<SetType>();
-
             modelBuilder.Entity<ModelResult>()
                 .Property(mr => mr.SetType)
-                .HasColumnType("set_type");
+                .HasConversion(setTypeConverter);
+
+            // Konwertery dla pozostałych enumów
+            var plotTypeConverter = new ValueConverter<PlotType, string>(
+                v => v.ToString(),
+                v => Enum.Parse<PlotType>(v)
+            );
 
             modelBuilder.HasPostgresEnum<PlotType>();
-
             modelBuilder.Entity<Plot>()
                 .Property(p => p.PlotType)
-                .HasColumnType("plot_type");
+                .HasConversion(plotTypeConverter);
+
+            var metricConverter = new ValueConverter<Metric, string>(
+                v => v.ToString(),
+                v => Enum.Parse<Metric>(v)
+            );
 
             modelBuilder.HasPostgresEnum<Metric>();
-
             modelBuilder.Entity<DecisionRule>()
                 .Property(dr => dr.Metric)
-                .HasColumnType("metric");
+                .HasConversion(metricConverter);
+
+            var operatorConverter = new ValueConverter<Operator, string>(
+                v => v.ToString(),
+                v => Enum.Parse<Operator>(v)
+            );
 
             modelBuilder.HasPostgresEnum<Operator>();
-
             modelBuilder.Entity<DecisionRule>()
                 .Property(dr => dr.Operator)
-                .HasColumnType("operator");
+                .HasConversion(operatorConverter);
+
+            var logicOperatorConverter = new ValueConverter<LogicOperator, string>(
+                v => v.ToString(),
+                v => Enum.Parse<LogicOperator>(v)
+            );
 
             modelBuilder.HasPostgresEnum<LogicOperator>();
-
             modelBuilder.Entity<DecisionRule>()
                 .Property(dr => dr.LogicOperator)
-                .HasColumnType("logic_operator");
+                .HasConversion(logicOperatorConverter);
 
+
+            modelBuilder.Entity<ModelResult>()
+                .Property(mr => mr.CreatedAt)
+                .HasColumnType("timestamp with time zone");
 
             modelBuilder.Entity<ModelConfiguration>()
                 .Property(mc => mc.Hyperparameters)
                 .HasColumnType("jsonb");
-
-            modelBuilder.Entity<ModelResult>()
-                .Property(mr => mr.CreatedAt)
-                .HasColumnType("timestamp");
-
 
             modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("UserId");
             modelBuilder.Entity<Dataset>().Property(d => d.Id).HasColumnName("DatasetId");
@@ -83,8 +99,6 @@ namespace ExpertSystem.EntityFramework
             modelBuilder.Entity<ModelResult>().Property(mr => mr.Id).HasColumnName("ResultId");
             modelBuilder.Entity<Plot>().Property(p => p.Id).HasColumnName("PlotId");
             modelBuilder.Entity<DecisionRule>().Property(dr => dr.Id).HasColumnName("RuleId");
-
-            // creating FK and relations 
 
             modelBuilder.Entity<Dataset>()
                 .HasOne(d => d.User)
@@ -96,30 +110,30 @@ namespace ExpertSystem.EntityFramework
                 .WithMany(u => u.Experiments)
                 .HasForeignKey(e => e.UserId);
 
-           modelBuilder.Entity<Experiment>()
+            modelBuilder.Entity<Experiment>()
                 .HasOne(e => e.Dataset)
                 .WithMany(d => d.Experiments)
                 .HasForeignKey(e => e.DatasetID);
 
-           modelBuilder.Entity<ModelConfiguration>()
+            modelBuilder.Entity<ModelConfiguration>()
                 .HasOne(mc => mc.Experiment)
                 .WithMany(e => e.ModelConfigurations)
                 .HasForeignKey(mc => mc.ExperimentId);
 
-           modelBuilder.Entity<DecisionRule>()
+            modelBuilder.Entity<DecisionRule>()
                 .HasOne(dr => dr.Experiment)
                 .WithMany(e => e.DecisionRules)
                 .HasForeignKey(dr => dr.ExperimentID);
 
-           modelBuilder.Entity<ModelResult>()
+            modelBuilder.Entity<ModelResult>()
                 .HasOne(mr => mr.ModelConfiguration)
                 .WithMany(mc => mc.ModelResults)
                 .HasForeignKey(mr => mr.ConfigId);
 
-           modelBuilder.Entity<Plot>()
+            modelBuilder.Entity<Plot>()
                 .HasOne(p => p.ModelResult)
                 .WithMany(mr => mr.Plots)
                 .HasForeignKey(p => p.ResultId);
         }
-    } 
+    }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.ViewModels;
 using ExpertSystem.WPF.Views;
+using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.WPF.Services
 {
@@ -18,9 +19,9 @@ namespace ExpertSystem.WPF.Services
             dataFrameView.Show();
         }
 
-        public void ShowResultsDialog()
+        public void ShowResultsDialog(List<ModelAnalysisResult> results)
         {
-            var viewModel = new ResultsViewModel();
+            var viewModel = new ResultsViewModel(results);
             var window = new ResultsView { DataContext = viewModel };
             window.Show();
         }

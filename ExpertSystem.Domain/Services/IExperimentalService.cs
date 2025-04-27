@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +7,8 @@ using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.Domain.Services
 {
-    public interface IDialogService
+    public interface IExperimentService
     {
-        void ShowDataFrameDialog(DataTable table);
-        void ShowResultsDialog(List<ModelAnalysisResult> results);
+        Task<int> CreateExperimentWithResults(int userId, int datasetId, List<ModelAnalysisResult> analysisResults, Dictionary<string, string> hyperparameters);
     }
 }
