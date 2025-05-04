@@ -48,7 +48,19 @@ public partial class App : Application
         services.AddSingleton<IApiService, ApiService>();
         services.AddScoped(typeof(GenericDataService<>), typeof(GenericDataService<>));
         services.AddSingleton<IExperimentService, ExperimentService>();
+        services.AddSingleton<IResultsViewModelFactory, ResultsViewModelFactory>();
+        services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
+        {
+            return () => provider.GetRequiredService<ResultsViewModel>();
+        });
+        services.AddSingleton<RegisterViewModel>();
 
+        services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>
+        {
+            return () => new RegisterViewModel(
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<ViewModelFactoryRenavigator<LoginViewModel>>());
+        });
         services.AddSingleton<IExpertSystemViewModelFactory, ExpertSystemViewModelAbstractFactory>();
 
         services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
@@ -64,28 +76,48 @@ public partial class App : Application
             );
         });
 
-        services.AddSingleton<CreateViewModel<AnalysisViewModel>>(services =>
+        services.AddSingleton<CreateViewModel<AnalysisViewModel>>(provider =>
         {
             return () => new AnalysisViewModel(
-                services.GetRequiredService<INavigator>(),
-                services.GetRequiredService<IExpertSystemViewModelFactory>(),
-                services.GetRequiredService<IAuthenticator>(),
-                services.GetRequiredService<IDatasetService>(),
-                services.GetRequiredService<IDatasetStore>(),
-                services.GetRequiredService<IDialogService>(),
-                services.GetRequiredService<IDialogService>(),
-                services.GetRequiredService<IApiService>(),
-                services.GetRequiredService<IExperimentService>());
-
+                provider.GetRequiredService<INavigator>(),
+                provider.GetRequiredService<IExpertSystemViewModelFactory>(),
+                provider.GetRequiredService<IAuthenticator>(),
+                provider.GetRequiredService<IDatasetService>(),
+                provider.GetRequiredService<IDatasetStore>(),
+                provider.GetRequiredService<IDialogService>(),
+                provider.GetRequiredService<IDialogService>(),
+                provider.GetRequiredService<IApiService>(),
+                provider.GetRequiredService<IExperimentService>(),
+                provider.GetRequiredService<CreateViewModel<ResultsViewModel>>(),
+                provider.GetRequiredService<MainViewModel>()
+            );
         });
+
+        services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
+            () => new ResultsViewModel(
+                provider.GetRequiredService<INavigator>(),
+                provider.GetRequiredService<IExpertSystemViewModelFactory>()
+            )
+        );
+
+
+        services.AddSingleton<CreateViewModel<HistoryViewModel>>(provider =>
+            () => new HistoryViewModel(
+                provider.GetRequiredService<INavigator>()
+            )
+        );
+
+
+
+
 
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();
-        services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>
-        {
-            return () => new RegisterViewModel(
-                services.GetRequiredService<IAuthenticator>(),
-                services.GetRequiredService<ViewModelFactoryRenavigator<LoginViewModel>>());
-        });
+
+        services.AddSingleton<ResultsViewModel>();
+        services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
+            () => provider.GetRequiredService<ResultsViewModel>()
+        );
+
 
         services.AddSingleton<CreateViewModel<AdminViewModel>>(services =>
         {

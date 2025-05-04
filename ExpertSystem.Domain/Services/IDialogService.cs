@@ -11,6 +11,5 @@ namespace ExpertSystem.Domain.Services
     public interface IDialogService
     {
         void ShowDataFrameDialog(DataTable table);
-        void ShowResultsDialog(List<ModelAnalysisResult> results);
     }
 }

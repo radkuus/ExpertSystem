@@ -26,6 +26,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IDialogService _resultsDialog;
         private readonly IApiService _apiService;
         private readonly IExperimentService _experimentService;
+        private readonly CreateViewModel<ResultsViewModel> _resultsFactory;
         private bool _isKnnChecked;
         private bool _isLinearRegressionChecked;
         private bool _isBayesChecked;
@@ -36,6 +37,7 @@ namespace ExpertSystem.WPF.ViewModels
         private Dataset _selectedDataset;
         private string _selectedResultColumn;
         private List<string> _datasetColumnNames;
+        private readonly MainViewModel _mainViewModel;
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
@@ -43,7 +45,8 @@ namespace ExpertSystem.WPF.ViewModels
         public ICommand GenerateResultsCommand { get; }
 
         public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore,
-            IDialogService dataFrameDialogService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService)
+            IDialogService dataFrameDialogService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel
+)
         {
             _navigator = navigator;
             _viewModelAbstractFactory = viewModelAbstractFactory;
@@ -54,11 +57,12 @@ namespace ExpertSystem.WPF.ViewModels
             _resultsDialog = resultsDialog;
             _apiService = apiService;
             _experimentService = experimentService;
+            _resultsFactory = resultsFactory;
+            _mainViewModel = mainViewModel;
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService);
             LoadDatasetColumnNames = new LoadDatasetColumnNames(datasetService, this);
-            GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService);
-
+            GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
         }
 
         public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn);

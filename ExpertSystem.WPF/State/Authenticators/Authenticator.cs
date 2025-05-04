@@ -47,6 +47,7 @@ namespace ExpertSystem.WPF.State.Authenticators
         public async Task Logout()
         {
             CurrentUser = null;
+
             await Task.CompletedTask;
         }
 

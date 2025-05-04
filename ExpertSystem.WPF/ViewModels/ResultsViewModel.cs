@@ -1,19 +1,28 @@
 ﻿using System.Collections.ObjectModel;
 using ExpertSystem.Domain.Models;
 using System.Text;
+using ExpertSystem.WPF.State.Navigators;
+using ExpertSystem.WPF.ViewModels.Factories;
 
 namespace ExpertSystem.WPF.ViewModels
 {
     public class ResultsViewModel : BaseViewModel
     {
-        public ObservableCollection<ModelResultViewModel> Models { get; set; }
+        private readonly INavigator _navigator;
+
+        public ObservableCollection<ModelResultViewModel> Models { get; }
         public bool HasResults => Models.Count > 0;
 
-        public ResultsViewModel(List<ModelAnalysisResult> results)
+        public ResultsViewModel(INavigator navigator,
+                                IExpertSystemViewModelFactory factory)
         {
+            _navigator = navigator;
             Models = new ObservableCollection<ModelResultViewModel>();
+        }
 
-            int index = 1;
+        public void LoadResults(List<ModelAnalysisResult> results)
+        {
+            Models.Clear();
             foreach (var result in results)
             {
                 Models.Add(new ModelResultViewModel
@@ -23,6 +32,7 @@ namespace ExpertSystem.WPF.ViewModels
                     ConfusionMatrixText = "Empty for now"
                 });
             }
+            OnPropertyChanged(nameof(HasResults));
         }
 
         private string GenerateClassificationReport(ModelAnalysisResult result)

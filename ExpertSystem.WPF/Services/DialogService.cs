@@ -18,12 +18,5 @@ namespace ExpertSystem.WPF.Services
             var dataFrameView = new DataFrameView(table);
             dataFrameView.Show();
         }
-
-        public void ShowResultsDialog(List<ModelAnalysisResult> results)
-        {
-            var viewModel = new ResultsViewModel(results);
-            var window = new ResultsView { DataContext = viewModel };
-            window.Show();
-        }
     }
 }

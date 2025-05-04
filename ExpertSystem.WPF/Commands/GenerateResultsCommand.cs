@@ -14,6 +14,7 @@ using ExpertSystem.Domain.Models;
 using System.Diagnostics;
 using System.Net.Http;
 using System.IO;
+using ExpertSystem.WPF.State.Navigators;
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -25,21 +26,29 @@ namespace ExpertSystem.WPF.Commands
         private readonly IApiService _apiService;
         private readonly IExperimentService _experimentService;
         private Process? _apiProcess;
+        private readonly CreateViewModel<ResultsViewModel> _resultsFactory;
+        private readonly INavigator _navigator;
+        private readonly MainViewModel _mainViewModel;
 
         public GenerateResultsCommand(
             AnalysisViewModel viewModel,
             IDialogService dialogService,
             IDatasetService datasetService,
             IApiService apiService,
-            IExperimentService experimentService)
+            IExperimentService experimentService,
+            CreateViewModel<ResultsViewModel> resultsFactory,
+            INavigator navigator,
+            MainViewModel mainViewModel)
         {
             _viewModel = viewModel;
             _dialogService = dialogService;
             _datasetService = datasetService;
             _apiService = apiService;
             _experimentService = experimentService;
+            _resultsFactory = resultsFactory;
+            _navigator = navigator;
+            _mainViewModel = mainViewModel;
         }
-
         public bool CanExecute(object? parameter)
         {
             return _viewModel.CanGenerateResults;
@@ -111,7 +120,12 @@ namespace ExpertSystem.WPF.Commands
                     hyperparameters: hyperparameters
                 );
 
-                _dialogService.ShowResultsDialog(results);
+                var resultsVm = _resultsFactory();
+                resultsVm.LoadResults(results);
+
+                _navigator.CurrentViewModel = resultsVm;
+                _navigator.CurrentViewType = ViewType.Results;
+                _mainViewModel.AreResultsGenerated = true;
             }
             catch (Exception ex)
             {
@@ -119,7 +133,7 @@ namespace ExpertSystem.WPF.Commands
             }
         }
 
-   
+
         private async Task EnsureServerRunning()
         {
             if (_apiProcess != null && !_apiProcess.HasExited)

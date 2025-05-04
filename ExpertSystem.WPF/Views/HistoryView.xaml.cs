@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ExpertSystem.WPF.Views
 {
     /// <summary>
-    /// Interaction logic for ResultsView.xaml
+    /// Interaction logic for HistoryView.xaml
     /// </summary>
-    public partial class ResultsView : UserControl
+    public partial class HistoryView : UserControl
     {
-        public ResultsView()
+        public HistoryView()
         {
             InitializeComponent();
         }
