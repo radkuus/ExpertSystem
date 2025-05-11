@@ -18,5 +18,11 @@ namespace ExpertSystem.WPF.Services
             var dataFrameView = new DataFrameView(table);
             dataFrameView.Show();
         }
+
+        public void ShowDatasetStatistics(DataTable statisticsTable)
+        {
+            var statisticsView = new DatasetStatisticsView(statisticsTable);
+            statisticsView.Show();
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Commands;
+using ExpertSystem.WPF.Conditions;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Datasets;
 using ExpertSystem.WPF.State.Navigators;
@@ -23,6 +24,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IDatasetService _datasetService;
         private readonly IDatasetStore _datasetStore;
         private readonly IDialogService _dataFrameDialogService;
+        private readonly IDatasetStatisticsService _dataStatisticsService;
         private readonly IDialogService _resultsDialog;
         private readonly IApiService _apiService;
         private readonly IExperimentService _experimentService;
@@ -38,14 +40,19 @@ namespace ExpertSystem.WPF.ViewModels
         private string _selectedResultColumn;
         private List<string> _datasetColumnNames;
         private readonly MainViewModel _mainViewModel;
+        private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
+        public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
+        public ObservableCollection<Condition> Conditions { get; set; } = new ObservableCollection<Condition>();
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
         public ICommand LoadDatasetColumnNames { get; }
+        public ICommand AddConditionCommand { get; }
+        public ICommand RemoveConditionCommand { get; }
         public ICommand GenerateResultsCommand { get; }
 
         public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore,
-            IDialogService dataFrameDialogService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel
+            IDialogService dataFrameDialogService, IDatasetStatisticsService dataStatisticsService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel
 )
         {
             _navigator = navigator;
@@ -54,20 +61,22 @@ namespace ExpertSystem.WPF.ViewModels
             _datasetService = datasetService;
             _datasetStore = datasetStore;
             _dataFrameDialogService = dataFrameDialogService;
+            _dataStatisticsService = dataStatisticsService;
             _resultsDialog = resultsDialog;
             _apiService = apiService;
             _experimentService = experimentService;
             _resultsFactory = resultsFactory;
             _mainViewModel = mainViewModel;
+
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
-            DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService);
+            DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService, dataStatisticsService);
             LoadDatasetColumnNames = new LoadDatasetColumnNames(datasetService, this);
+            AddConditionCommand = new AddConditionCommand(this);
+            RemoveConditionCommand = new RemoveConditionCommand(this);
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
         }
 
         public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn);
-
-        public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
 
         public bool IsKnnChecked
         {
@@ -81,6 +90,8 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsModelWithParametersChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResults));
+                    OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                    UpdateSelectedModels();
                 }
                 if (!_isKnnChecked)
                 {
@@ -98,6 +109,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedNeighbours = value;
                 OnPropertyChanged(nameof(SelectedNeighbours));
                 OnPropertyChanged(nameof(CanGenerateResults));
+                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
 
             }
         }
@@ -114,6 +126,8 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsModelWithParametersChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResults));
+                    OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                    UpdateSelectedModels();
 
                 }
                 if (!_isNeuralNetworkChecked)
@@ -132,6 +146,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedLayers = value;
                 OnPropertyChanged(nameof(SelectedLayers));
                 OnPropertyChanged(nameof(CanGenerateResults));
+                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
 
             }
         }
@@ -148,6 +163,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsLinearRegressionChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResults));
+                    UpdateSelectedModels();
 
                 }
                 if (!_isLinearRegressionChecked)
@@ -168,6 +184,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsBayesChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResults));
+                    UpdateSelectedModels();
 
                 }
                 if (!_isBayesChecked)
@@ -188,6 +205,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsOwnChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResults));
+                    UpdateSelectedModels();
 
                 }
                 if (!_isOwnChecked)
@@ -217,11 +235,10 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedResultColumn = value;
                 OnPropertyChanged(nameof(SelectedResultColumn));
                 OnPropertyChanged(nameof(CanGenerateResults));
+                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
             }
         }
 
-        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
 
         public List<string> DatasetColumnNames
         {
@@ -233,6 +250,47 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(CanGenerateResults));
             }
         }
+
+        public ObservableCollection<string> SelectedModels
+        {
+            get => _selectedModels;
+            set
+            {
+                _selectedModels = value;
+                OnPropertyChanged(nameof(SelectedModels));
+            }
+        }
+
+        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+        public bool IsResultColumnAndHyperparametersChecked => !string.IsNullOrWhiteSpace(SelectedResultColumn) && (!IsKnnChecked || !string.IsNullOrWhiteSpace(SelectedNeighbours)) && (!IsNeuralNetworkChecked || !string.IsNullOrWhiteSpace(SelectedLayers));
+
+        private void UpdateSelectedModels()
+        {
+            SelectedModels.Clear();
+
+            if (IsKnnChecked)
+            {
+                SelectedModels.Add("KNN");
+            }
+            if (IsLinearRegressionChecked)
+            {
+                SelectedModels.Add("Linear Regression");
+            }
+            if (IsBayesChecked)
+            {
+                SelectedModels.Add("Bayes");
+            }
+            if (IsNeuralNetworkChecked)
+            {
+                SelectedModels.Add("Neural Network");
+            }
+            if (IsOwnChecked)
+            {
+                SelectedModels.Add("Own");
+            }
+        }
+
 
 
 

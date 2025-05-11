@@ -45,6 +45,7 @@ public partial class App : Application
         services.AddSingleton<IDatasetService, DatasetService>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<IDatasetStatisticsService, DatasetStatisticsService>();
         services.AddSingleton<IApiService, ApiService>();
         services.AddScoped(typeof(GenericDataService<>), typeof(GenericDataService<>));
         services.AddSingleton<IExperimentService, ExperimentService>();
@@ -85,6 +86,7 @@ public partial class App : Application
                 provider.GetRequiredService<IDatasetService>(),
                 provider.GetRequiredService<IDatasetStore>(),
                 provider.GetRequiredService<IDialogService>(),
+                provider.GetRequiredService<IDatasetStatisticsService>(),
                 provider.GetRequiredService<IDialogService>(),
                 provider.GetRequiredService<IApiService>(),
                 provider.GetRequiredService<IExperimentService>(),
