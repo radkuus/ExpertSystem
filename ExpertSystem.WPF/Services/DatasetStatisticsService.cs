@@ -22,6 +22,7 @@ namespace ExpertSystem.WPF.Services
                 table.Columns.Add(column.ColumnName);
             }
 
+            // Nowa logika: zamiast patrzeć na DataType kolumny, sprawdzamy czy wartości są numeryczne
             var numericColumns = dataTable.Columns.Cast<DataColumn>()
                 .Where(IsNumericColumn)
                 .ToList();
@@ -64,7 +65,6 @@ namespace ExpertSystem.WPF.Services
                 var valueStr = row[column].ToString();
                 if (!double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
                 {
-                    return false; 
                 }
             }
             return true;

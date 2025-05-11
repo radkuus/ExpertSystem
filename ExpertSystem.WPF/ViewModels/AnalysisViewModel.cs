@@ -76,7 +76,7 @@ namespace ExpertSystem.WPF.ViewModels
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
         }
 
-        public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn);
+        public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
 
         public bool IsKnnChecked
         {
@@ -239,6 +239,18 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
+        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
 
         public List<string> DatasetColumnNames
         {
@@ -291,8 +303,20 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
+        public ObservableCollection<string> SelectedModels
+        {
+            get => _selectedModels;
+            set
 
+                _selectedModels = value;
 
+            }
+
+        }
+
+        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
+        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
+        public bool IsResultColumnAndHyperparametersChecked => !string.IsNullOrWhiteSpace(SelectedResultColumn) && (!IsKnnChecked || !string.IsNullOrWhiteSpace(SelectedNeighbours)) && (!IsNeuralNetworkChecked || !string.IsNullOrWhiteSpace(SelectedLayers));
 
     }
 }

@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
-using ExpertSystem.WPF.Services;
-using ExpertSystem.WPF.ViewModels;
+using ExpertSystem.WPF.Views;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class LoadDatasetColumnNames : ICommand
+    public class DisplayDatasetAsDataFrameAndStatisticsCommand : ICommand
     {
         private readonly IDatasetService _datasetService;
-        private readonly AnalysisViewModel _analysisViewModel;
+        private readonly IDataFrameDialogService _dataFrameDialogService;
 
-        public LoadDatasetColumnNames(IDatasetService datasetService, AnalysisViewModel analysisViewModel)
+        public DisplayDatasetAsDataFrameCommand(IDatasetService datasetService, IDataFrameDialogService dataFrameDialogService)
         {
             _datasetService = datasetService;
-            _analysisViewModel = analysisViewModel;
+            _dataFrameDialogService = dataFrameDialogService;
+            _datasetStatisticsService = datasetStatisticsService;
         }
 
         public event EventHandler? CanExecuteChanged;
+
 
         public bool CanExecute(object? parameter)
         {
@@ -33,8 +35,11 @@ namespace ExpertSystem.WPF.Commands
         {
             if (parameter is Dataset dataset)
             {
-                var datasetColumnNames = await _datasetService.GetDatasetColumnNames(dataset.Id);
-                _analysisViewModel.DatasetColumnNames = datasetColumnNames;
+                var dataTable = await _datasetService.GetDatasetAsDataTable(dataset.Id);
+                if (dataTable != null)
+                {
+                    _dataFrameDialogService.ShowDataFrame(dataTable);
+                }
             }
         }
     }

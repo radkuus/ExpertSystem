@@ -43,6 +43,7 @@ public partial class App : Application
         services.AddSingleton<IUserService, UserDataService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<IDatasetService, DatasetService>();
+        services.AddSingleton<IDatasetStatisticsService, DatasetStatisticsService>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IDatasetStatisticsService, DatasetStatisticsService>();
@@ -80,19 +81,12 @@ public partial class App : Application
         services.AddSingleton<CreateViewModel<AnalysisViewModel>>(provider =>
         {
             return () => new AnalysisViewModel(
-                provider.GetRequiredService<INavigator>(),
-                provider.GetRequiredService<IExpertSystemViewModelFactory>(),
-                provider.GetRequiredService<IAuthenticator>(),
-                provider.GetRequiredService<IDatasetService>(),
-                provider.GetRequiredService<IDatasetStore>(),
-                provider.GetRequiredService<IDialogService>(),
-                provider.GetRequiredService<IDatasetStatisticsService>(),
-                provider.GetRequiredService<IDialogService>(),
-                provider.GetRequiredService<IApiService>(),
-                provider.GetRequiredService<IExperimentService>(),
-                provider.GetRequiredService<CreateViewModel<ResultsViewModel>>(),
-                provider.GetRequiredService<MainViewModel>()
-            );
+                services.GetRequiredService<INavigator>(),
+                services.GetRequiredService<IExpertSystemViewModelFactory>(),
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<IDatasetService>(),
+                services.GetRequiredService<IDatasetStore>(),
+                services.GetRequiredService<IDataFrameDialogService>());
         });
 
         services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
