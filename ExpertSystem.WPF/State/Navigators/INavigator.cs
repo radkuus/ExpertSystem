@@ -12,12 +12,15 @@ namespace ExpertSystem.WPF.State.Navigators
     {
         Login,
         Home,
-        Analysis
+        Analysis,
+        History,
+        Results
     }
 
     public interface INavigator
     {
         BaseViewModel CurrentViewModel { get; set; }
+        ViewType CurrentViewType { get; set; } 
         event Action StateChanged;
     }
 }

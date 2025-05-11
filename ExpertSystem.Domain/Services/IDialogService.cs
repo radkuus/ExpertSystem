@@ -4,12 +4,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.Domain.Services
 {
-    public interface IDataFrameDialogService
+    public interface IDialogService
     {
-        void ShowDataFrame(DataTable table);
+        void ShowDataFrameDialog(DataTable table);
         void ShowDatasetStatistics(DataTable statisticsTable);
     }
 }

@@ -65,7 +65,6 @@ namespace ExpertSystem.WPF.Services
                 var valueStr = row[column].ToString();
                 if (!double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
                 {
-                    return false; // Jeśli jakiejś wartości nie da się sparsować jako liczby, kolumna nie jest numeryczna
                 }
             }
             return true;

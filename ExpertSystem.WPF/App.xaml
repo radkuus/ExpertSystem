@@ -4,7 +4,7 @@
              xmlns:views="clr-namespace:ExpertSystem.WPF.Views"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExpertSystem.WPF">
-    
+
     <Application.Resources>
 
 
@@ -23,6 +23,15 @@
                 <views:AnalysisView/>
             </DataTemplate>
 
+
+            <DataTemplate DataType="{x:Type viewmodels:ResultsViewModel}">
+                <views:ResultsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:HistoryViewModel}">
+                <views:HistoryView/>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
                 <views:LoginView LoginCommand="{Binding LoginCommand}"/>
             </DataTemplate>
@@ -30,6 +39,8 @@
             <DataTemplate DataType="{x:Type viewmodels:RegisterViewModel}">
                 <views:RegisterView RegisterCommand="{Binding RegisterCommand}"/>
             </DataTemplate>
+
+
 
             <DataTemplate DataType="{x:Type viewmodels:AdminViewModel}">
                 <views:AdminView RegisterCommand="{Binding RegisterCommand}"

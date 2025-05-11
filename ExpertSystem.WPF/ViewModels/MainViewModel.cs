@@ -2,52 +2,69 @@
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.ViewModels.Factories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ExpertSystem.WPF.ViewModels;
 using System.Windows.Input;
 
-namespace ExpertSystem.WPF.ViewModels
+public class MainViewModel : BaseViewModel
 {
-    public class MainViewModel : BaseViewModel
+    private readonly IExpertSystemViewModelFactory _viewModelAbstractFactory;
+    private readonly INavigator _navigator;
+    private readonly IAuthenticator _authenticator;
+    private bool _areResultsGenerated;
+    public bool IsUserLoggedIn => _authenticator.IsUserLoggedIn;
+    public bool IsAdminLoggedIn => _authenticator.IsAdminLoggedIn;
+
+    public BaseViewModel CurrentViewModel => _navigator.CurrentViewModel;
+
+    public ViewType CurrentViewType
     {
-        private readonly IExpertSystemViewModelFactory _viewModelAbstractFactory;
-        private readonly INavigator _navigator;
-        private readonly IAuthenticator _authenticator;
-
-        public bool IsUserLoggedIn => _authenticator.IsUserLoggedIn;
-        public bool IsAdminLoggedIn => _authenticator.IsAdminLoggedIn;
-
-        public BaseViewModel CurrentViewModel => _navigator.CurrentViewModel;
-
-
-        public ICommand UpdateCurrentViewModelCommand { get; }
-
-        public MainViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator)
+        get => _navigator.CurrentViewType;
+        set
         {
-            _navigator = navigator;
-            _authenticator = authenticator;
-            _viewModelAbstractFactory = viewModelAbstractFactory;
-
-            _navigator.StateChanged += Navigator_StateChanged;
-            _authenticator.StateChanged += Authenticator_StateChanged;
-
-
-            UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
-            UpdateCurrentViewModelCommand.Execute(ViewType.Login);
+            _navigator.CurrentViewType = value;
+            OnPropertyChanged(nameof(CurrentViewType));
         }
+    }
 
-        public void Navigator_StateChanged()
+    public ICommand UpdateCurrentViewModelCommand { get; }
+
+    public MainViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator)
+    {
+        _navigator = navigator;
+        _authenticator = authenticator;
+        _viewModelAbstractFactory = viewModelAbstractFactory;
+        _areResultsGenerated = false;
+        _navigator.StateChanged += Navigator_StateChanged;
+        _authenticator.StateChanged += Authenticator_StateChanged;
+
+        UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
+        UpdateCurrentViewModelCommand.Execute(ViewType.Login);
+    }
+
+    public void Navigator_StateChanged()
+    {
+        OnPropertyChanged(nameof(CurrentViewModel));
+        OnPropertyChanged(nameof(CurrentViewType));
+    }
+
+    public void Authenticator_StateChanged()
+    {
+        OnPropertyChanged(nameof(IsUserLoggedIn));
+        OnPropertyChanged(nameof(IsAdminLoggedIn));
+        if (!IsUserLoggedIn)
         {
-            OnPropertyChanged(nameof(CurrentViewModel));
+            AreResultsGenerated = false;
+            _navigator.CurrentViewModel = _viewModelAbstractFactory.CreateViewModel(ViewType.Login);
+            _navigator.CurrentViewType = ViewType.Login;
         }
-
-        public void Authenticator_StateChanged()
+    }
+    public bool AreResultsGenerated
+    {
+        get => _areResultsGenerated;
+        set
         {
-            OnPropertyChanged(nameof(IsUserLoggedIn));
-            OnPropertyChanged(nameof(IsAdminLoggedIn));
+            _areResultsGenerated = value;
+            OnPropertyChanged(nameof(AreResultsGenerated));
         }
     }
 }

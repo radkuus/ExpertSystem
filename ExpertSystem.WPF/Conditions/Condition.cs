@@ -10,7 +10,7 @@ namespace ExpertSystem.WPF.Conditions
 {
     public class Condition
     {
-        public string? SelectedModel { get; set; } 
+        public string? SelectedModel { get; set; }
         public string? SelectedMetric { get; set; }
         public string? SelectedOperator { get; set; }
         public string? SelectedValue { get; set; }

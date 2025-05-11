@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
+             xmlns:local="clr-namespace:ExpertSystem.WPF.Views" 
+             xmlns:viewmodels="clr-namespace:ExpertSystem.WPF.ViewModels" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:AdminViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -24,11 +30,12 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
                 <Button Content="Create user" Height="30" Width="90" Grid.Column="0" 
-                        Click= "RegisterButton" />
+                        Click="RegisterButton" />
 
                 <Button Content="Edit user" Height="30" Width="90" Grid.Column="1" 
-                        Click="EditButton"
+                        Click="EditButton" 
                         CommandParameter="{Binding SelectedUser}"/>
 
                 <Button Content="Delete user" Height="30" Width="90" Grid.Column="2"
@@ -37,7 +44,8 @@
             </Grid>
 
             <ListView ItemsSource="{Binding Users}" Margin="20" Grid.Row="1"
-                      SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                      SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                      SelectionChanged="ListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Nickname" DisplayMemberBinding="{Binding Nickname}" Width="auto"/>
@@ -45,7 +53,6 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-
         </Grid>
 
         <Grid Grid.IsSharedSizeScope="True" Grid.Column="1">
@@ -56,48 +63,56 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-
             </Grid.RowDefinitions>
-            
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,5,0,5"
+                      HorizontalAlignment="Center"
+                      DataContext="{Binding ErrorMessageViewModel}"
+                      Foreground="Red"
+                      Text="{Binding Message}"
+                      TextWrapping="Wrap"
+                      Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
             <Grid Grid.Row="0" Margin="0 45 0 45" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Nickname" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                         Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
-            
+
             <Grid Grid.Row="1" Margin="0 45 0 45" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="E-mail" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
-            
+
             <Grid Grid.Row="2" Margin="0 45 0 45" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Password" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <PasswordBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="passwordpb"/>
+                <PasswordBox x:Name="passwordpb" Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
-            
+
             <Grid Grid.Row="3" Margin="0 45 0 45" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
                     <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Confirm password" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <PasswordBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="password2pb"/>
+                <PasswordBox x:Name="password2pb" Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
 
             <Button Content="Logout" Command="{Binding LogoutCommand}"
                     Height="30" Width="90" Grid.Row="5"/>
         </Grid>
-
     </Grid>
 </UserControl>

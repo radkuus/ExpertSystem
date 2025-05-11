@@ -26,8 +26,7 @@ public partial class App : Application
     {
         IServiceProvider serviceProvider = CreateServiceProvider();
         IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
-        authentication.Register("kamil", "1234", "1234", "kamil@gmail.com", true);
-
+        authentication.Register("kamil", "Testowanko1", "Testowanko1", "kamil.kamil@gmail.com", true);
         Window window = serviceProvider.GetRequiredService<MainWindow>();
         window.Show();
 
@@ -46,8 +45,24 @@ public partial class App : Application
         services.AddSingleton<IDatasetService, DatasetService>();
         services.AddSingleton<IDatasetStatisticsService, DatasetStatisticsService>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<IDataFrameDialogService, DataFrameDialogService>();
+        services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<IDatasetStatisticsService, DatasetStatisticsService>();
+        services.AddSingleton<IApiService, ApiService>();
+        services.AddScoped(typeof(GenericDataService<>), typeof(GenericDataService<>));
+        services.AddSingleton<IExperimentService, ExperimentService>();
+        services.AddSingleton<IResultsViewModelFactory, ResultsViewModelFactory>();
+        services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
+        {
+            return () => provider.GetRequiredService<ResultsViewModel>();
+        });
+        services.AddSingleton<RegisterViewModel>();
 
+        services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>
+        {
+            return () => new RegisterViewModel(
+                services.GetRequiredService<IAuthenticator>(),
+                services.GetRequiredService<ViewModelFactoryRenavigator<LoginViewModel>>());
+        });
         services.AddSingleton<IExpertSystemViewModelFactory, ExpertSystemViewModelAbstractFactory>();
 
         services.AddSingleton<CreateViewModel<HomeViewModel>>(services =>
@@ -63,7 +78,7 @@ public partial class App : Application
             );
         });
 
-        services.AddSingleton<CreateViewModel<AnalysisViewModel>>(services =>
+        services.AddSingleton<CreateViewModel<AnalysisViewModel>>(provider =>
         {
             return () => new AnalysisViewModel(
                 services.GetRequiredService<INavigator>(),
@@ -71,17 +86,34 @@ public partial class App : Application
                 services.GetRequiredService<IAuthenticator>(),
                 services.GetRequiredService<IDatasetService>(),
                 services.GetRequiredService<IDatasetStore>(),
-                services.GetRequiredService<IDataFrameDialogService>(),
-                services.GetRequiredService<IDatasetStatisticsService>());
+                services.GetRequiredService<IDataFrameDialogService>());
         });
 
+        services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
+            () => new ResultsViewModel(
+                provider.GetRequiredService<INavigator>(),
+                provider.GetRequiredService<IExpertSystemViewModelFactory>()
+            )
+        );
+
+
+        services.AddSingleton<CreateViewModel<HistoryViewModel>>(provider =>
+            () => new HistoryViewModel(
+                provider.GetRequiredService<INavigator>()
+            )
+        );
+
+
+
+
+
         services.AddSingleton<ViewModelFactoryRenavigator<LoginViewModel>>();
-        services.AddSingleton<CreateViewModel<RegisterViewModel>>(services =>
-        {
-            return () => new RegisterViewModel(
-                services.GetRequiredService<IAuthenticator>(),
-                services.GetRequiredService<ViewModelFactoryRenavigator<LoginViewModel>>());
-        });
+
+        services.AddSingleton<ResultsViewModel>();
+        services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
+            () => provider.GetRequiredService<ResultsViewModel>()
+        );
+
 
         services.AddSingleton<CreateViewModel<AdminViewModel>>(services =>
         {

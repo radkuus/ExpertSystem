@@ -15,9 +15,8 @@ namespace ExpertSystem.WPF.Commands
     {
         private readonly IDatasetService _datasetService;
         private readonly IDataFrameDialogService _dataFrameDialogService;
-        private readonly IDatasetStatisticsService _datasetStatisticsService;
 
-        public DisplayDatasetAsDataFrameAndStatisticsCommand(IDatasetService datasetService, IDataFrameDialogService dataFrameDialogService, IDatasetStatisticsService datasetStatisticsService)
+        public DisplayDatasetAsDataFrameCommand(IDatasetService datasetService, IDataFrameDialogService dataFrameDialogService)
         {
             _datasetService = datasetService;
             _dataFrameDialogService = dataFrameDialogService;
@@ -40,9 +39,6 @@ namespace ExpertSystem.WPF.Commands
                 if (dataTable != null)
                 {
                     _dataFrameDialogService.ShowDataFrame(dataTable);
-
-                    var statisticsTable = _datasetStatisticsService.CalculateDatasetStatistics(dataTable);
-                    _dataFrameDialogService.ShowDatasetStatistics(statisticsTable);
                 }
             }
         }

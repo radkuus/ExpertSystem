@@ -9,7 +9,10 @@ namespace ExpertSystem.Domain.Models
     public enum ModelType
     {
         KNN,
-        LinearRegression
+        LinearRegression,
+        Bayes,
+        NeuralNetwork,
+        Own
     }
     public class ModelConfiguration : BaseObject
     {

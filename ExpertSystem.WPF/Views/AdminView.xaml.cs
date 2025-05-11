@@ -1,4 +1,5 @@
-﻿using SimpleTrader.WPF.Commands;
+﻿using ExpertSystem.WPF.ViewModels;
+using SimpleTrader.WPF.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,15 +83,27 @@ namespace ExpertSystem.WPF.Views
             }
         }
 
+        public Tuple<string, string> PasswordTuple =>
+            Tuple.Create(passwordpb.Password, password2pb.Password);
         private async void EditButton(object sender, RoutedEventArgs e)
         {
+            var (password1, password2) = PasswordTuple;
             if (EditUserCommand != null)
             {
-                var passwordData = (passwordpb.Password, password2pb.Password);
-                await EditUserCommand.ExecuteAsync(passwordData);
+                await EditUserCommand.ExecuteAsync(PasswordTuple);
                 await DisplayUsersCommand.ExecuteAsync(null);
             }
         }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                passwordpb.Password = string.Empty;
+                password2pb.Password = string.Empty;
+            }
+        }
+
     }
 }
 

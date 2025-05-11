@@ -5,13 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ExpertSystem.Domain.Services;
+using ExpertSystem.WPF.ViewModels;
 using ExpertSystem.WPF.Views;
+using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.WPF.Services
 {
-    public class DataFrameDialogService : IDataFrameDialogService
+    public class DialogService : IDialogService
     {
-        public void ShowDataFrame(DataTable table)
+        public void ShowDataFrameDialog(DataTable table)
         {
             var dataFrameView = new DataFrameView(table);
             dataFrameView.Show();

@@ -32,3 +32,4 @@ namespace ExpertSystem.WPF.Commands
         }
     }
 }
+

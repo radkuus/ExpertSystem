@@ -12,15 +12,20 @@ namespace ExpertSystem.WPF.ViewModels.Factories
         private readonly CreateViewModel<HomeViewModel> _createHomeViewModel;
         private readonly CreateViewModel<AnalysisViewModel> _createAnalysisViewModel;
         private readonly CreateViewModel<LoginViewModel> _createLoginViewModel;
-
+        private readonly CreateViewModel<HistoryViewModel> _createHistoryViewModel;
+        private readonly CreateViewModel<ResultsViewModel> _createResultsViewModel;
         public ExpertSystemViewModelAbstractFactory(
-            CreateViewModel<HomeViewModel> createHomeViewModel, 
-            CreateViewModel<AnalysisViewModel> createAnalysisViewModel, 
-            CreateViewModel<LoginViewModel> createLoginViewModel)
+            CreateViewModel<HomeViewModel> createHomeViewModel,
+            CreateViewModel<AnalysisViewModel> createAnalysisViewModel,
+            CreateViewModel<LoginViewModel> createLoginViewModel,
+            CreateViewModel<ResultsViewModel> createResultsViewModel,
+            CreateViewModel<HistoryViewModel> createHistoryViewModel)
         {
             _createHomeViewModel = createHomeViewModel;
             _createAnalysisViewModel = createAnalysisViewModel;
             _createLoginViewModel = createLoginViewModel;
+            _createResultsViewModel = createResultsViewModel;
+            _createHistoryViewModel = createHistoryViewModel;
         }
 
         public BaseViewModel CreateViewModel(ViewType viewType)
@@ -33,6 +38,10 @@ namespace ExpertSystem.WPF.ViewModels.Factories
                     return _createHomeViewModel();
                 case ViewType.Analysis:
                     return _createAnalysisViewModel();
+                case ViewType.History:
+                    return _createHistoryViewModel();
+                case ViewType.Results:
+                    return _createResultsViewModel();
                 default:
                     throw new ArgumentException("ViewType doesn't have ViewModel", "viewType");
             }

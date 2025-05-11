@@ -16,6 +16,8 @@ namespace ExpertSystem.WPF.State.Navigators
     public class Navigator : INavigator
     {
         private BaseViewModel _currentViewModel;
+        private ViewType _currentViewType;
+
         public BaseViewModel CurrentViewModel
         {
             get
@@ -25,6 +27,16 @@ namespace ExpertSystem.WPF.State.Navigators
             set
             {
                 _currentViewModel = value;
+                StateChanged?.Invoke();
+            }
+        }
+
+        public ViewType CurrentViewType
+        {
+            get => _currentViewType;
+            set
+            {
+                _currentViewType = value;
                 StateChanged?.Invoke();
             }
         }
