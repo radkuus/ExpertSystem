@@ -46,7 +46,7 @@ namespace ExpertSystem.WPF.ViewModels
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
-        public ICommand LoadDatasetColumnNames { get; }
+        public ICommand LoadDatasetColumnNamesCommand { get; }
         public ICommand AddConditionCommand { get; }
         public ICommand RemoveConditionCommand { get; }
         public ICommand GenerateResultsCommand { get; }
@@ -70,13 +70,13 @@ namespace ExpertSystem.WPF.ViewModels
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService, dataStatisticsService);
-            LoadDatasetColumnNames = new LoadDatasetColumnNames(datasetService, this);
+            LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
             AddConditionCommand = new AddConditionCommand(this);
             RemoveConditionCommand = new RemoveConditionCommand(this);
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
         }
 
-        public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
+        public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn);
 
         public bool IsKnnChecked
         {
@@ -223,7 +223,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedDataset = value;
                 OnPropertyChanged(nameof(SelectedDataset));
                 OnPropertyChanged(nameof(CanGenerateResults));
-                LoadDatasetColumnNames.Execute(_selectedDataset);
+                LoadDatasetColumnNamesCommand.Execute(_selectedDataset);
             }
         }
 
@@ -239,18 +239,6 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
 
         public List<string> DatasetColumnNames
         {
@@ -303,20 +291,8 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public ObservableCollection<string> SelectedModels
-        {
-            get => _selectedModels;
-            set
 
-                _selectedModels = value;
 
-            }
-
-        }
-
-        public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
-        public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-        public bool IsResultColumnAndHyperparametersChecked => !string.IsNullOrWhiteSpace(SelectedResultColumn) && (!IsKnnChecked || !string.IsNullOrWhiteSpace(SelectedNeighbours)) && (!IsNeuralNetworkChecked || !string.IsNullOrWhiteSpace(SelectedLayers));
 
     }
 }
