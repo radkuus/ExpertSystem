@@ -11,15 +11,17 @@ using ExpertSystem.WPF.Views;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class DisplayDatasetAsDataFrameCommand : ICommand
+    public class DisplayDatasetAsDataFrameAndStatisticsCommand : ICommand
     {
         private readonly IDatasetService _datasetService;
         private readonly IDataFrameDialogService _dataFrameDialogService;
+        private readonly IDatasetStatisticsService _datasetStatisticsService;
 
-        public DisplayDatasetAsDataFrameCommand(IDatasetService datasetService, IDataFrameDialogService dataFrameDialogService)
+        public DisplayDatasetAsDataFrameAndStatisticsCommand(IDatasetService datasetService, IDataFrameDialogService dataFrameDialogService, IDatasetStatisticsService datasetStatisticsService)
         {
             _datasetService = datasetService;
             _dataFrameDialogService = dataFrameDialogService;
+            _datasetStatisticsService = datasetStatisticsService;
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -38,6 +40,9 @@ namespace ExpertSystem.WPF.Commands
                 if (dataTable != null)
                 {
                     _dataFrameDialogService.ShowDataFrame(dataTable);
+
+                    var statisticsTable = _datasetStatisticsService.CalculateDatasetStatistics(dataTable);
+                    _dataFrameDialogService.ShowDatasetStatistics(statisticsTable);
                 }
             }
         }

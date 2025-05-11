@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ExpertSystem.Domain.Services
 {
-    public interface IDataFrameDialogService
+    public interface IDatasetStatisticsService
     {
-        void ShowDataFrame(DataTable table);
-        void ShowDatasetStatistics(DataTable statisticsTable);
+        DataTable CalculateDatasetStatistics(DataTable dataTable);
     }
 }

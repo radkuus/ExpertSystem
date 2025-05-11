@@ -11,12 +11,12 @@ using ExpertSystem.WPF.ViewModels;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class LoadDatasetColumnNames : ICommand
+    public class LoadDatasetColumnNamesCommand : ICommand
     {
         private readonly IDatasetService _datasetService;
         private readonly AnalysisViewModel _analysisViewModel;
 
-        public LoadDatasetColumnNames(IDatasetService datasetService, AnalysisViewModel analysisViewModel)
+        public LoadDatasetColumnNamesCommand(IDatasetService datasetService, AnalysisViewModel analysisViewModel)
         {
             _datasetService = datasetService;
             _analysisViewModel = analysisViewModel;
