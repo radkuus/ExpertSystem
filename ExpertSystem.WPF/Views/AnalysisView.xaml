@@ -213,6 +213,59 @@
                     <Button Content="Remove" Height="35" Width="70" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveConditionCommand}"></Button>
                 </StackPanel>
 
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="If" FontSize="20" Margin="10"/>
+                    <ComboBox Width="100" Height="30" FontSize="15" ItemsSource="{Binding SelectedModels}" SelectedItem="{Binding SelectedModel}" />
+                    <ComboBox Width="100" Height="30" FontSize="15" SelectedItem="{Binding SelectedMetric}">
+                        <ComboBoxItem Content="Accuracy"/>
+                        <ComboBoxItem Content="Precision"/>
+                        <ComboBoxItem Content="Recall"/>
+                        <ComboBoxItem Content="F1-Score"/>
+                    </ComboBox>
+                    <ComboBox Width="40" Height="30" FontSize="15" SelectedItem="{Binding SelectedOperator}">
+                        <ComboBoxItem Content=">"/>
+                        <ComboBoxItem Content="="/>
+                        <ComboBoxItem Content="&lt;"/>
+                    </ComboBox>
+                    <TextBox Width="50" Height="30" FontSize="20" Text="{Binding SelectedValue}" MaxLength="4">
+                        <i:Interaction.Behaviors>
+                            <behaviors:NumericInputBehavior/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding Conditions}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+                                <TextBlock Text="And" FontSize="20" Margin="10"/>
+                                <ComboBox Width="100" Height="30" FontSize="15" ItemsSource="{Binding SelectedModels}" SelectedItem="{Binding SelectedModel}" />
+                                <ComboBox Width="100" Height="30" FontSize="15" SelectedItem="{Binding SelectedMetric}">
+                                    <ComboBoxItem Content="Accuracy"/>
+                                    <ComboBoxItem Content="Precision"/>
+                                    <ComboBoxItem Content="Recall"/>
+                                    <ComboBoxItem Content="F1-Score"/>
+                                </ComboBox>
+                                <ComboBox Width="40" Height="30" FontSize="15" SelectedItem="{Binding SelectedOperator}">
+                                    <ComboBoxItem Content=">"/>
+                                    <ComboBoxItem Content="="/>
+                                    <ComboBoxItem Content="&lt;"/>
+                                </ComboBox>
+                                <TextBox Width="50" Height="30" FontSize="20" Text="{Binding SelectedValue}"  MaxLength="4">
+                                    <i:Interaction.Behaviors>
+                                        <behaviors:NumericInputBehavior/>
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
             </Grid>
         </Border>

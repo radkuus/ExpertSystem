@@ -11,6 +11,7 @@ using System.Windows;
 
 namespace ExpertSystem.WPF.Controls.Behaviors
 {
+    public class NumericInputBehavior : Behavior<TextBox>
     {
         private static readonly Regex _regex = new Regex(@"^[01](\,\d{0,2})?$");
 
