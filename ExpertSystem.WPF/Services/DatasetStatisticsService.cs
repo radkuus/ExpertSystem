@@ -17,18 +17,17 @@ namespace ExpertSystem.WPF.Services
             var table = new DataTable();
             table.Columns.Add("Statistic");
 
-            foreach (DataColumn column in dataTable.Columns)
-            {
-                table.Columns.Add(column.ColumnName);
-            }
-
-            // Nowa logika: zamiast patrzeć na DataType kolumny, sprawdzamy czy wartości są numeryczne
             var numericColumns = dataTable.Columns.Cast<DataColumn>()
                 .Where(IsNumericColumn)
                 .ToList();
 
             if (!numericColumns.Any())
                 return table;
+
+            foreach(DataColumn column in numericColumns)
+            {
+                table.Columns.Add(column.ColumnName);
+            }
 
             double[] GetColumnValues(DataColumn col)
             {
@@ -39,6 +38,7 @@ namespace ExpertSystem.WPF.Services
                     .ToArray();
             }
 
+            table.Rows.Add(CreateRow(table, "count", numericColumns, col => GetColumnValues(col).Length.ToString()));
             table.Rows.Add(CreateRow(table, "mean", numericColumns, col => GetColumnValues(col).Average().ToString("F2")));
             table.Rows.Add(CreateRow(table, "std", numericColumns, col =>
             {
@@ -65,6 +65,7 @@ namespace ExpertSystem.WPF.Services
                 var valueStr = row[column].ToString();
                 if (!double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
                 {
+                    return false;
                 }
             }
             return true;
