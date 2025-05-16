@@ -97,33 +97,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid Margin="5" Grid.Row="0">
-                    <Grid.Resources>
-                        <Style x:Key="VisibleTextStyle" TargetType="TextBlock">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsModelWithParametersChecked}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsModelWithParametersChecked}" Value="False">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                        <Style x:Key="VisibleTextStyle2" TargetType="TextBlock">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsModelWithParametersChecked}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsModelWithParametersChecked}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Resources>
-
-                    <TextBlock Text="Choose hyperparameters and result column" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" 
-                               Grid.Column="0" VerticalAlignment="Center" Style="{StaticResource VisibleTextStyle}"/>
-                    <TextBlock Text="Choose result column" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" 
-                               Grid.Column="0" VerticalAlignment="Center" Style="{StaticResource VisibleTextStyle2}"/>
+                    <TextBlock Text="Choose details" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
                 </Grid>
 
                 <StackPanel Grid.Row="1" Margin="5">
@@ -140,10 +114,11 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Text="KNN" Margin="0,0,0,5"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Neighbours:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Neighbours:" FontSize="14" Width="100" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
                                       SelectedValue="{Binding SelectedNeighbours, Mode=TwoWay}" 
                                       SelectedValuePath="Content">
@@ -152,6 +127,17 @@
                                 <ComboBoxItem Content="4"/>
                                 <ComboBoxItem Content="5"/>
                                 <ComboBoxItem Content="6"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Margin="0 5 0 0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Distance metric:" FontSize="14" Width="100" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
+                                      SelectedValue="{Binding SelectedDistanceMetric, Mode=TwoWay}" 
+                                      SelectedValuePath="Content">
+                                <ComboBoxItem Content="Euclidean"/>
+                                <ComboBoxItem Content="Manhattan"/>
+                                <ComboBoxItem Content="Chebyshev"/>
+                                <ComboBoxItem Content="Minkowski "/>
                             </ComboBox>
                         </StackPanel>
                     </Grid>
@@ -172,6 +158,22 @@
                                 <ComboBoxItem Content="4"/>
                                 <ComboBoxItem Content="5"/>
                             </ComboBox>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Visibility="{Binding IsAnyModelChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Training set percentage(20% - 89%)" Margin="0,10,0,0"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
+                            <TextBlock Text="Percent:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox Width="100" Height="25" FontSize="15" Text="{Binding SelectedTrainingSetPercentage}"  MaxLength="4">
+                                <i:Interaction.Behaviors>
+                                    <behaviors:NumericInputBehaviorTrainingSetPercentage/>
+                                </i:Interaction.Behaviors>
+                            </TextBox>
                         </StackPanel>
                     </Grid>
 
