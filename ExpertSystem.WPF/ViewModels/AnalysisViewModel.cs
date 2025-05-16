@@ -36,6 +36,8 @@ namespace ExpertSystem.WPF.ViewModels
         private bool _isOwnChecked;
         private string _selectedNeighbours;
         private string _selectedLayers;
+        private string _selectedTrainingSetPercentage;
+        private string _selectedDistanceMetric;
         private Dataset _selectedDataset;
         private string _selectedResultColumn;
         private List<string> _datasetColumnNames;
@@ -76,8 +78,6 @@ namespace ExpertSystem.WPF.ViewModels
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
         }
 
-        public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn);
-
         public bool IsKnnChecked
         {
             get => _isKnnChecked;
@@ -97,6 +97,7 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     SelectedNeighbours = null;
                     SelectedResultColumn = null;
+                    SelectedDistanceMetric = null;
                 }
             }
         }
@@ -215,6 +216,19 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
+        public string SelectedDistanceMetric
+        {
+            get => _selectedDistanceMetric;
+            set
+            {
+                _selectedDistanceMetric = value;
+                OnPropertyChanged(nameof(SelectedDistanceMetric));
+                OnPropertyChanged(nameof(CanGenerateResults));
+                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+
+            }
+        }
+
         public Dataset SelectedDataset
         {
             get => _selectedDataset;
@@ -234,6 +248,18 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedResultColumn = value;
                 OnPropertyChanged(nameof(SelectedResultColumn));
+                OnPropertyChanged(nameof(CanGenerateResults));
+                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+            }
+        }
+
+        public string SelectedTrainingSetPercentage
+        {
+            get => _selectedTrainingSetPercentage;
+            set
+            {
+                _selectedTrainingSetPercentage = value;
+                OnPropertyChanged(nameof(SelectedTrainingSetPercentage));
                 OnPropertyChanged(nameof(CanGenerateResults));
                 OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
             }
@@ -263,7 +289,8 @@ namespace ExpertSystem.WPF.ViewModels
 
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
         public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-        public bool IsResultColumnAndHyperparametersChecked => !string.IsNullOrWhiteSpace(SelectedResultColumn) && (!IsKnnChecked || !string.IsNullOrWhiteSpace(SelectedNeighbours)) && (!IsNeuralNetworkChecked || !string.IsNullOrWhiteSpace(SelectedLayers));
+        public bool IsResultColumnAndHyperparametersChecked => !string.IsNullOrWhiteSpace(SelectedResultColumn) && !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) && SelectedTrainingSetPercentage.Length == 2 && (!IsKnnChecked || !string.IsNullOrWhiteSpace(SelectedNeighbours) || !string.IsNullOrWhiteSpace(SelectedDistanceMetric)) && (!IsNeuralNetworkChecked || !string.IsNullOrWhiteSpace(SelectedLayers));
+        public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn) && !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) && SelectedTrainingSetPercentage.Length == 2;
 
         private void UpdateSelectedModels()
         {
