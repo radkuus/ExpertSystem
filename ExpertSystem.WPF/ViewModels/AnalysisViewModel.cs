@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
+using ExpertSystem.WPF.Auxiliary;
 using ExpertSystem.WPF.Commands;
 using ExpertSystem.WPF.Conditions;
 using ExpertSystem.WPF.State.Authenticators;
@@ -37,7 +38,7 @@ namespace ExpertSystem.WPF.ViewModels
         private string _selectedNeighbours;
         private string _selectedLayers;
         private string _selectedTrainingSetPercentage;
-        private string _selectedDistanceMetric;
+        private string _selectedDistanceMetrics;
         private Dataset _selectedDataset;
         private string _selectedResultColumn;
         private List<string> _datasetColumnNames;
@@ -45,6 +46,7 @@ namespace ExpertSystem.WPF.ViewModels
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
         public ObservableCollection<Condition> Conditions { get; set; } = new ObservableCollection<Condition>();
+        public ObservableCollection<NeuronLayer> NeuronCounts { get; set; } = new ObservableCollection<NeuronLayer>();
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
@@ -89,15 +91,15 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsKnnChecked));
                     OnPropertyChanged(nameof(IsModelWithParametersChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
-                    OnPropertyChanged(nameof(CanGenerateResults));
-                    OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                    OnPropertyChanged(nameof(AreDetailsChecked));
                     UpdateSelectedModels();
                 }
                 if (!_isKnnChecked)
                 {
                     SelectedNeighbours = null;
                     SelectedResultColumn = null;
-                    SelectedDistanceMetric = null;
+                    SelectedDistanceMetrics = null;
+                    SelectedTrainingSetPercentage = null;
                 }
             }
         }
@@ -109,8 +111,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedNeighbours = value;
                 OnPropertyChanged(nameof(SelectedNeighbours));
-                OnPropertyChanged(nameof(CanGenerateResults));
-                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                OnPropertyChanged(nameof(AreDetailsChecked));
 
             }
         }
@@ -126,8 +127,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsNeuralNetworkChecked));
                     OnPropertyChanged(nameof(IsModelWithParametersChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
-                    OnPropertyChanged(nameof(CanGenerateResults));
-                    OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                    OnPropertyChanged(nameof(AreDetailsChecked));
                     UpdateSelectedModels();
 
                 }
@@ -135,6 +135,8 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     SelectedLayers = null;
                     SelectedResultColumn = null;
+                    SelectedTrainingSetPercentage = null;
+                    NeuronCounts.Clear();
                 }
             }
         }
@@ -146,9 +148,8 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedLayers = value;
                 OnPropertyChanged(nameof(SelectedLayers));
-                OnPropertyChanged(nameof(CanGenerateResults));
-                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
-
+                OnPropertyChanged(nameof(AreDetailsChecked));
+                UpdateNeuronCounts();
             }
         }
 
@@ -163,13 +164,13 @@ namespace ExpertSystem.WPF.ViewModels
                     _isLinearRegressionChecked = value;
                     OnPropertyChanged(nameof(IsLinearRegressionChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
-                    OnPropertyChanged(nameof(CanGenerateResults));
                     UpdateSelectedModels();
 
                 }
                 if (!_isLinearRegressionChecked)
                 {
                     SelectedResultColumn = null;
+                    SelectedTrainingSetPercentage = null;
                 }
             }
         }
@@ -184,13 +185,13 @@ namespace ExpertSystem.WPF.ViewModels
                     _isBayesChecked = value;
                     OnPropertyChanged(nameof(IsBayesChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
-                    OnPropertyChanged(nameof(CanGenerateResults));
                     UpdateSelectedModels();
 
                 }
                 if (!_isBayesChecked)
                 {
                     SelectedResultColumn = null;
+                    SelectedTrainingSetPercentage = null;
                 }
             }
         }
@@ -205,26 +206,25 @@ namespace ExpertSystem.WPF.ViewModels
                     _isOwnChecked = value;
                     OnPropertyChanged(nameof(IsOwnChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
-                    OnPropertyChanged(nameof(CanGenerateResults));
                     UpdateSelectedModels();
 
                 }
                 if (!_isOwnChecked)
                 {
                     SelectedResultColumn = null;
+                    SelectedTrainingSetPercentage = null;
                 }
             }
         }
 
-        public string SelectedDistanceMetric
+        public string SelectedDistanceMetrics
         {
-            get => _selectedDistanceMetric;
+            get => _selectedDistanceMetrics;
             set
             {
-                _selectedDistanceMetric = value;
-                OnPropertyChanged(nameof(SelectedDistanceMetric));
-                OnPropertyChanged(nameof(CanGenerateResults));
-                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                _selectedDistanceMetrics = value;
+                OnPropertyChanged(nameof(SelectedDistanceMetrics));
+                OnPropertyChanged(nameof(AreDetailsChecked));
 
             }
         }
@@ -236,7 +236,6 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedDataset = value;
                 OnPropertyChanged(nameof(SelectedDataset));
-                OnPropertyChanged(nameof(CanGenerateResults));
                 LoadDatasetColumnNamesCommand.Execute(_selectedDataset);
             }
         }
@@ -248,8 +247,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedResultColumn = value;
                 OnPropertyChanged(nameof(SelectedResultColumn));
-                OnPropertyChanged(nameof(CanGenerateResults));
-                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                OnPropertyChanged(nameof(AreDetailsChecked));
             }
         }
 
@@ -260,8 +258,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _selectedTrainingSetPercentage = value;
                 OnPropertyChanged(nameof(SelectedTrainingSetPercentage));
-                OnPropertyChanged(nameof(CanGenerateResults));
-                OnPropertyChanged(nameof(IsResultColumnAndHyperparametersChecked));
+                OnPropertyChanged(nameof(AreDetailsChecked));
             }
         }
 
@@ -273,7 +270,6 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _datasetColumnNames = value;
                 OnPropertyChanged(nameof(DatasetColumnNames));
-                OnPropertyChanged(nameof(CanGenerateResults));
             }
         }
 
@@ -289,8 +285,40 @@ namespace ExpertSystem.WPF.ViewModels
 
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
         public bool IsAnyModelChecked => IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked;
-        public bool IsResultColumnAndHyperparametersChecked => !string.IsNullOrWhiteSpace(SelectedResultColumn) && !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) && SelectedTrainingSetPercentage.Length == 2 && (!IsKnnChecked || !string.IsNullOrWhiteSpace(SelectedNeighbours) || !string.IsNullOrWhiteSpace(SelectedDistanceMetric)) && (!IsNeuralNetworkChecked || !string.IsNullOrWhiteSpace(SelectedLayers));
-        public bool CanGenerateResults => SelectedDataset != null && IsAnyModelChecked && !string.IsNullOrEmpty(SelectedResultColumn) && !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) && SelectedTrainingSetPercentage.Length == 2;
+        public bool AreDetailsChecked =>
+            !string.IsNullOrWhiteSpace(SelectedResultColumn) &&
+            !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) &&
+            SelectedTrainingSetPercentage.Length == 2 &&
+            (
+                !IsKnnChecked ||
+                (
+                    !string.IsNullOrWhiteSpace(SelectedNeighbours) &&
+                    !string.IsNullOrWhiteSpace(SelectedDistanceMetrics)
+                )
+            ) &&
+            (
+                !IsNeuralNetworkChecked ||
+                (
+                    !string.IsNullOrWhiteSpace(SelectedLayers) &&
+                    NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount))
+                )
+            );
+
+        private void UpdateNeuronCounts()
+        {
+            if (!int.TryParse(SelectedLayers, out int layerCount))
+            {
+                return;
+            }
+            while (NeuronCounts.Count < layerCount)
+            {
+                NeuronCounts.Add(new NeuronLayer(this) { NeuronCount = null });
+            }
+            while (NeuronCounts.Count > layerCount)
+            {
+                NeuronCounts.RemoveAt(NeuronCounts.Count - 1);
+            }
+        }
 
         private void UpdateSelectedModels()
         {
@@ -318,8 +346,10 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-
-
+        public void RaiseAreDetailsChanged()
+        {
+            OnPropertyChanged(nameof(AreDetailsChecked));
+        }
 
     }
 }
