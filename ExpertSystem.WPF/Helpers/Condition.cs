@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ExpertSystem.WPF.ViewModels;
 
-namespace ExpertSystem.WPF.Conditions
+namespace ExpertSystem.WPF.Helpers
 {
     public class Condition
     {

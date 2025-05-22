@@ -225,14 +225,65 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                <Grid Margin="5" Grid.Row="0">
+                    <TextBlock Text="Create your own samples" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                </Grid>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                    <Button Content="Add" Height="35" Width="50" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding AddSampleCommand}"></Button>
+                    <Button Content="Remove" Height="35" Width="70" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveSampleCommand}"></Button>
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding UserSample.UserSamples}" Grid.Row="2">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="10">
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="2">
+                                                <TextBlock Text="{Binding ColumnName}" Width="130"/>
+                                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </Grid>
+        </Border>
+<!--
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Margin="10" Visibility="{Binding AreDetailsChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Margin="5" Grid.Row="0">
+                    <TextBlock Text="Create your own samples" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                </Grid>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
                     <Button Content="Add" Height="35" Width="50" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding AddConditionCommand}"></Button>
                     <Button Content="Remove" Height="35" Width="70" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveConditionCommand}"></Button>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
                     <TextBlock Text="If" FontSize="20" Margin="10"/>
                     <ComboBox Width="100" Height="30" FontSize="15" ItemsSource="{Binding SelectedModels}" SelectedItem="{Binding SelectedModel}" />
                     <ComboBox Width="100" Height="30" FontSize="15" SelectedItem="{Binding SelectedMetric}">
@@ -253,7 +304,7 @@
                     </TextBox>
                 </StackPanel>
 
-                <ItemsControl Grid.Row="2" ItemsSource="{Binding Conditions}">
+                <ItemsControl Grid.Row="3" ItemsSource="{Binding Conditions}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal"/>
@@ -288,5 +339,6 @@
 
             </Grid>
         </Border>
+-->
     </Grid>
 </UserControl>

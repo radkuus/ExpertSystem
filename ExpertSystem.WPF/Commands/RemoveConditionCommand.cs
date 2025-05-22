@@ -27,10 +27,7 @@ namespace ExpertSystem.WPF.Commands
 
         public void Execute(object? parameter)
         {
-            if (_analysisViewModel.Conditions.Count > 0)
-            {
-                _analysisViewModel.Conditions.RemoveAt(_analysisViewModel.Conditions.Count - 1);
-            }
+            _analysisViewModel.Conditions.RemoveAt(_analysisViewModel.Conditions.Count - 1);
         }
     }
 
