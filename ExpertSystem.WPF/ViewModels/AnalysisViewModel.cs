@@ -9,7 +9,8 @@ using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Auxiliary;
 using ExpertSystem.WPF.Commands;
-using ExpertSystem.WPF.Conditions;
+using ExpertSystem.WPF.Helpers;
+using ExpertSystem.WPF.Helpers.Sample;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Datasets;
 using ExpertSystem.WPF.State.Navigators;
@@ -30,6 +31,8 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IApiService _apiService;
         private readonly IExperimentService _experimentService;
         private readonly CreateViewModel<ResultsViewModel> _resultsFactory;
+        private readonly MainViewModel _mainViewModel;
+        private readonly UserSample _userSample;
         private bool _isKnnChecked;
         private bool _isLinearRegressionChecked;
         private bool _isBayesChecked;
@@ -42,7 +45,6 @@ namespace ExpertSystem.WPF.ViewModels
         private Dataset _selectedDataset;
         private string _selectedResultColumn;
         private List<string> _datasetColumnNames;
-        private readonly MainViewModel _mainViewModel;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
         public ObservableCollection<Condition> Conditions { get; set; } = new ObservableCollection<Condition>();
@@ -51,12 +53,13 @@ namespace ExpertSystem.WPF.ViewModels
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
         public ICommand LoadDatasetColumnNamesCommand { get; }
-        public ICommand AddConditionCommand { get; }
+        public ICommand AddSampleCommand { get; }
         public ICommand RemoveConditionCommand { get; }
         public ICommand GenerateResultsCommand { get; }
+        public ICommand RemoveSampleCommand { get; }
 
         public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore,
-            IDialogService dataFrameDialogService, IDatasetStatisticsService dataStatisticsService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel
+            IDialogService dataFrameDialogService, IDatasetStatisticsService dataStatisticsService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel, UserSample userSample
 )
         {
             _navigator = navigator;
@@ -71,13 +74,15 @@ namespace ExpertSystem.WPF.ViewModels
             _experimentService = experimentService;
             _resultsFactory = resultsFactory;
             _mainViewModel = mainViewModel;
+            _userSample = userSample;
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService, dataStatisticsService);
             LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
-            AddConditionCommand = new AddConditionCommand(this);
+            AddSampleCommand = new AddSampleCommand(this);
             RemoveConditionCommand = new RemoveConditionCommand(this);
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
+            RemoveSampleCommand = new RemoveSampleCommand(this);
         }
 
         public bool IsKnnChecked
@@ -100,6 +105,7 @@ namespace ExpertSystem.WPF.ViewModels
                     SelectedResultColumn = null;
                     SelectedDistanceMetrics = null;
                     SelectedTrainingSetPercentage = null;
+                    _userSample.UserSamples.Clear();
                 }
             }
         }
@@ -112,7 +118,6 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedNeighbours = value;
                 OnPropertyChanged(nameof(SelectedNeighbours));
                 OnPropertyChanged(nameof(AreDetailsChecked));
-
             }
         }
 
@@ -137,6 +142,7 @@ namespace ExpertSystem.WPF.ViewModels
                     SelectedResultColumn = null;
                     SelectedTrainingSetPercentage = null;
                     NeuronCounts.Clear();
+                    _userSample.UserSamples.Clear();
                 }
             }
         }
@@ -171,6 +177,7 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     SelectedResultColumn = null;
                     SelectedTrainingSetPercentage = null;
+                    _userSample.UserSamples.Clear();
                 }
             }
         }
@@ -192,6 +199,7 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     SelectedResultColumn = null;
                     SelectedTrainingSetPercentage = null;
+                    _userSample.UserSamples.Clear();
                 }
             }
         }
@@ -213,6 +221,7 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     SelectedResultColumn = null;
                     SelectedTrainingSetPercentage = null;
+                    _userSample.UserSamples.Clear();
                 }
             }
         }
@@ -237,6 +246,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedDataset = value;
                 OnPropertyChanged(nameof(SelectedDataset));
                 LoadDatasetColumnNamesCommand.Execute(_selectedDataset);
+                _userSample.UserSamples.Clear();
             }
         }
 
@@ -303,6 +313,8 @@ namespace ExpertSystem.WPF.ViewModels
                     NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount))
                 )
             );
+
+        public UserSample UserSample => _userSample;
 
         private void UpdateNeuronCounts()
         {

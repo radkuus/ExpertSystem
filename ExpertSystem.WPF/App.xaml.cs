@@ -2,6 +2,7 @@
 using ExpertSystem.Domain.Services;
 using ExpertSystem.EntityFramework;
 using ExpertSystem.EntityFramework.Services;
+using ExpertSystem.WPF.Helpers.Sample;
 using ExpertSystem.WPF.Services;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Datasets;
@@ -50,6 +51,7 @@ public partial class App : Application
         services.AddScoped(typeof(GenericDataService<>), typeof(GenericDataService<>));
         services.AddSingleton<IExperimentService, ExperimentService>();
         services.AddSingleton<IResultsViewModelFactory, ResultsViewModelFactory>();
+        services.AddSingleton<UserSample>();
         services.AddSingleton<CreateViewModel<ResultsViewModel>>(provider =>
         {
             return () => provider.GetRequiredService<ResultsViewModel>();
@@ -91,7 +93,8 @@ public partial class App : Application
                 provider.GetRequiredService<IApiService>(),
                 provider.GetRequiredService<IExperimentService>(),
                 provider.GetRequiredService<CreateViewModel<ResultsViewModel>>(),
-                provider.GetRequiredService<MainViewModel>()
+                provider.GetRequiredService<MainViewModel>(),
+                provider.GetRequiredService<UserSample>()
             );
         });
 
