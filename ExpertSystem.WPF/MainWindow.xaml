@@ -27,6 +27,19 @@
         <controls:NavigationBar/>
         </Grid>
 
+        <Grid Grid.Row="0">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAdminLoggedIn}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <controls:NavigationBarAdmin/>
+        </Grid>
+
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
         </ScrollViewer>

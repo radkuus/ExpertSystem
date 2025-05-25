@@ -14,7 +14,9 @@ namespace ExpertSystem.WPF.State.Navigators
         Home,
         Analysis,
         History,
-        Results
+        Results,
+        AdminUsers,
+        AdminDataset
     }
 
     public interface INavigator

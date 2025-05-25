@@ -47,6 +47,10 @@
                                  DisplayUsersCommand="{Binding DisplayUsersCommand}"
                                  EditUserCommand="{Binding EditUserCommand}"/>
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:AdminDatasetViewModel}">
+                <views:AdminDatasetView/>
+            </DataTemplate>
         </ResourceDictionary>
 
     </Application.Resources>

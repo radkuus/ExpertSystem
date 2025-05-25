@@ -133,6 +133,11 @@ public partial class App : Application
                 services.GetRequiredService<CreateViewModel<LoginViewModel>>());
         });
 
+        services.AddSingleton<AdminDatasetViewModel>();
+        services.AddSingleton<CreateViewModel<AdminDatasetViewModel>>(provider =>
+            () => provider.GetRequiredService<AdminDatasetViewModel>()
+        );
+
         services.AddSingleton<ViewModelFactoryRenavigator<RegisterViewModel>>();
         services.AddSingleton<ViewModelFactoryRenavigator<HomeViewModel>>();
         services.AddSingleton<ViewModelFactoryRenavigator<AdminViewModel>>();
