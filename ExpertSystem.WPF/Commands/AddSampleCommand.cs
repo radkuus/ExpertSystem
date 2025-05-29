@@ -20,13 +20,33 @@ namespace ExpertSystem.WPF.Commands
         public AddSampleCommand(AnalysisViewModel analysisViewModel)
         {
             _analysisViewModel = analysisViewModel;
+            _analysisViewModel.UserSample.UserSamples.CollectionChanged += (s, e) => RaiseCanExecuteChanged();
         }
 
         public event EventHandler? CanExecuteChanged;
 
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public bool CanExecute(object? parameter)
         {
-            return true;
+            var samples = _analysisViewModel.UserSample.UserSamples;
+
+            if (samples == null || samples.Count == 0)
+            {
+                return true;
+            }
+
+            var lastSample = samples.LastOrDefault();
+
+            if (lastSample == null)
+            {
+                return false;
+            }
+
+            return lastSample.All(entry => !string.IsNullOrWhiteSpace(entry.Value));
         }
 
         public void Execute(object? parameter)
@@ -38,7 +58,7 @@ namespace ExpertSystem.WPF.Commands
                 return;
             }
 
-            _analysisViewModel.UserSample.AddNewSample(columns);
+            _analysisViewModel.UserSample.AddNewSample(columns, RaiseCanExecuteChanged);
         }
     }
 }
