@@ -11,15 +11,17 @@ namespace ExpertSystem.WPF.Helpers.Sample
     {
         public string ColumnName { get; set; }
 
-        private double? _value;
-        public double? Value
+        private string? _value;
+        public string? Value
         {
             get => _value;
             set
             {
                 _value = value;
                 OnPropertyChanged(nameof(Value));
+                OnValueChanged?.Invoke();
             }
         }
+        public Action? OnValueChanged { get; set; }
     }
 }
