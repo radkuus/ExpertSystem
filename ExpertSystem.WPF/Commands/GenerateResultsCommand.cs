@@ -56,6 +56,8 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
+
+            MessageBox.Show(string.Join(", ", _viewModel.SelectedColumnsForAnalysis));
             try
             {
                 // check server status
