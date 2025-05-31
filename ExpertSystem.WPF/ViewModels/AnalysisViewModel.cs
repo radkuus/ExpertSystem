@@ -37,7 +37,7 @@ namespace ExpertSystem.WPF.ViewModels
         private bool _isLinearRegressionChecked;
         private bool _isBayesChecked;
         private bool _isNeuralNetworkChecked;
-        private bool _isOwnChecked;
+        private bool _isIfThenChecked;
         private string _selectedNeighbours;
         private string _selectedLayers;
         private string _selectedTrainingSetPercentage;
@@ -99,6 +99,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsKnnChecked));
                     OnPropertyChanged(nameof(IsModelWithParametersChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(AreDetailsChecked));
                     UpdateSelectedModels();
                 }
@@ -135,6 +136,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsNeuralNetworkChecked));
                     OnPropertyChanged(nameof(IsModelWithParametersChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(AreDetailsChecked));
                     UpdateSelectedModels();
 
@@ -173,6 +175,7 @@ namespace ExpertSystem.WPF.ViewModels
                     _isLinearRegressionChecked = value;
                     OnPropertyChanged(nameof(IsLinearRegressionChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     UpdateSelectedModels();
 
                 }
@@ -195,6 +198,7 @@ namespace ExpertSystem.WPF.ViewModels
                     _isBayesChecked = value;
                     OnPropertyChanged(nameof(IsBayesChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     UpdateSelectedModels();
 
                 }
@@ -207,23 +211,22 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public bool IsOwnChecked
+        public bool IsIfThenChecked
         {
-            get => _isOwnChecked;
+            get => _isIfThenChecked;
             set
             {
-                if (_isOwnChecked != value)
+                if (_isIfThenChecked != value)
                 {
-                    _isOwnChecked = value;
-                    OnPropertyChanged(nameof(IsOwnChecked));
+                    _isIfThenChecked = value;
+                    OnPropertyChanged(nameof(IsIfThenChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     UpdateSelectedModels();
 
                 }
-                if (!_isOwnChecked)
+                if (!_isIfThenChecked)
                 {
                     SelectedResultColumn = null;
-                    SelectedTrainingSetPercentage = null;
                     _userSample.UserSamples.Clear();
                 }
             }
@@ -305,11 +308,13 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedColumnsForAnalysis = value;
                 OnPropertyChanged(nameof(SelectedColumnsForAnalysis));
                 OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+                OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
             }
         }
 
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
-        public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsOwnChecked) && SelectedColumnsForAnalysis.Any();
+        public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
+        public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
         public bool AreDetailsChecked =>
             !string.IsNullOrWhiteSpace(SelectedResultColumn) &&
             !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) &&
@@ -367,9 +372,9 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 SelectedModels.Add("Neural Network");
             }
-            if (IsOwnChecked)
+            if (IsIfThenChecked)
             {
-                SelectedModels.Add("Own");
+                SelectedModels.Add("If=>Then");
             }
         }
 
@@ -381,6 +386,7 @@ namespace ExpertSystem.WPF.ViewModels
         private void UpdateColumnsForAnalysis()
         {
             OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+            OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
             this.UserSample.UserSamples.Clear();
         }
 
