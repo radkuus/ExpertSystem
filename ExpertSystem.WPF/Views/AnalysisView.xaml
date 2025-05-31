@@ -269,24 +269,30 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="10">
+                            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                                 <ItemsControl ItemsSource="{Binding}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" Margin="2">
-                                                <TextBlock Text="{Binding ColumnName}" Width="130"/>
-                                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="50">
+                                            <Grid Margin="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition SharedSizeGroup="ColumnNameGroup" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{Binding ColumnName}" Grid.Column="0" Margin="0,0,5,0"/>
+                                                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Width="50">
                                                     <i:Interaction.Behaviors>
                                                         <behaviors:NumericInputBehaviorUserSample/>
                                                     </i:Interaction.Behaviors>
                                                 </TextBox>
-                                            </StackPanel>
+                                            </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
+
                 </ItemsControl>
 
             </Grid>

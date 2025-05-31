@@ -13,7 +13,7 @@ namespace ExpertSystem.WPF.Helpers.Sample
     {
         public ObservableCollection<ObservableCollection<SampleEntry>> UserSamples { get; set; } = new();
 
-        public void AddNewSample(List<string> columnNames, Action onValueChangedCallback)
+        public void AddNewSample(ObservableCollection<string> columnNames, Action onValueChangedCallback)
         {
             var newSample = new ObservableCollection<SampleEntry>();
             foreach (var columnName in columnNames)
