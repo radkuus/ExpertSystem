@@ -381,6 +381,7 @@ namespace ExpertSystem.WPF.ViewModels
         private void UpdateColumnsForAnalysis()
         {
             OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
+            this.UserSample.UserSamples.Clear();
         }
 
     }

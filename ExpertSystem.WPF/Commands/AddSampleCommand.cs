@@ -51,14 +51,14 @@ namespace ExpertSystem.WPF.Commands
 
         public void Execute(object? parameter)
         {
-            var columns = _analysisViewModel.DatasetColumnNames.Take(_analysisViewModel.DatasetColumnNames.Count - 1).ToList();
-            if (columns == null || columns.Count == 0)
+            var columnsForAnalysis = _analysisViewModel.SelectedColumnsForAnalysis;
+            if (columnsForAnalysis == null || columnsForAnalysis.Count == 0)
             {
                 MessageBox.Show("Brak kolumn do utworzenia próbki.");
                 return;
             }
 
-            _analysisViewModel.UserSample.AddNewSample(columns, RaiseCanExecuteChanged);
+            _analysisViewModel.UserSample.AddNewSample(columnsForAnalysis, RaiseCanExecuteChanged);
         }
     }
 }
