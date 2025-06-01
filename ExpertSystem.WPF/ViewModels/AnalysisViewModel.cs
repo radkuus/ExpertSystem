@@ -45,7 +45,9 @@ namespace ExpertSystem.WPF.ViewModels
         private Dataset _selectedDataset;
         private ObservableCollection<string> _selectedColumnsForAnalysis = new ObservableCollection<string>();
         private string _selectedResultColumn;
-        private List<string> _datasetColumnNames;
+        private ObservableCollection<string> _datasetColumnNames;
+        private ObservableCollection<string> _datasetNumericColumnNames;
+        private ObservableCollection<string> _datasetTextColumnNames;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
         public ObservableCollection<Condition> Conditions { get; set; } = new ObservableCollection<Condition>();
@@ -280,13 +282,32 @@ namespace ExpertSystem.WPF.ViewModels
         }
 
 
-        public List<string> DatasetColumnNames
+        public ObservableCollection<string> DatasetColumnNames
         {
             get => _datasetColumnNames;
             set
             {
                 _datasetColumnNames = value;
                 OnPropertyChanged(nameof(DatasetColumnNames));
+            }
+        }
+
+        public ObservableCollection<string> DatasetNumericColumnNames
+        {
+            get => _datasetNumericColumnNames;
+            set
+            {
+                _datasetNumericColumnNames = value;
+                OnPropertyChanged(nameof(DatasetNumericColumnNames));
+            }
+        }
+        public ObservableCollection<string> DatasetTextColumnNames
+        {
+            get => _datasetTextColumnNames;
+            set
+            {
+                _datasetTextColumnNames = value;
+                OnPropertyChanged(nameof(DatasetTextColumnNames));
             }
         }
 

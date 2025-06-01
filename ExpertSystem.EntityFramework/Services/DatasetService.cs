@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
 using System.Linq;
@@ -121,10 +122,62 @@ namespace ExpertSystem.EntityFramework.Services
             }
         }
 
-        public async Task<List<string>> GetDatasetColumnNames(int datasetId)
+        public async Task<ObservableCollection<string>> GetDatasetColumnNames(int datasetId)
         {
             var dataTable = await GetDatasetAsDataTable(datasetId);
-            return dataTable.Columns.Cast<DataColumn>().Select(col => col.ColumnName).ToList();
+            return new ObservableCollection<string>(dataTable.Columns.Cast<DataColumn>().Select(col => col.ColumnName));
+        }
+
+        public async Task<ObservableCollection<string>> GetDatasetNumericColumnNames(int datasetId)
+        {
+            var dataTable = await GetDatasetAsDataTable(datasetId);
+
+            bool IsNumericColumn(DataColumn column)
+            {
+                foreach (DataRow row in column.Table.Rows)
+                {
+                    if (row.IsNull(column)) continue;
+
+                    var valueStr = row[column].ToString();
+                    if (!double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            var numericColumns = dataTable.Columns.Cast<DataColumn>()
+                .Where(IsNumericColumn)
+                .Select(col => col.ColumnName);
+
+            return new ObservableCollection<string>(numericColumns);
+        }
+
+        public async Task<ObservableCollection<string>> GetDatasetTextColumnNames(int datasetId)
+        {
+            var dataTable = await GetDatasetAsDataTable(datasetId);
+
+            bool IsTextColumn(DataColumn column)
+            {
+                foreach (DataRow row in column.Table.Rows)
+                {
+                    if (row.IsNull(column)) continue;
+
+                    var valueStr = row[column].ToString();
+                    if (double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            var textColumns = dataTable.Columns.Cast<DataColumn>()
+                .Where(IsTextColumn)
+                .Select(col => col.ColumnName);
+
+            return new ObservableCollection<string>(textColumns);
         }
     }
 }

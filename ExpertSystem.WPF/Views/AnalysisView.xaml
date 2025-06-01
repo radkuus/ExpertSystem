@@ -102,7 +102,7 @@
                     <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
                         <TextBlock Text="Columns:" FontSize="14" VerticalAlignment="Center" Margin="5,0,10,0"/>
                         <ListBox Width="150" Height="200" FontSize="15"
-                                 ItemsSource="{Binding DatasetColumnNames}"
+                                 ItemsSource="{Binding DatasetNumericColumnNames}"
                                  SelectionMode="Multiple"
                                  behaviors:ListBoxSelectedItemsBehavior.BindableSelectedItems="{Binding SelectedColumnsForAnalysis}"/>
                     </StackPanel>
@@ -240,7 +240,7 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
                             <TextBlock Text="Column:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <ComboBox Width="100" FontSize="15" 
-                                      ItemsSource="{Binding DatasetColumnNames}" 
+                                      ItemsSource="{Binding DatasetTextColumnNames}" 
                                       SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"/>
                         </StackPanel>
                     </Grid>

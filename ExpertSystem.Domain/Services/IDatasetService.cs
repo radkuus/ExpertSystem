@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace ExpertSystem.Domain.Services
         Task<List<Dataset>> GetAll();
         Task<Dataset> GetDatasetById(int datasetId);
         Task<DataTable> GetDatasetAsDataTable(int datasetId);
-        Task<List<String>> GetDatasetColumnNames(int datasetId);
+        Task<ObservableCollection<string>> GetDatasetColumnNames(int datasetId);
+        Task<ObservableCollection<string>> GetDatasetNumericColumnNames(int datasetId);
+        Task<ObservableCollection<string>> GetDatasetTextColumnNames(int datasetId);
     }
 }

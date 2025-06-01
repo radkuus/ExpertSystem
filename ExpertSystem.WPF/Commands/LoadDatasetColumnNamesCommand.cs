@@ -34,7 +34,11 @@ namespace ExpertSystem.WPF.Commands
             if (parameter is Dataset dataset)
             {
                 var datasetColumnNames = await _datasetService.GetDatasetColumnNames(dataset.Id);
+                var datasetNumericColumnNames = await _datasetService.GetDatasetNumericColumnNames(dataset.Id);
+                var datasetTextColumnNames = await _datasetService.GetDatasetTextColumnNames(dataset.Id);
                 _analysisViewModel.DatasetColumnNames = datasetColumnNames;
+                _analysisViewModel.DatasetNumericColumnNames = datasetNumericColumnNames;
+                _analysisViewModel.DatasetTextColumnNames = datasetTextColumnNames;
             }
         }
     }
