@@ -57,7 +57,7 @@ namespace ExpertSystem.WPF.Commands
         public async void Execute(object? parameter)
         {
 
-            MessageBox.Show(string.Join(", ", _viewModel.SelectedColumnsForAnalysis));
+
             try
             {
                 // check server status
@@ -66,17 +66,24 @@ namespace ExpertSystem.WPF.Commands
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
+                var analysis_columns = _viewModel.SelectedColumnsForAnalysis;
+                var target_column = _viewModel.SelectedResultColumn;
+                var training_size = _viewModel.SelectedTrainingSetPercentage;
                 var data = new List<List<string>>();
+
+                List<string> selectedColumns = new List<string>(analysis_columns);
+                selectedColumns.Add(target_column);
 
                 foreach (DataRow row in df.Rows)
                 {
                     var rowData = new List<string>();
-                    foreach (var col in columns)
+                    foreach (var col in selectedColumns)
                     {
                         rowData.Add(row[col].ToString());
                     }
                     data.Add(rowData);
                 }
+
 
                 var results = new List<ModelAnalysisResult>();
                 var hyperparameters = new Dictionary<string, string>();
@@ -85,12 +92,15 @@ namespace ExpertSystem.WPF.Commands
                 if (_viewModel.IsKnnChecked)
                 {
                     var neighbors = _viewModel.SelectedNeighbours ?? "3";
+                    var distance_metric = _viewModel.SelectedDistanceMetrics;
                     var request = new
                     {
                         data,
-                        columns,
-                        target_column = _viewModel.SelectedResultColumn,
-                        neighbors = int.Parse(neighbors)
+                        analysis_columns,
+                        target_column,
+                        training_size = float.Parse(training_size),
+                        neighbors = int.Parse(neighbors),
+                        distance_metric
                     };
 
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/knn", request);
@@ -105,8 +115,10 @@ namespace ExpertSystem.WPF.Commands
                     var request = new
                     {
                         data,
-                        columns,
-                        target_column = _viewModel.SelectedResultColumn
+                        analysis_columns,
+                        target_column,
+                        training_size = float.Parse(training_size)
+
                     };
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/bayes", request);
                     response.ModelName = "Bayes";
@@ -148,7 +160,8 @@ namespace ExpertSystem.WPF.Commands
             if (!File.Exists(mainPy))
                 throw new FileNotFoundException($"Can't find file main.py in {solutionRoot}");
 
-            // "open" cmd and write -m uvicorn main:app --host 127.0.0.1 --port 8000
+            // "open" cmd and write -m
+            // uvicorn main:app --host 127.0.0.1 --port 8000
             var startInfo = new ProcessStartInfo
             {
                 FileName = "python",

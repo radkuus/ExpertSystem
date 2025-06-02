@@ -13,14 +13,17 @@ app = FastAPI()
 
 class KNNDatasetInput(BaseModel):
     data: List[List[str]]
-    columns: List[str]
+    analysis_columns: List[str]
     target_column: str
+    training_size: float
     neighbors: int
+    distance_metric: str
 
 class BayesDatasetInput(BaseModel):
     data: List[List[str]]
-    columns: List[str]
+    analysis_columns: List[str]
     target_column: str
+    training_size: float
 
 class ModelOutput(BaseModel):
     f1: float
@@ -28,6 +31,32 @@ class ModelOutput(BaseModel):
     recall: float
     accuracy: float
     request_id: str
+
+
+def prepare_dataset(training_size, data, analysis_columns, target_column):
+    
+    full_columns = analysis_columns + [target_column]
+    
+    df = pd.DataFrame(data, columns=full_columns)
+
+    
+    for col in df.columns:
+        if col != target_column:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+
+    df = df.dropna()
+    X = df[analysis_columns]
+    y = df[target_column]
+
+
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    test_size = 1 - (training_size / 100)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+
+    return X_train, X_test, y_train, y_test
+
 
 @app.get("/health")
 def health_check():
@@ -38,23 +67,12 @@ async def run_knn(input_data: KNNDatasetInput):
     try:
         request_id = str(uuid.uuid4())
 
-        df = pd.DataFrame(input_data.data, columns=input_data.columns)
+        X_train, X_test, y_train, y_test = prepare_dataset(input_data.training_size, input_data.data, input_data.analysis_columns, input_data.target_column)
 
-        for col in df.columns:
-            if col != input_data.target_column:
-                df[col] = pd.to_numeric(df[col], errors='coerce')
-
-        df = df.dropna()
-
-        X = df.drop(columns=[input_data.target_column])
-        y = df[input_data.target_column]
-
-        le = LabelEncoder()
-        y = le.fit_transform(y)
-
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-        knn = KNeighborsClassifier(n_neighbors=input_data.neighbors)
+        if input_data.neighbors > len(X_train):
+            raise HTTPException(status_code=400, detail = f"The number of neighbors ({input_data.neighbors}) cannot be greater than the number of rows in the training dataset ({len(X_train)}).")
+        distance_metric = input_data.distance_metric.strip().lower()
+        knn = KNeighborsClassifier(n_neighbors=input_data.neighbors, metric=distance_metric)
         knn.fit(X_train, y_train)
         y_pred = knn.predict(X_test)
 
@@ -79,21 +97,7 @@ async def run_bayes(input_data: BayesDatasetInput):
     try:
         request_id = str(uuid.uuid4())
 
-        df = pd.DataFrame(input_data.data, columns=input_data.columns)
-
-        for col in df.columns:
-            if col != input_data.target_column:
-                df[col] = pd.to_numeric(df[col], errors='coerce')
-
-        df = df.dropna()
-
-        X = df.drop(columns=[input_data.target_column])
-        y = df[input_data.target_column]
-
-        le = LabelEncoder()
-        y = le.fit_transform(y)
-
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = prepare_dataset(input_data.training_size, input_data.data, input_data.analysis_columns, input_data.target_column)
 
         nb = GaussianNB()
         nb.fit(X_train, y_train)
