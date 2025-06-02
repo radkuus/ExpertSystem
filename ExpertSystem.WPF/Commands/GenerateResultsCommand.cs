@@ -114,6 +114,27 @@ namespace ExpertSystem.WPF.Commands
                     hyperparameters["Bayes"] = null;
                 }
 
+                // NeuralNetwork
+                if (_viewModel.IsNeuralNetworkChecked)
+                {
+                    var neurons = _viewModel.NeuronCounts
+                        .Select(n => int.Parse(n.NeuronCount))
+                        .ToList();
+                    var layers = _viewModel.SelectedLayers;
+                    var request = new
+                    {
+                        data,
+                        columns,
+                        neurons,
+                        layers,
+                        target_column = _viewModel.SelectedResultColumn
+                    };
+                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/neuralnetwork", request);
+                    response.ModelName = "neuralnetwork";
+                    results.Add(response);
+                    hyperparameters["neuralnetwork"] = null;
+                }
+
 
                 await _experimentService.CreateExperimentWithResults(
                     userId: dataset.UserId,
