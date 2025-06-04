@@ -85,7 +85,7 @@
                     </StackPanel.Resources>
 
                     <CheckBox Content="KNN" IsChecked="{Binding IsKnnChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
-                    <CheckBox Content="Linear regression" IsChecked="{Binding IsLinearRegressionChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
+                    <CheckBox Content="Logistic Regression" IsChecked="{Binding IsLogisticRegressionChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
                     <CheckBox Content="Bayes" IsChecked="{Binding IsBayesChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
                     <CheckBox Content="Neural Network" IsChecked="{Binding IsNeuralNetworkChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
                     <CheckBox Content="If=>Then" IsChecked="{Binding IsIfThenChecked}" IsEnabled="{Binding IsIfThenEnabled}"/>

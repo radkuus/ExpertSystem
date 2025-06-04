@@ -42,11 +42,11 @@ public class ExperimentService : IExperimentService
             var modelType = result.ModelName switch
             {
                 "KNN" => ModelType.KNN,
-                "LinearRegression" => ModelType.LinearRegression,
+                "LogisticRegression" => ModelType.LogisticRegression,
                 "Bayes" => ModelType.Bayes,
                 "NeuralNetwork" => ModelType.NeuralNetwork,
                 "Own" => ModelType.Own,
-                _ => throw new ArgumentException($"Nieznany typ modelu: {result.ModelName}")
+                _ => throw new ArgumentException($"Unknown model name: {result.ModelName}")
             };
 
             var config = new ModelConfiguration

@@ -22,7 +22,7 @@ namespace ExpertSystem.EntityFramework.Migrations
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "logic_operator", new[] { "and", "or" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "metric", new[] { "accuracy", "f1score", "precision", "recall" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "linear_regression", "bayes", "neural_network", "own" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "logistic_regression", "bayes", "neural_network", "own" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "operator", new[] { "greater_than", "greater_than_or_equal", "less_than", "less_than_or_equal" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "plot_type", new[] { "confusion_matrix", "roc" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "set_type", new[] { "training_set", "validation_set", "test_set" });

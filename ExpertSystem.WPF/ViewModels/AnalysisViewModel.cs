@@ -34,7 +34,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly MainViewModel _mainViewModel;
         private readonly UserSample _userSample;
         private bool _isKnnChecked;
-        private bool _isLinearRegressionChecked;
+        private bool _isLogisticRegressionChecked;
         private bool _isBayesChecked;
         private bool _isNeuralNetworkChecked;
         private bool _isIfThenChecked;
@@ -171,15 +171,15 @@ namespace ExpertSystem.WPF.ViewModels
         }
 
 
-        public bool IsLinearRegressionChecked
+        public bool IsLogisticRegressionChecked
         {
-            get => _isLinearRegressionChecked;
+            get => _isLogisticRegressionChecked;
             set
             {
-                if (_isLinearRegressionChecked != value)
+                if (_isLogisticRegressionChecked != value)
                 {
-                    _isLinearRegressionChecked = value;
-                    OnPropertyChanged(nameof(IsLinearRegressionChecked));
+                    _isLogisticRegressionChecked = value;
+                    OnPropertyChanged(nameof(IsLogisticRegressionChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsIfThenEnabled));
@@ -187,7 +187,7 @@ namespace ExpertSystem.WPF.ViewModels
                     UpdateSelectedModels();
 
                 }
-                if (!_isLinearRegressionChecked)
+                if (!_isLogisticRegressionChecked)
                 {
                     SelectedResultColumn = null;
                     SelectedTrainingSetPercentage = null;
@@ -342,11 +342,11 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
             }
         }
-        public bool IsIfThenEnabled => !IsKnnChecked && !IsLinearRegressionChecked && !IsBayesChecked && !IsNeuralNetworkChecked;
+        public bool IsIfThenEnabled => !IsKnnChecked && !IsLogisticRegressionChecked && !IsBayesChecked && !IsNeuralNetworkChecked;
         public bool AreOtherModelsEnabled => !IsIfThenChecked;
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
-        public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
-        public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
+        public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
+        public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
         public bool AreDetailsChecked =>
             !string.IsNullOrWhiteSpace(SelectedResultColumn) &&
             !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) &&
@@ -392,9 +392,9 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 SelectedModels.Add("KNN");
             }
-            if (IsLinearRegressionChecked)
+            if (IsLogisticRegressionChecked)
             {
-                SelectedModels.Add("Linear Regression");
+                SelectedModels.Add("Logistic Regression");
             }
             if (IsBayesChecked)
             {

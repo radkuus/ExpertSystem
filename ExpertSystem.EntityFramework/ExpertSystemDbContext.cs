@@ -42,7 +42,7 @@ namespace ExpertSystem.EntityFramework
                 .Property(mr => mr.SetType)
                 .HasConversion(setTypeConverter);
 
-            // Konwertery dla pozostałych enumów
+            
             var plotTypeConverter = new ValueConverter<PlotType, string>(
                 v => v.ToString(),
                 v => Enum.Parse<PlotType>(v)

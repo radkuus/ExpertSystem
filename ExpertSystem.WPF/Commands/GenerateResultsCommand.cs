@@ -63,6 +63,8 @@ namespace ExpertSystem.WPF.Commands
                 // check server status
                 await EnsureServerRunning();
 
+
+
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
@@ -87,6 +89,7 @@ namespace ExpertSystem.WPF.Commands
 
                 var results = new List<ModelAnalysisResult>();
                 var hyperparameters = new Dictionary<string, string>();
+                MessageBox.Show("Generating results");
 
                 // KNN
                 if (_viewModel.IsKnnChecked)
@@ -124,6 +127,21 @@ namespace ExpertSystem.WPF.Commands
                     response.ModelName = "Bayes";
                     results.Add(response);
                     hyperparameters["Bayes"] = null;
+                }
+
+                if (_viewModel.IsLogisticRegressionChecked)
+                {
+                    var request = new
+                    {
+                        data,
+                        analysis_columns,
+                        target_column,
+                        training_size = float.Parse(training_size)
+                    };
+                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/lr", request);
+                    response.ModelName = "LogisticRegression";
+                    results.Add(response);
+                    hyperparameters["LogisticReggresion"] = null;
                 }
 
 

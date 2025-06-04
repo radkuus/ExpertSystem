@@ -6,6 +6,7 @@ import uuid
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 
@@ -20,6 +21,12 @@ class KNNDatasetInput(BaseModel):
     distance_metric: str
 
 class BayesDatasetInput(BaseModel):
+    data: List[List[str]]
+    analysis_columns: List[str]
+    target_column: str
+    training_size: float
+
+class LogisticRegressionInput(BaseModel):
     data: List[List[str]]
     analysis_columns: List[str]
     target_column: str
@@ -117,4 +124,31 @@ async def run_bayes(input_data: BayesDatasetInput):
 
     except Exception as e:
         print("Error in Bayes:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/lr", response_model=ModelOutput)
+async def run_lr(input_data: LogisticRegressionInput):
+    try:
+        request_id = str(uuid.uuid4())
+
+        X_train, X_test, y_train, y_test = prepare_dataset(input_data.training_size, input_data.data, input_data.analysis_columns, input_data.target_column)
+
+        lr = LogisticRegression()
+        lr.fit(X_train, y_train)
+        y_pred = lr.predict(X_test)
+
+        metrics = {
+            "f1": f1_score(y_test, y_pred, average='weighted'),
+            "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
+            "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
+            "accuracy": accuracy_score(y_test, y_pred),
+            "request_id": request_id
+        }
+
+        print("LR Response:", metrics)
+
+        return ModelOutput(**metrics)
+
+    except Exception as e:
+        print("Error in LR:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
