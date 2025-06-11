@@ -9,6 +9,9 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+import tensorflow
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Input, Dense
 
 app = FastAPI()
 
@@ -23,6 +26,14 @@ class KNNDatasetInput(BaseModel):
 class BayesDatasetInput(BaseModel):
     data: List[List[str]]
     analysis_columns: List[str]
+    target_column: str
+    training_size: float
+
+class NeuralNetworkDatasetInput(BaseModel):
+    data: List[List[str]]
+    analysis_columns: List[str]
+    neurons: List[int]
+    layers: int
     target_column: str
     training_size: float
 
@@ -124,6 +135,54 @@ async def run_bayes(input_data: BayesDatasetInput):
 
     except Exception as e:
         print("Error in Bayes:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/NeuralNetwork", response_model=ModelOutput)
+async def run_NeuralNetwork(input_data: NeuralNetworkDatasetInput):
+    try:
+        request_id = str(uuid.uuid4())
+
+        X_train, X_test, y_train, y_test = prepare_dataset(input_data.training_size, input_data.data, input_data.analysis_columns, input_data.target_column)
+
+        model = Sequential()
+        model.add(Input(shape=(X_train.shape[1],)))
+
+        for i in range(input_data.layers):
+            model.add(Dense(input_data.neurons[i], activation="relu"))
+        
+        num_classes = len(pd.unique(y_train))
+
+        if num_classes == 2:
+            model.add(Dense(1, activation="sigmoid"))
+            loss = "binary_crossentropy"
+        else:
+            model.add(Dense(num_classes, activation="softmax"))
+            loss = "sparse_categorical_crossentropy"
+        
+        model.compile(optimizer="adam", loss=loss, metrics=["accuracy"])
+        model.fit(X_train, y_train, epochs=50, batch_size=32, verbose=0)
+        
+        y_pred_prob = model.predict(X_test)
+
+        if num_classes == 2:
+            y_pred = (y_pred_prob > 0.5).astype(int).flatten()
+        else:
+            y_pred = y_pred_prob.argmax(axis=1)
+
+        metrics = {
+            "f1": f1_score(y_test, y_pred, average='weighted'),
+            "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
+            "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
+            "accuracy": accuracy_score(y_test, y_pred),
+            "request_id": request_id
+        }
+
+        print("Neural Network Response:", metrics)
+
+        return ModelOutput(**metrics)
+
+    except Exception as e:
+        print("Error in Neural Network:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.post("/lr", response_model=ModelOutput)
