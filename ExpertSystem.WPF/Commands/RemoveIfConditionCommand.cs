@@ -8,26 +8,26 @@ using ExpertSystem.WPF.ViewModels;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class RemoveConditionCommand : ICommand
+    public class RemoveIfConditionCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 
         private readonly AnalysisViewModel _analysisViewModel;
 
-        public RemoveConditionCommand(AnalysisViewModel analysisViewModel)
+        public RemoveIfConditionCommand(AnalysisViewModel analysisViewModel)
         {
             _analysisViewModel = analysisViewModel;
-            _analysisViewModel.Conditions.CollectionChanged += (s, e) => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            _analysisViewModel.IfThenConditions.CollectionChanged += (s, e) => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public bool CanExecute(object? parameter)
         {
-            return _analysisViewModel.Conditions.Count > 0;
+            return _analysisViewModel.IfThenConditions.Count > 0;
         }
 
         public void Execute(object? parameter)
         {
-            _analysisViewModel.Conditions.RemoveAt(_analysisViewModel.Conditions.Count - 1);
+            _analysisViewModel.IfThenConditions.RemoveAt(_analysisViewModel.IfThenConditions.Count - 1);
         }
     }
 
