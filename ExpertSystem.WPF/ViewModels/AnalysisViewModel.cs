@@ -9,7 +9,7 @@ using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Auxiliary;
 using ExpertSystem.WPF.Commands;
-using ExpertSystem.WPF.Helpers;
+using ExpertSystem.WPF.Helpers.IfThen;
 using ExpertSystem.WPF.Helpers.Sample;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Datasets;
@@ -50,16 +50,19 @@ namespace ExpertSystem.WPF.ViewModels
         private ObservableCollection<string> _datasetTextColumnNames;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
-        public ObservableCollection<Condition> Conditions { get; set; } = new ObservableCollection<Condition>();
+        public ObservableCollection<IfThenConditionGroup> IfThenConditions { get; set; } = new ObservableCollection<IfThenConditionGroup>();
         public ObservableCollection<NeuronLayer> NeuronCounts { get; set; } = new ObservableCollection<NeuronLayer>();
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
         public ICommand LoadDatasetColumnNamesCommand { get; }
         public ICommand AddSampleCommand { get; }
-        public ICommand RemoveConditionCommand { get; }
+        public ICommand RemoveIfConditionCommand { get; }
         public ICommand GenerateResultsCommand { get; }
         public ICommand RemoveSampleCommand { get; }
+        public ICommand AddIfConditionCommand { get; }
+        public ICommand AddAndConditionCommand { get; }
+        public ICommand RemoveAndConditionCommand { get; }
 
         public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore,
             IDialogService dataFrameDialogService, IDatasetStatisticsService dataStatisticsService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel, UserSample userSample
@@ -83,9 +86,12 @@ namespace ExpertSystem.WPF.ViewModels
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService, dataStatisticsService);
             LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
             AddSampleCommand = new AddSampleCommand(this);
-            RemoveConditionCommand = new RemoveConditionCommand(this);
+            RemoveIfConditionCommand = new RemoveIfConditionCommand(this);
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
             RemoveSampleCommand = new RemoveSampleCommand(this);
+            AddIfConditionCommand = new AddIfConditionCommand(this);
+            AddAndConditionCommand = new AddAndConditionCommand(this);
+            RemoveAndConditionCommand = new RemoveAndConditionCommand(this);
 
             SelectedColumnsForAnalysis.CollectionChanged += (s, e) => UpdateColumnsForAnalysis();
         }
@@ -233,6 +239,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsIfThenEnabled));
                     OnPropertyChanged(nameof(AreOtherModelsEnabled));
+                    OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
                     UpdateSelectedModels();
 
                 }
@@ -277,6 +284,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedResultColumn = value;
                 OnPropertyChanged(nameof(SelectedResultColumn));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
             }
         }
 
@@ -340,10 +348,12 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(SelectedColumnsForAnalysis));
                 OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                 OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
+                OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
             }
         }
         public bool IsIfThenEnabled => !IsKnnChecked && !IsLogisticRegressionChecked && !IsBayesChecked && !IsNeuralNetworkChecked;
         public bool AreOtherModelsEnabled => !IsIfThenChecked;
+        public bool IsIfThenAndResultColumnChecked => IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && SelectedColumnsForAnalysis.Any();
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
         public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
         public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
@@ -419,6 +429,7 @@ namespace ExpertSystem.WPF.ViewModels
         {
             OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
             OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
+            OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
             this.UserSample.UserSamples.Clear();
         }
 
