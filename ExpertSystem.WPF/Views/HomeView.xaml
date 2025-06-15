@@ -44,8 +44,8 @@
 
                     <TextBlock Text="Your Datasets" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
                     <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" 
-                        Grid.Column="1" HorizontalAlignment="Center" Height="41" 
-                        Style="{StaticResource CustomButtonStyle}" VerticalAlignment="Top" />
+                        Grid.Column="1" HorizontalAlignment="Center" 
+                        Style="{StaticResource CustomButtonStyle}" />
                 </Grid>
 
                 <ListView ItemsSource="{Binding UserDatasets}" Margin="10" Grid.Row="1">
