@@ -291,6 +291,7 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(AreDetailsChecked));
                 OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
                 OnPropertyChanged(nameof(UniqueNamesFromClassifyingColumn));
+                IfThenConditions.Clear();
             }
         }
 
