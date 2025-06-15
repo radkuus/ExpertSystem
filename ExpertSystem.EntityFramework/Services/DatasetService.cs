@@ -179,6 +179,20 @@ namespace ExpertSystem.EntityFramework.Services
 
             return new ObservableCollection<string>(textColumns);
         }
+
+        public async Task<ObservableCollection<string>> GetUniqueNamesFromClassifyingColumn(int datasetId, string columnName)
+        {
+            var dataTable = await GetDatasetAsDataTable(datasetId);
+
+            var uniqueNames = dataTable
+                .AsEnumerable()
+                .Select(row => row[columnName]?.ToString())
+                .Where(value => !string.IsNullOrWhiteSpace(value))
+                .Distinct()
+                .ToList();
+
+            return new ObservableCollection<string>(uniqueNames);
+        }
     }
 }
     

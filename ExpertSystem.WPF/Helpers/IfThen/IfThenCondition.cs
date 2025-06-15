@@ -14,5 +14,6 @@ namespace ExpertSystem.WPF.Helpers.IfThen
         public string? SelectedOperator { get; set; }
         public string? SelectedValue { get; set; }
         public string? Type { get; set; }
+        public string? SelectedClass { get; set; }
     }
 }

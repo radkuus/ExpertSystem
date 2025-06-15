@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using ExpertSystem.Domain.Models;
+using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Helpers.IfThen;
 using ExpertSystem.WPF.ViewModels;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class RemoveAndConditionCommand : ICommand
+    public class AddThenInConditionCommand : ICommand
     {
+        private readonly IDatasetService _datasetService;
         private readonly AnalysisViewModel _analysisViewModel;
 
-        public RemoveAndConditionCommand(AnalysisViewModel analysisViewModel)
+        public AddThenInConditionCommand(IDatasetService datasetService, AnalysisViewModel analysisViewModel)
         {
+            _datasetService = datasetService;
             _analysisViewModel = analysisViewModel;
-
             _analysisViewModel.IfThenConditions.CollectionChanged += (s, e) =>
             {
                 if (e.NewItems != null)
@@ -26,7 +30,6 @@ namespace ExpertSystem.WPF.Commands
                         SubscribeToConditionChanges(newGroup);
                     }
                 }
-
                 CanExecuteChanged?.Invoke(this, EventArgs.Empty);
             };
 
@@ -48,15 +51,27 @@ namespace ExpertSystem.WPF.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return _analysisViewModel.IfThenConditions.Any() 
-                   && _analysisViewModel.IfThenConditions.Last().Conditions.Count > 1 
-                   && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
+            return parameter is Dataset && _analysisViewModel.IfThenConditions.Any() 
+                                        && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
         }
 
-        public void Execute(object? parameter)
+        public async void Execute(object? parameter)
         {
-            var lastGroup = _analysisViewModel.IfThenConditions.Last();
-            lastGroup.Conditions.RemoveAt(lastGroup.Conditions.Count - 1);
+            if (parameter is Dataset dataset)
+            {
+                var uniqueNames = await _datasetService.GetUniqueNamesFromClassifyingColumn(dataset.Id, _analysisViewModel.SelectedResultColumn);
+                _analysisViewModel.UniqueNamesFromClassifyingColumn = uniqueNames;
+
+                var lastGroup = _analysisViewModel.IfThenConditions.Last();
+                lastGroup.Conditions.Add(new IfThenCondition
+                {
+                    Type = "then",
+                    SelectedClass = null
+                });
+
+                MessageBox.Show(string.Join(Environment.NewLine, uniqueNames), "Unikalne wartości");
+            }
+                
         }
     }
 }

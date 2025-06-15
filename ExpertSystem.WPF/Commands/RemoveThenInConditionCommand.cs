@@ -9,11 +9,11 @@ using ExpertSystem.WPF.ViewModels;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class RemoveAndConditionCommand : ICommand
+    public class RemoveThenInConditionCommand : ICommand
     {
         private readonly AnalysisViewModel _analysisViewModel;
 
-        public RemoveAndConditionCommand(AnalysisViewModel analysisViewModel)
+        public RemoveThenInConditionCommand(AnalysisViewModel analysisViewModel)
         {
             _analysisViewModel = analysisViewModel;
 
@@ -48,9 +48,9 @@ namespace ExpertSystem.WPF.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return _analysisViewModel.IfThenConditions.Any() 
-                   && _analysisViewModel.IfThenConditions.Last().Conditions.Count > 1 
-                   && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
+            return _analysisViewModel.IfThenConditions.Any()
+                  && _analysisViewModel.IfThenConditions.Last().Conditions.Count > 1
+                  && _analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
         }
 
         public void Execute(object? parameter)

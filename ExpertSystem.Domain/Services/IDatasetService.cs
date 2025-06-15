@@ -20,5 +20,6 @@ namespace ExpertSystem.Domain.Services
         Task<ObservableCollection<string>> GetDatasetColumnNames(int datasetId);
         Task<ObservableCollection<string>> GetDatasetNumericColumnNames(int datasetId);
         Task<ObservableCollection<string>> GetDatasetTextColumnNames(int datasetId);
+        Task<ObservableCollection<string>> GetUniqueNamesFromClassifyingColumn(int datasetId, string columnName);
     }
 }
