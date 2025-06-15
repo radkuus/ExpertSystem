@@ -68,8 +68,6 @@ namespace ExpertSystem.WPF.Commands
                     Type = "then",
                     SelectedClass = null
                 });
-
-                MessageBox.Show(string.Join(Environment.NewLine, uniqueNames), "Unikalne wartości");
             }
                 
         }
