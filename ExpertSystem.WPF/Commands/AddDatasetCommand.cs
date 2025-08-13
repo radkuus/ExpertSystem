@@ -64,14 +64,14 @@ namespace ExpertSystem.WPF.Commands
 
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
-            string datasetsFolder = Path.Combine(projectDirectory, "Datasets");
+            string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
 
-            if (!Directory.Exists(datasetsFolder))
+            if (!Directory.Exists(datasetsFolderDirectory))
             {
-                Directory.CreateDirectory(datasetsFolder);
+                Directory.CreateDirectory(datasetsFolderDirectory);
             }
 
-            string destPath = Path.Combine(datasetsFolder, fileName);
+            string destPath = Path.Combine(datasetsFolderDirectory, fileName);
 
             try
             {
