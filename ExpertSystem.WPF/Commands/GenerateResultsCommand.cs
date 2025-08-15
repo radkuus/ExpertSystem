@@ -89,6 +89,7 @@ namespace ExpertSystem.WPF.Commands
 
                 var results = new List<ModelAnalysisResult>();
                 var hyperparameters = new Dictionary<string, string>();
+                var samples = new Dictionary<string, string>();
                 MessageBox.Show("Generating results");
 
                 // KNN
@@ -172,7 +173,8 @@ namespace ExpertSystem.WPF.Commands
                     userId: dataset.UserId,
                     datasetId: dataset.Id,
                     analysisResults: results,
-                    hyperparameters: hyperparameters
+                    hyperparameters: hyperparameters,
+                    samples: samples
                 );
 
                 var resultsVm = _resultsFactory();

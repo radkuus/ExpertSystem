@@ -19,6 +19,7 @@ namespace ExpertSystem.Domain.Models
         public int ExperimentId { get; set; }
         public ModelType ModelType { get; set; }
         public string Hyperparameters { get; set; }
+        public string Samples { get; set; }
 
 
         public Experiment Experiment { get; set; }
