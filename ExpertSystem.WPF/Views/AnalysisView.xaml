@@ -356,10 +356,9 @@
                                                         <ComboBox Width="100" Height="30" FontSize="15"
                                                                   ItemsSource="{Binding DataContext.SelectedColumnsForAnalysis, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                   SelectedItem="{Binding SelectedColumn}" />
-                                                        <ComboBox Width="40" Height="30" FontSize="15" SelectedItem="{Binding SelectedOperator}">
-                                                            <ComboBoxItem Content=">"/>
-                                                            <ComboBoxItem Content="="/>
-                                                            <ComboBoxItem Content="&lt;"/>
+                                                        <ComboBox Width="40" Height="30" FontSize="15"
+                                                                  ItemsSource="{Binding DataContext.Operators, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  SelectedItem="{Binding SelectedOperator}">
                                                         </ComboBox>
                                                         <TextBox Width="73" Height="30" FontSize="20" Text="{Binding SelectedValue}" MaxLength="6">
                                                             <i:Interaction.Behaviors>

@@ -50,6 +50,7 @@ namespace ExpertSystem.WPF.ViewModels
         private ObservableCollection<string> _datasetTextColumnNames;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         private ObservableCollection<string> _uniqueNamesFromClassifyingColumn = new ObservableCollection<string>();
+        public ObservableCollection<string> Operators => IfThenOperators.Operators;
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
         public ObservableCollection<IfThenConditionGroup> IfThenConditions { get; set; } = new ObservableCollection<IfThenConditionGroup>();
         public ObservableCollection<NeuronLayer> NeuronCounts { get; set; } = new ObservableCollection<NeuronLayer>();
