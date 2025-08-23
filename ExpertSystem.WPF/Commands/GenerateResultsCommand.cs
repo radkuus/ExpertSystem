@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.IO;
 using ExpertSystem.WPF.State.Navigators;
+using ExpertSystem.WPF.Helpers.IfThen;
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -56,8 +57,6 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
-
-
             try
             {
                 // check server status
