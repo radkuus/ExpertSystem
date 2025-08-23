@@ -376,6 +376,7 @@ namespace ExpertSystem.WPF.ViewModels
         public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
         public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
         public bool AreDetailsChecked =>
+            (
             !string.IsNullOrWhiteSpace(SelectedResultColumn) &&
             !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) &&
             SelectedTrainingSetPercentage.Length == 2 &&
@@ -392,6 +393,12 @@ namespace ExpertSystem.WPF.ViewModels
                     !string.IsNullOrWhiteSpace(SelectedLayers) &&
                     NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount))
                 )
+            )
+            )
+            ||
+            (
+                IsIfThenChecked &&
+                !string.IsNullOrWhiteSpace(SelectedResultColumn)
             );
 
         public UserSample UserSample => _userSample;
