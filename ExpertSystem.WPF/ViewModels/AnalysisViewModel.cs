@@ -9,7 +9,7 @@ using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.Auxiliary;
 using ExpertSystem.WPF.Commands;
-using ExpertSystem.WPF.Helpers;
+using ExpertSystem.WPF.Helpers.IfThen;
 using ExpertSystem.WPF.Helpers.Sample;
 using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.State.Datasets;
@@ -34,7 +34,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly MainViewModel _mainViewModel;
         private readonly UserSample _userSample;
         private bool _isKnnChecked;
-        private bool _isLinearRegressionChecked;
+        private bool _isLogisticRegressionChecked;
         private bool _isBayesChecked;
         private bool _isNeuralNetworkChecked;
         private bool _isIfThenChecked;
@@ -49,17 +49,24 @@ namespace ExpertSystem.WPF.ViewModels
         private ObservableCollection<string> _datasetNumericColumnNames;
         private ObservableCollection<string> _datasetTextColumnNames;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
+        private ObservableCollection<string> _uniqueNamesFromClassifyingColumn = new ObservableCollection<string>();
+        public ObservableCollection<string> Operators => IfThenOperators.Operators;
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
-        public ObservableCollection<Condition> Conditions { get; set; } = new ObservableCollection<Condition>();
+        public ObservableCollection<IfThenConditionGroup> IfThenConditions { get; set; } = new ObservableCollection<IfThenConditionGroup>();
         public ObservableCollection<NeuronLayer> NeuronCounts { get; set; } = new ObservableCollection<NeuronLayer>();
 
         public ICommand UpdateCurrentViewModelCommand { get; }
         public ICommand DisplayDatasetAsDataFrameCommand { get; }
         public ICommand LoadDatasetColumnNamesCommand { get; }
         public ICommand AddSampleCommand { get; }
-        public ICommand RemoveConditionCommand { get; }
+        public ICommand RemoveIfConditionCommand { get; }
         public ICommand GenerateResultsCommand { get; }
         public ICommand RemoveSampleCommand { get; }
+        public ICommand AddIfConditionCommand { get; }
+        public ICommand AddAndConditionCommand { get; }
+        public ICommand RemoveAndConditionCommand { get; }
+        public ICommand AddThenInConditionCommand { get; }
+        public ICommand RemoveThenInConditionCommand { get; }
 
         public AnalysisViewModel(INavigator navigator, IExpertSystemViewModelFactory viewModelAbstractFactory, IAuthenticator authenticator, IDatasetService datasetService, IDatasetStore datasetStore,
             IDialogService dataFrameDialogService, IDatasetStatisticsService dataStatisticsService, IDialogService resultsDialog, IApiService apiService, IExperimentService experimentService, CreateViewModel<ResultsViewModel> resultsFactory, MainViewModel mainViewModel, UserSample userSample
@@ -83,9 +90,14 @@ namespace ExpertSystem.WPF.ViewModels
             DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService, dataStatisticsService);
             LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
             AddSampleCommand = new AddSampleCommand(this);
-            RemoveConditionCommand = new RemoveConditionCommand(this);
+            RemoveIfConditionCommand = new RemoveIfConditionCommand(this);
             GenerateResultsCommand = new GenerateResultsCommand(this, resultsDialog, datasetService, apiService, experimentService, resultsFactory, navigator, mainViewModel);
             RemoveSampleCommand = new RemoveSampleCommand(this);
+            AddIfConditionCommand = new AddIfConditionCommand(this);
+            AddAndConditionCommand = new AddAndConditionCommand(this);
+            RemoveAndConditionCommand = new RemoveAndConditionCommand(this);
+            AddThenInConditionCommand = new AddThenInConditionCommand(datasetService, this);
+            RemoveThenInConditionCommand = new RemoveThenInConditionCommand(this);
 
             SelectedColumnsForAnalysis.CollectionChanged += (s, e) => UpdateColumnsForAnalysis();
         }
@@ -171,15 +183,15 @@ namespace ExpertSystem.WPF.ViewModels
         }
 
 
-        public bool IsLinearRegressionChecked
+        public bool IsLogisticRegressionChecked
         {
-            get => _isLinearRegressionChecked;
+            get => _isLogisticRegressionChecked;
             set
             {
-                if (_isLinearRegressionChecked != value)
+                if (_isLogisticRegressionChecked != value)
                 {
-                    _isLinearRegressionChecked = value;
-                    OnPropertyChanged(nameof(IsLinearRegressionChecked));
+                    _isLogisticRegressionChecked = value;
+                    OnPropertyChanged(nameof(IsLogisticRegressionChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsIfThenEnabled));
@@ -187,7 +199,7 @@ namespace ExpertSystem.WPF.ViewModels
                     UpdateSelectedModels();
 
                 }
-                if (!_isLinearRegressionChecked)
+                if (!_isLogisticRegressionChecked)
                 {
                     SelectedResultColumn = null;
                     SelectedTrainingSetPercentage = null;
@@ -233,6 +245,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsIfThenEnabled));
                     OnPropertyChanged(nameof(AreOtherModelsEnabled));
+                    OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
                     UpdateSelectedModels();
 
                 }
@@ -277,6 +290,9 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedResultColumn = value;
                 OnPropertyChanged(nameof(SelectedResultColumn));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
+                OnPropertyChanged(nameof(UniqueNamesFromClassifyingColumn));
+                IfThenConditions.Clear();
             }
         }
 
@@ -340,14 +356,28 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(SelectedColumnsForAnalysis));
                 OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                 OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
+                OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
             }
         }
-        public bool IsIfThenEnabled => !IsKnnChecked && !IsLinearRegressionChecked && !IsBayesChecked && !IsNeuralNetworkChecked;
+
+        public ObservableCollection<string> UniqueNamesFromClassifyingColumn
+        {
+            get => _uniqueNamesFromClassifyingColumn;
+            set
+            {
+                _uniqueNamesFromClassifyingColumn = value;
+                OnPropertyChanged(nameof(UniqueNamesFromClassifyingColumn));
+            }
+        }
+
+        public bool IsIfThenEnabled => !IsKnnChecked && !IsLogisticRegressionChecked && !IsBayesChecked && !IsNeuralNetworkChecked;
         public bool AreOtherModelsEnabled => !IsIfThenChecked;
+        public bool IsIfThenAndResultColumnChecked => IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && SelectedColumnsForAnalysis.Any();
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
-        public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
-        public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLinearRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
+        public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
+        public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
         public bool AreDetailsChecked =>
+            (
             !string.IsNullOrWhiteSpace(SelectedResultColumn) &&
             !string.IsNullOrWhiteSpace(SelectedTrainingSetPercentage) &&
             SelectedTrainingSetPercentage.Length == 2 &&
@@ -364,6 +394,12 @@ namespace ExpertSystem.WPF.ViewModels
                     !string.IsNullOrWhiteSpace(SelectedLayers) &&
                     NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount))
                 )
+            )
+            )
+            ||
+            (
+                IsIfThenChecked &&
+                !string.IsNullOrWhiteSpace(SelectedResultColumn)
             );
 
         public UserSample UserSample => _userSample;
@@ -392,9 +428,9 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 SelectedModels.Add("KNN");
             }
-            if (IsLinearRegressionChecked)
+            if (IsLogisticRegressionChecked)
             {
-                SelectedModels.Add("Linear Regression");
+                SelectedModels.Add("Logistic Regression");
             }
             if (IsBayesChecked)
             {
@@ -419,6 +455,7 @@ namespace ExpertSystem.WPF.ViewModels
         {
             OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
             OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
+            OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
             this.UserSample.UserSamples.Clear();
         }
 

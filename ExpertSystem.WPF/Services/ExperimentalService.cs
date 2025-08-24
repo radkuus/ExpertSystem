@@ -27,7 +27,9 @@ public class ExperimentService : IExperimentService
         int userId,
         int datasetId,
         List<ModelAnalysisResult> analysisResults,
-        Dictionary<string, string> hyperparameters)
+        Dictionary<string, string> hyperparameters,
+        Dictionary<string, string> samples)
+
     {
 
         var experiment = new Experiment
@@ -42,11 +44,11 @@ public class ExperimentService : IExperimentService
             var modelType = result.ModelName switch
             {
                 "KNN" => ModelType.KNN,
-                "LinearRegression" => ModelType.LinearRegression,
+                "LogisticRegression" => ModelType.LogisticRegression,
                 "Bayes" => ModelType.Bayes,
                 "NeuralNetwork" => ModelType.NeuralNetwork,
                 "Own" => ModelType.Own,
-                _ => throw new ArgumentException($"Nieznany typ modelu: {result.ModelName}")
+                _ => throw new ArgumentException($"Unknown model name: {result.ModelName}")
             };
 
             var config = new ModelConfiguration
@@ -55,19 +57,23 @@ public class ExperimentService : IExperimentService
                 ModelType = modelType,
                 Hyperparameters = hyperparameters.ContainsKey(result.ModelName)
                 ? (hyperparameters[result.ModelName] ?? "{}")
+                : "{}",
+                Samples = samples.ContainsKey(result.ModelName)
+                ? (samples[result.ModelName] ?? "{}")
                 : "{}"
+
             };
             var createdConfig = await _configService.Create(config);
 
             var modelResult = new ModelResult
             {
                 ConfigId = createdConfig.Id,
-                SetType = SetType.TestSet,
                 Accuracy = (int)(result.Accuracy * 100),
                 F1Score = (int)(result.F1 * 100),
                 Precision = (int)(result.Precision * 100),
                 Recall = (int)(result.Recall * 100),
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                SamplesHistory = "{}",    // CHANGE IN THE FUTURE (when samples will work)
             };
             await _resultService.Create(modelResult);
         }

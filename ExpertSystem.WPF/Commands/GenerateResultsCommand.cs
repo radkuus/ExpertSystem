@@ -15,6 +15,9 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.IO;
 using ExpertSystem.WPF.State.Navigators;
+using ExpertSystem.WPF.Helpers.IfThen;
+using ExpertSystem.WPF.Helpers.Sample;
+using System.Printing.IndexedProperties;
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -53,11 +56,9 @@ namespace ExpertSystem.WPF.Commands
         {
             return _viewModel.AreDetailsChecked;
         }
-
         public async void Execute(object? parameter)
         {
 
-            MessageBox.Show(string.Join(", ", _viewModel.SelectedColumnsForAnalysis));
             try
             {
                 // check server status
@@ -66,12 +67,36 @@ namespace ExpertSystem.WPF.Commands
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
+                var analysis_columns = _viewModel.SelectedColumnsForAnalysis;
+                var target_column = _viewModel.SelectedResultColumn;
+                var training_size = _viewModel.SelectedTrainingSetPercentage;
                 var data = new List<List<string>>();
+
+                var user_samples_raw = _viewModel.UserSample;
+                var user_samples = new List<List<string>>();
+
+                if (user_samples_raw == null)
+                {
+                    user_samples = null;
+                }
+                else
+                {
+                    foreach (var row in user_samples_raw.UserSamples)
+                    {
+                        foreach (var entry in row)
+                        {
+                            user_samples.Add(new List<string> { entry.ColumnName, entry.Value });
+                        }
+                    }
+                }
+
+                List<string> selectedColumns = new List<string>(analysis_columns);
+                selectedColumns.Add(target_column);
 
                 foreach (DataRow row in df.Rows)
                 {
                     var rowData = new List<string>();
-                    foreach (var col in columns)
+                    foreach (var col in selectedColumns)
                     {
                         rowData.Add(row[col].ToString());
                     }
@@ -80,17 +105,23 @@ namespace ExpertSystem.WPF.Commands
 
                 var results = new List<ModelAnalysisResult>();
                 var hyperparameters = new Dictionary<string, string>();
+                var samples = new Dictionary<string, string>();
+                MessageBox.Show("Generating results");
 
                 // KNN
                 if (_viewModel.IsKnnChecked)
                 {
                     var neighbors = _viewModel.SelectedNeighbours ?? "3";
+                    var distance_metric = _viewModel.SelectedDistanceMetrics;
                     var request = new
                     {
                         data,
-                        columns,
-                        target_column = _viewModel.SelectedResultColumn,
-                        neighbors = int.Parse(neighbors)
+                        analysis_columns,
+                        target_column,
+                        training_size = float.Parse(training_size),
+                        neighbors = int.Parse(neighbors),
+                        distance_metric,
+                        user_samples
                     };
 
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/knn", request);
@@ -105,8 +136,11 @@ namespace ExpertSystem.WPF.Commands
                     var request = new
                     {
                         data,
-                        columns,
-                        target_column = _viewModel.SelectedResultColumn
+                        analysis_columns,
+                        target_column,
+                        training_size = float.Parse(training_size),
+                        user_samples
+
                     };
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/bayes", request);
                     response.ModelName = "Bayes";
@@ -124,15 +158,71 @@ namespace ExpertSystem.WPF.Commands
                     var request = new
                     {
                         data,
-                        columns,
+                        analysis_columns,
                         neurons,
                         layers,
-                        target_column = _viewModel.SelectedResultColumn
+                        target_column,
+                        training_size = float.Parse(training_size),
+                        user_samples
+
                     };
-                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/neuralnetwork", request);
-                    response.ModelName = "neuralnetwork";
+                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/NeuralNetwork", request);
+                    response.ModelName = "NeuralNetwork";
                     results.Add(response);
-                    hyperparameters["neuralnetwork"] = null;
+                    hyperparameters["NeuralNetwork"] = null;
+                }
+
+                // IF model
+                if (_viewModel.IsIfThenChecked)
+                {
+                    var ifthen = new List<List<string>>();
+
+                    foreach (var row in _viewModel.IfThenConditions)
+                    {
+                        foreach (var col in row.Conditions)
+                        {
+                            
+                            ifthen.Add(new List<string>
+                            {
+                                col.Type ?? "",
+                                col.SelectedColumn ?? "",
+                                col.SelectedOperator ?? "",
+                                col.SelectedValue?.ToString() ?? "",
+                                col.SelectedClass ?? ""
+                            });
+                        }
+                    }
+
+                    var request = new
+                    {
+                        data,
+                        analysis_columns,
+                        target_column,
+                        user_samples,
+                        ifthen
+
+                    };
+
+                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/ifthen", request);
+                    response.ModelName = "Own";
+                    results.Add(response);
+                    hyperparameters["Own"] = null;
+                }
+
+                if (_viewModel.IsLogisticRegressionChecked)
+                {
+                    var request = new
+                    {
+                        data,
+                        analysis_columns,
+                        target_column,
+                        training_size = float.Parse(training_size),
+                        user_samples
+                    };
+                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/lr", request);
+                    response.ModelName = "LogisticRegression";
+                    results.Add(response);
+                    hyperparameters["LogisticReggresion"] = null;
                 }
 
 
@@ -140,7 +230,8 @@ namespace ExpertSystem.WPF.Commands
                     userId: dataset.UserId,
                     datasetId: dataset.Id,
                     analysisResults: results,
-                    hyperparameters: hyperparameters
+                    hyperparameters: hyperparameters,
+                    samples: samples
                 );
 
                 var resultsVm = _resultsFactory();
@@ -169,7 +260,8 @@ namespace ExpertSystem.WPF.Commands
             if (!File.Exists(mainPy))
                 throw new FileNotFoundException($"Can't find file main.py in {solutionRoot}");
 
-            // "open" cmd and write -m uvicorn main:app --host 127.0.0.1 --port 8000
+            // "open" cmd and write -m
+            // uvicorn main:app --host 127.0.0.1 --port 8000
             var startInfo = new ProcessStartInfo
             {
                 FileName = "python",

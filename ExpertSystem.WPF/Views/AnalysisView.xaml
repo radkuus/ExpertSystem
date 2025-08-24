@@ -15,6 +15,7 @@
     <UserControl.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:IfThenConditionTypeToVisibilityConverter x:Key="IfThenConditionTypeToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -85,7 +86,7 @@
                     </StackPanel.Resources>
 
                     <CheckBox Content="KNN" IsChecked="{Binding IsKnnChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
-                    <CheckBox Content="Linear regression" IsChecked="{Binding IsLinearRegressionChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
+                    <CheckBox Content="Logistic Regression" IsChecked="{Binding IsLogisticRegressionChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
                     <CheckBox Content="Bayes" IsChecked="{Binding IsBayesChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
                     <CheckBox Content="Neural Network" IsChecked="{Binding IsNeuralNetworkChecked}" IsEnabled="{Binding AreOtherModelsEnabled}"/>
                     <CheckBox Content="If=>Then" IsChecked="{Binding IsIfThenChecked}" IsEnabled="{Binding IsIfThenEnabled}"/>
@@ -142,7 +143,7 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
                             <TextBlock Text="Column:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <ComboBox Width="100" FontSize="15" 
-                                      ItemsSource="{Binding DatasetTextColumnNames}" 
+                                      ItemsSource="{Binding DatasetColumnNames}" 
                                       SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"/>
                         </StackPanel>
                     </Grid>
@@ -240,7 +241,7 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
                             <TextBlock Text="Column:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
                             <ComboBox Width="100" FontSize="15" 
-                                      ItemsSource="{Binding DatasetTextColumnNames}" 
+                                      ItemsSource="{Binding DatasetColumnNames}" 
                                       SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"/>
                         </StackPanel>
                     </Grid>
@@ -311,8 +312,8 @@
 
             </Grid>
         </Border>
-<!--
-        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Margin="10" Visibility="{Binding AreDetailsChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1" Margin="10" Visibility="{Binding IsIfThenAndResultColumnChecked, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -322,70 +323,66 @@
                 </Grid.RowDefinitions>
 
                 <Grid Margin="5" Grid.Row="0">
-                    <TextBlock Text="Create your own samples" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Create your own conditions" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
                 </Grid>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                    <Button Content="Add" Height="35" Width="50" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding AddConditionCommand}"></Button>
-                    <Button Content="Remove" Height="35" Width="70" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveConditionCommand}"></Button>
+                    <Button Content="Add if condition" Height="35" Width="Auto" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding AddIfConditionCommand}"></Button>
+                    <Button Content="Add and condition" Height="35" Width="Auto" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding AddAndConditionCommand}"></Button>
+                    <Button Content="Remove if condition" Height="35" Width="Auto" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveIfConditionCommand}"></Button>
+                    <Button Content="Remove and condition" Height="35" Width="Auto" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveAndConditionCommand}"></Button>
+                    <Button Content="Add then" Height="35" Width="Auto" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding AddThenInConditionCommand}" CommandParameter="{Binding SelectedDataset}"></Button>
+                    <Button Content="Remove then" Height="35" Width="Auto" FontSize="12" Padding="5" VerticalAlignment="Top" Command="{Binding RemoveThenInConditionCommand}"></Button>
                 </StackPanel>
 
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
-                    <TextBlock Text="If" FontSize="20" Margin="10"/>
-                    <ComboBox Width="100" Height="30" FontSize="15" ItemsSource="{Binding SelectedModels}" SelectedItem="{Binding SelectedModel}" />
-                    <ComboBox Width="100" Height="30" FontSize="15" SelectedItem="{Binding SelectedMetric}">
-                        <ComboBoxItem Content="Accuracy"/>
-                        <ComboBoxItem Content="Precision"/>
-                        <ComboBoxItem Content="Recall"/>
-                        <ComboBoxItem Content="F1-Score"/>
-                    </ComboBox>
-                    <ComboBox Width="40" Height="30" FontSize="15" SelectedItem="{Binding SelectedOperator}">
-                        <ComboBoxItem Content=">"/>
-                        <ComboBoxItem Content="="/>
-                        <ComboBoxItem Content="&lt;"/>
-                    </ComboBox>
-                    <TextBox Width="50" Height="30" FontSize="20" Text="{Binding SelectedValue}" MaxLength="4">
-                        <i:Interaction.Behaviors>
-                            <behaviors:NumericInputBehavior/>
-                        </i:Interaction.Behaviors>
-                    </TextBox>
-                </StackPanel>
+                <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding IfThenConditions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="10">
+                                    <ItemsControl ItemsSource="{Binding Conditions}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="5">
+                                                    <TextBlock Text="{Binding Type}" FontSize="20" Margin="5"/>
 
-                <ItemsControl Grid.Row="3" ItemsSource="{Binding Conditions}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                                                    <StackPanel Orientation="Horizontal" Margin="5"
+                                                                Visibility="{Binding Type, Converter={StaticResource IfThenConditionTypeToVisibilityConverter}, ConverterParameter=if/and}">
+                                                        <ComboBox Width="100" Height="30" FontSize="15"
+                                                                  ItemsSource="{Binding DataContext.SelectedColumnsForAnalysis, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  SelectedItem="{Binding SelectedColumn}" />
+                                                        <ComboBox Width="40" Height="30" FontSize="15"
+                                                                  ItemsSource="{Binding DataContext.Operators, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  SelectedItem="{Binding SelectedOperator}">
+                                                        </ComboBox>
+                                                        <TextBox Width="73" Height="30" FontSize="20" Text="{Binding SelectedValue}" MaxLength="6">
+                                                            <i:Interaction.Behaviors>
+                                                                <behaviors:NumericInputBehaviorUserSample/>
+                                                            </i:Interaction.Behaviors>
+                                                        </TextBox>
+                                                    </StackPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="10">
-                                <TextBlock Text="And" FontSize="20" Margin="10"/>
-                                <ComboBox Width="100" Height="30" FontSize="15" ItemsSource="{Binding SelectedModels}" SelectedItem="{Binding SelectedModel}" />
-                                <ComboBox Width="100" Height="30" FontSize="15" SelectedItem="{Binding SelectedMetric}">
-                                    <ComboBoxItem Content="Accuracy"/>
-                                    <ComboBoxItem Content="Precision"/>
-                                    <ComboBoxItem Content="Recall"/>
-                                    <ComboBoxItem Content="F1-Score"/>
-                                </ComboBox>
-                                <ComboBox Width="40" Height="30" FontSize="15" SelectedItem="{Binding SelectedOperator}">
-                                    <ComboBoxItem Content=">"/>
-                                    <ComboBoxItem Content="="/>
-                                    <ComboBoxItem Content="&lt;"/>
-                                </ComboBox>
-                                <TextBox Width="50" Height="30" FontSize="20" Text="{Binding SelectedValue}"  MaxLength="4">
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:NumericInputBehavior/>
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
+                                                    <StackPanel Orientation="Horizontal" Margin="5"
+                                                                Visibility="{Binding Type, Converter={StaticResource IfThenConditionTypeToVisibilityConverter}, ConverterParameter=then}">
+                                                        <ComboBox Width="100" Height="30" FontSize="15"
+                                                                  ItemsSource="{Binding DataContext.UniqueNamesFromClassifyingColumn, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                  SelectedItem="{Binding SelectedClass}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Grid>
         </Border>
--->
     </Grid>
 </UserControl>
