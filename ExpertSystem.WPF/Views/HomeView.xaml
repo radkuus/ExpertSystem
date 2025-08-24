@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="ExpertSystem.WPF.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
+             xmlns:navigator="clr-namespace:ExpertSystem.WPF.State.Navigators"
+             xmlns:vm="clr-namespace:ExpertSystem.WPF.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
+                   Text="{Binding Nickname, StringFormat='Hi {0}!'}" 
+                   FontSize="30" FontWeight="Bold" 
+                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"/>
+
+        <Button Content="Logout" Command="{Binding LogoutCommand}" 
+                Grid.Column="1" Margin="0 5 5 5" HorizontalAlignment="Right" Height="Auto" 
+                Style="{StaticResource CustomButtonStyle}" />
+
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="10" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Your Datasets" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                    <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" 
+                        Grid.Column="1" HorizontalAlignment="Center" 
+                        Style="{StaticResource CustomButtonStyle}" />
+                </Grid>
+
+                <ListView ItemsSource="{Binding UserDatasets}" Margin="10" Grid.Row="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Remove" 
+                                            Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            FontSize="12" Padding="5"
+                                            CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="10" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Your Results" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                </Grid>
+
+                <ListView Margin="10" Grid.Row="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
+                            <GridViewColumn Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

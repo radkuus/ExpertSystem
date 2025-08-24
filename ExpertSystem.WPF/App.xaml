@@ -1,0 +1,57 @@
+﻿<Application x:Class="ExpertSystem.WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:viewmodels="clr-namespace:ExpertSystem.WPF.ViewModels"
+             xmlns:views="clr-namespace:ExpertSystem.WPF.Views"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ExpertSystem.WPF">
+
+    <Application.Resources>
+
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Common.xaml"/>
+                <ResourceDictionary Source="/Styles/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/NavigationBar.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                <views:HomeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:AnalysisViewModel}">
+                <views:AnalysisView/>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type viewmodels:ResultsViewModel}">
+                <views:ResultsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:HistoryViewModel}">
+                <views:HistoryView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+                <views:LoginView LoginCommand="{Binding LoginCommand}"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:RegisterViewModel}">
+                <views:RegisterView RegisterCommand="{Binding RegisterCommand}"/>
+            </DataTemplate>
+
+
+
+            <DataTemplate DataType="{x:Type viewmodels:AdminViewModel}">
+                <views:AdminView RegisterCommand="{Binding RegisterCommand}"
+                                 DisplayUsersCommand="{Binding DisplayUsersCommand}"
+                                 EditUserCommand="{Binding EditUserCommand}"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:AdminDatasetViewModel}">
+                <views:AdminDatasetView/>
+            </DataTemplate>
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>
