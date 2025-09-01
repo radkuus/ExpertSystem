@@ -21,11 +21,8 @@ namespace ExpertSystem.EntityFramework.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "logic_operator", new[] { "and", "or" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "metric", new[] { "accuracy", "f1score", "precision", "recall" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "linear_regression", "bayes", "neural_network", "own" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "logistic_regression", "bayes", "neural_network", "own" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "operator", new[] { "greater_than", "greater_than_or_equal", "less_than", "less_than_or_equal" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "plot_type", new[] { "confusion_matrix", "roc" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "set_type", new[] { "training_set", "validation_set", "test_set" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.Dataset", b =>
@@ -60,6 +57,10 @@ namespace ExpertSystem.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Column")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("ExperimentID")
                         .HasColumnType("integer");
 
@@ -67,11 +68,11 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Metric")
+                    b.Property<string>("Operator")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Operator")
+                    b.Property<string>("Result")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -129,6 +130,10 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Samples")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ExperimentId");
@@ -163,42 +168,15 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<int>("Recall")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SetType")
+                    b.Property<string>("SamplesHistory")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("jsonb");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ConfigId");
 
                     b.ToTable("ModelResults");
-                });
-
-            modelBuilder.Entity("ExpertSystem.Domain.Models.Plot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("PlotId");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PlotType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ResultId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ResultId");
-
-                    b.ToTable("Plots");
                 });
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.User", b =>
@@ -293,17 +271,6 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Navigation("ModelConfiguration");
                 });
 
-            modelBuilder.Entity("ExpertSystem.Domain.Models.Plot", b =>
-                {
-                    b.HasOne("ExpertSystem.Domain.Models.ModelResult", "ModelResult")
-                        .WithMany("Plots")
-                        .HasForeignKey("ResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ModelResult");
-                });
-
             modelBuilder.Entity("ExpertSystem.Domain.Models.Dataset", b =>
                 {
                     b.Navigation("Experiments");
@@ -319,11 +286,6 @@ namespace ExpertSystem.EntityFramework.Migrations
             modelBuilder.Entity("ExpertSystem.Domain.Models.ModelConfiguration", b =>
                 {
                     b.Navigation("ModelResults");
-                });
-
-            modelBuilder.Entity("ExpertSystem.Domain.Models.ModelResult", b =>
-                {
-                    b.Navigation("Plots");
                 });
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.User", b =>

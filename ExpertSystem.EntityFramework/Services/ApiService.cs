@@ -30,13 +30,28 @@ namespace ExpertSystem.EntityFramework.Services
                 var json = JsonSerializer.Serialize(data);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(endpoint, content);
-                response.EnsureSuccessStatusCode();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    var errorResponse = JsonSerializer.Deserialize<JsonElement>(errorContent);
+
+                    if (errorResponse.TryGetProperty("detail", out var detail))
+                    {
+                        throw new Exception(detail.GetString());
+                    }
+                    else
+                    {
+                        throw new Exception($"API call failed with status: {response.StatusCode}");
+                    }
+                }
+
                 var responseJson = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<T>(responseJson);
             }
             catch (Exception ex)
             {
-                throw new Exception($"API call failed: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

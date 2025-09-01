@@ -19,6 +19,7 @@ using ExpertSystem.WPF.Helpers.IfThen;
 using ExpertSystem.WPF.Helpers.Sample;
 using System.Printing.IndexedProperties;
 
+
 namespace ExpertSystem.WPF.Commands
 {
     internal class GenerateResultsCommand : ICommand
@@ -64,6 +65,8 @@ namespace ExpertSystem.WPF.Commands
                 // check server status
                 await EnsureServerRunning();
 
+
+
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
@@ -102,6 +105,7 @@ namespace ExpertSystem.WPF.Commands
                     }
                     data.Add(rowData);
                 }
+
 
                 var results = new List<ModelAnalysisResult>();
                 var hyperparameters = new Dictionary<string, string>();

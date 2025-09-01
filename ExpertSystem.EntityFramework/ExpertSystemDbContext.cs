@@ -11,7 +11,6 @@ namespace ExpertSystem.EntityFramework
         public DbSet<Experiment> Experiments { get; set; }
         public DbSet<ModelConfiguration> ModelConfigurations { get; set; }
         public DbSet<ModelResult> ModelResults { get; set; }
-        public DbSet<Plot> Plots { get; set; }
         public DbSet<DecisionRule> DecisionRules { get; set; }
 
         public ExpertSystemDbContext(DbContextOptions options) : base(options) { }
@@ -31,37 +30,6 @@ namespace ExpertSystem.EntityFramework
                 .Property(e => e.ModelType)
                 .HasConversion(modelTypeConverter);
 
-            // converter
-            var setTypeConverter = new ValueConverter<SetType, string>(
-                v => v.ToString(),
-                v => Enum.Parse<SetType>(v)
-            );
-
-            modelBuilder.HasPostgresEnum<SetType>();
-            modelBuilder.Entity<ModelResult>()
-                .Property(mr => mr.SetType)
-                .HasConversion(setTypeConverter);
-
-            // Konwertery dla pozostałych enumów
-            var plotTypeConverter = new ValueConverter<PlotType, string>(
-                v => v.ToString(),
-                v => Enum.Parse<PlotType>(v)
-            );
-
-            modelBuilder.HasPostgresEnum<PlotType>();
-            modelBuilder.Entity<Plot>()
-                .Property(p => p.PlotType)
-                .HasConversion(plotTypeConverter);
-
-            var metricConverter = new ValueConverter<Metric, string>(
-                v => v.ToString(),
-                v => Enum.Parse<Metric>(v)
-            );
-
-            modelBuilder.HasPostgresEnum<Metric>();
-            modelBuilder.Entity<DecisionRule>()
-                .Property(dr => dr.Metric)
-                .HasConversion(metricConverter);
 
             var operatorConverter = new ValueConverter<Operator, string>(
                 v => v.ToString(),
@@ -92,12 +60,19 @@ namespace ExpertSystem.EntityFramework
                 .Property(mc => mc.Hyperparameters)
                 .HasColumnType("jsonb");
 
+            modelBuilder.Entity<ModelConfiguration>()
+                .Property(mc => mc.Samples)
+                .HasColumnType("jsonb");
+
+            modelBuilder.Entity<ModelResult>()
+                .Property(mr => mr.SamplesHistory)
+                .HasColumnType("jsonb");
+
             modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("UserId");
             modelBuilder.Entity<Dataset>().Property(d => d.Id).HasColumnName("DatasetId");
             modelBuilder.Entity<Experiment>().Property(e => e.Id).HasColumnName("ExperimentId");
             modelBuilder.Entity<ModelConfiguration>().Property(mc => mc.Id).HasColumnName("ConfigId");
             modelBuilder.Entity<ModelResult>().Property(mr => mr.Id).HasColumnName("ResultId");
-            modelBuilder.Entity<Plot>().Property(p => p.Id).HasColumnName("PlotId");
             modelBuilder.Entity<DecisionRule>().Property(dr => dr.Id).HasColumnName("RuleId");
 
             modelBuilder.Entity<Dataset>()
@@ -130,10 +105,6 @@ namespace ExpertSystem.EntityFramework
                 .WithMany(mc => mc.ModelResults)
                 .HasForeignKey(mr => mr.ConfigId);
 
-            modelBuilder.Entity<Plot>()
-                .HasOne(p => p.ModelResult)
-                .WithMany(mr => mr.Plots)
-                .HasForeignKey(p => p.ResultId);
         }
     }
 }

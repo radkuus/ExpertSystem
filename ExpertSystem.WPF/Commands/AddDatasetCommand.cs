@@ -62,24 +62,33 @@ namespace ExpertSystem.WPF.Commands
                 return;
             }
 
-            var dataset = new Dataset
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
+            string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
+
+            if (!Directory.Exists(datasetsFolderDirectory))
             {
-                Name = fileName,
-                UserId = currentUser.Id
-            };
+                Directory.CreateDirectory(datasetsFolderDirectory);
+            }
+
+            string destPath = Path.Combine(datasetsFolderDirectory, fileName);
 
             try
             {
+                File.Copy(filePath, destPath, overwrite: true);
+
+                var dataset = new Dataset
+                {
+                    Name = fileName,
+                    UserId = currentUser.Id
+                };
+
                 await _datasetService.AddDataset(dataset);
                 _viewModel.DisplayUserDatasetsCommand.Execute(null);
             }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error); 
-            }
             catch (Exception ex)
             {
-                
+                MessageBox.Show($"Error: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
