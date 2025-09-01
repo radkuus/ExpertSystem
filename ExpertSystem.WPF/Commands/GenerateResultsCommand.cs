@@ -16,6 +16,9 @@ using System.Net.Http;
 using System.IO;
 using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.Helpers.IfThen;
+using ExpertSystem.WPF.Helpers.Sample;
+using System.Printing.IndexedProperties;
+
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -54,9 +57,9 @@ namespace ExpertSystem.WPF.Commands
         {
             return _viewModel.AreDetailsChecked;
         }
-
         public async void Execute(object? parameter)
         {
+
             try
             {
                 // check server status
@@ -71,6 +74,24 @@ namespace ExpertSystem.WPF.Commands
                 var target_column = _viewModel.SelectedResultColumn;
                 var training_size = _viewModel.SelectedTrainingSetPercentage;
                 var data = new List<List<string>>();
+
+                var user_samples_raw = _viewModel.UserSample;
+                var user_samples = new List<List<string>>();
+
+                if (user_samples_raw == null)
+                {
+                    user_samples = null;
+                }
+                else
+                {
+                    foreach (var row in user_samples_raw.UserSamples)
+                    {
+                        foreach (var entry in row)
+                        {
+                            user_samples.Add(new List<string> { entry.ColumnName, entry.Value });
+                        }
+                    }
+                }
 
                 List<string> selectedColumns = new List<string>(analysis_columns);
                 selectedColumns.Add(target_column);
@@ -103,7 +124,8 @@ namespace ExpertSystem.WPF.Commands
                         target_column,
                         training_size = float.Parse(training_size),
                         neighbors = int.Parse(neighbors),
-                        distance_metric
+                        distance_metric,
+                        user_samples
                     };
 
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/knn", request);
@@ -120,7 +142,8 @@ namespace ExpertSystem.WPF.Commands
                         data,
                         analysis_columns,
                         target_column,
-                        training_size = float.Parse(training_size)
+                        training_size = float.Parse(training_size),
+                        user_samples
 
                     };
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/bayes", request);
@@ -143,13 +166,51 @@ namespace ExpertSystem.WPF.Commands
                         neurons,
                         layers,
                         target_column,
-                        training_size = float.Parse(training_size)
+                        training_size = float.Parse(training_size),
+                        user_samples
 
                     };
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/NeuralNetwork", request);
                     response.ModelName = "NeuralNetwork";
                     results.Add(response);
                     hyperparameters["NeuralNetwork"] = null;
+                }
+
+                // IF model
+                if (_viewModel.IsIfThenChecked)
+                {
+                    var ifthen = new List<List<string>>();
+
+                    foreach (var row in _viewModel.IfThenConditions)
+                    {
+                        foreach (var col in row.Conditions)
+                        {
+                            
+                            ifthen.Add(new List<string>
+                            {
+                                col.Type ?? "",
+                                col.SelectedColumn ?? "",
+                                col.SelectedOperator ?? "",
+                                col.SelectedValue?.ToString() ?? "",
+                                col.SelectedClass ?? ""
+                            });
+                        }
+                    }
+
+                    var request = new
+                    {
+                        data,
+                        analysis_columns,
+                        target_column,
+                        user_samples,
+                        ifthen
+
+                    };
+
+                    var response = await _apiService.PostAsync<ModelAnalysisResult>("/ifthen", request);
+                    response.ModelName = "Own";
+                    results.Add(response);
+                    hyperparameters["Own"] = null;
                 }
 
                 if (_viewModel.IsLogisticRegressionChecked)
@@ -159,7 +220,8 @@ namespace ExpertSystem.WPF.Commands
                         data,
                         analysis_columns,
                         target_column,
-                        training_size = float.Parse(training_size)
+                        training_size = float.Parse(training_size),
+                        user_samples
                     };
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/lr", request);
                     response.ModelName = "LogisticRegression";
