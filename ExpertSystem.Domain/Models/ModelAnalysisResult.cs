@@ -17,6 +17,10 @@
         public double Accuracy { get; set; }
 
         public string ModelName { get; set; }
+
+        [JsonPropertyName("samples_history")]
+        public List<string>? SamplesHistory { get; set; }  // może być null jak nie tworzymy własnych próbek
+
     }
 
 

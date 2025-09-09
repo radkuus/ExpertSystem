@@ -11,9 +11,8 @@ namespace ExpertSystem.Domain.Models
     public enum Operator
     {
         GreaterThan,
-        GreaterThanOrEqual,
+        Equal,
         LessThan,
-        LessThanOrEqual
     }
 
     public enum LogicOperator

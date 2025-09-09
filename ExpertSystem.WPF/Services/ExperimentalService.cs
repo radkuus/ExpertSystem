@@ -12,15 +12,19 @@ public class ExperimentService : IExperimentService
     private readonly GenericDataService<Experiment> _experimentService;
     private readonly GenericDataService<ModelConfiguration> _configService;
     private readonly GenericDataService<ModelResult> _resultService;
+    private readonly GenericDataService<DecisionRule> _decisionRuleService;
+
 
     public ExperimentService(
         GenericDataService<Experiment> experimentService,
         GenericDataService<ModelConfiguration> configService,
-        GenericDataService<ModelResult> resultService)
+        GenericDataService<ModelResult> resultService,
+        GenericDataService<DecisionRule> decisionRuleService)
     {
         _experimentService = experimentService;
         _configService = configService;
         _resultService = resultService;
+        _decisionRuleService = decisionRuleService;
     }
 
     public async Task<int> CreateExperimentWithResults(
@@ -28,7 +32,8 @@ public class ExperimentService : IExperimentService
         int datasetId,
         List<ModelAnalysisResult> analysisResults,
         Dictionary<string, string> hyperparameters,
-        Dictionary<string, string> samples)
+        Dictionary<string, string> samples,
+        List<DecisionRule> decisionRules)
 
     {
 
@@ -73,9 +78,20 @@ public class ExperimentService : IExperimentService
                 Precision = (int)(result.Precision * 100),
                 Recall = (int)(result.Recall * 100),
                 CreatedAt = DateTime.UtcNow,
-                SamplesHistory = "{}",    // CHANGE IN THE FUTURE (when samples will work)
+                SamplesHistory = result.SamplesHistory != null
+                     ? JsonSerializer.Serialize(result.SamplesHistory)
+                     : "{}"
             };
             await _resultService.Create(modelResult);
+        }
+
+        if (decisionRules != null && decisionRules.Any())
+        {
+            foreach (var rule in decisionRules)
+            {
+                rule.ExperimentID = createdExperiment.Id;
+                await _decisionRuleService.Create(rule);
+            }
         }
 
         return createdExperiment.Id;

@@ -16,10 +16,7 @@ namespace ExpertSystem.Domain.Models
         public int Precision { get; set; }
         public int Recall { get; set; }
         public DateTime CreatedAt { get; set; }
-        
         public string SamplesHistory { get; set; }
-
-
         public ModelConfiguration ModelConfiguration { get; set; }
     }
 }

@@ -1,5 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import json
+import random
+from typing import Optional
 from typing import List
 import pandas as pd
 import uuid
@@ -22,14 +25,14 @@ class KNNDatasetInput(BaseModel):
     training_size: float
     neighbors: int
     distance_metric: str
-    user_samples: List[List[str]]
+    user_samples: Optional[List[List[str]]] = None  ## tylko jak uzytkownik da przyklady
 
 class BayesDatasetInput(BaseModel):
     data: List[List[str]]
     analysis_columns: List[str]
     target_column: str
     training_size: float
-    user_samples: List[List[str]]
+    user_samples: Optional[List[List[str]]] = None
 
 class NeuralNetworkDatasetInput(BaseModel):
     data: List[List[str]]
@@ -38,13 +41,13 @@ class NeuralNetworkDatasetInput(BaseModel):
     layers: int
     target_column: str
     training_size: float
-    user_samples: List[List[str]]
+    user_samples: Optional[List[List[str]]] = None
 
 class IfThenDatasetInput(BaseModel):
     data: List[List[str]]
     analysis_columns: List[str]
     target_column: str
-    user_samples: List[List[str]]
+    user_samples: Optional[List[List[str]]] = None  
     ifthen: List[List[str]]
 
 class LogisticRegressionInput(BaseModel):
@@ -52,7 +55,7 @@ class LogisticRegressionInput(BaseModel):
     analysis_columns: List[str]
     target_column: str
     training_size: float
-    user_samples: List[List[str]]
+    user_samples: Optional[List[List[str]]] = None
 
 class ModelOutput(BaseModel):
     f1: float
@@ -60,6 +63,7 @@ class ModelOutput(BaseModel):
     recall: float
     accuracy: float
     request_id: str
+    samples_history: List[str]
 
 
 def prepare_dataset(training_size, data, analysis_columns, target_column):
@@ -125,6 +129,8 @@ def prepare_user_samples(user_samples, X_train):
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
+         
             
 @app.post("/knn", response_model=ModelOutput)
 async def run_knn(input_data: KNNDatasetInput):
@@ -145,7 +151,8 @@ async def run_knn(input_data: KNNDatasetInput):
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id
+            "request_id": request_id,
+            "samples_history": []             # domyslnie pusta lista
         }
 
         if input_data.user_samples:
@@ -154,14 +161,59 @@ async def run_knn(input_data: KNNDatasetInput):
             print(samples_df)
             prediction = knn.predict(samples_df)
             prediction = le.inverse_transform(prediction)
-            print(prediction)  
+            print(prediction)   
 
-        print("KNN Response:", metrics)
+
+            metrics["samples_history"] = [str(p) for p in prediction]
+
+
+            print("KNN Response:", metrics)
 
         return ModelOutput(**metrics)
 
     except Exception as e:
         print("Error in KNN:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.post("/lr", response_model=ModelOutput)
+async def run_lr(input_data: LogisticRegressionInput):
+    try:
+        request_id = str(uuid.uuid4())
+
+        X_train, X_test, y_train, y_test, le = prepare_dataset(input_data.training_size, input_data.data, input_data.analysis_columns, input_data.target_column)
+
+        lr = LogisticRegression()
+        lr.fit(X_train, y_train)
+        y_pred = lr.predict(X_test)
+
+        metrics = {
+            "f1": f1_score(y_test, y_pred, average='weighted'),
+            "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
+            "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
+            "accuracy": accuracy_score(y_test, y_pred),
+            "request_id": request_id,
+            "samples_history": []
+        }
+
+        if input_data.user_samples:
+            samples = prepare_user_samples(input_data.user_samples, X_train)
+            samples_df = pd.DataFrame(samples, columns=X_train.columns)
+            print(samples_df)
+            prediction = lr.predict(samples_df)
+            prediction = le.inverse_transform(prediction)
+            print(prediction)   
+
+
+            metrics["samples_history"] = [str(p) for p in prediction]
+
+        print("LR Response:", metrics)
+
+        return ModelOutput(**metrics)
+
+    except Exception as e:
+        print("Error in LR:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/bayes", response_model=ModelOutput)
@@ -180,7 +232,8 @@ async def run_bayes(input_data: BayesDatasetInput):
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id
+            "request_id": request_id,
+            "samples_history": []
         }
 
         if input_data.user_samples:
@@ -189,7 +242,10 @@ async def run_bayes(input_data: BayesDatasetInput):
             print(samples_df)
             prediction = nb.predict(samples_df)
             prediction = le.inverse_transform(prediction)
-            print(prediction)  
+            print(prediction)   
+
+
+            metrics["samples_history"] = [str(p) for p in prediction]
 
         print("Bayes Response:", metrics)
         
@@ -236,8 +292,10 @@ async def run_NeuralNetwork(input_data: NeuralNetworkDatasetInput):
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id
+            "request_id": request_id,
+            "samples_history": []
         }
+
 
         if input_data.user_samples:
             samples = prepare_user_samples(input_data.user_samples, X_train)
@@ -248,6 +306,8 @@ async def run_NeuralNetwork(input_data: NeuralNetworkDatasetInput):
             prediction = [[row.index(max(row))] for row in prediction]
             prediction = le.inverse_transform(prediction)
             print(prediction) 
+            
+            metrics["samples_history"] = [str(p) for p in prediction]
 
         print("Neural Network Response:", metrics)
 
@@ -282,7 +342,7 @@ def parse_rule(rule):
 
     return conditions, target_class
 
-def apply_rules(rules, df):
+def apply_rules(rules, df, classes):
     ops = {
         ">": lambda a, b: a > b,
         "<": lambda a, b: a < b,
@@ -290,7 +350,8 @@ def apply_rules(rules, df):
     }
     predictions = []
 
-    for _, row in df.iterrows():         
+
+    for _, row in df.iterrows():
         assigned = None
         for rule in rules:
             conditions, target_class = parse_rule(rule)
@@ -299,7 +360,10 @@ def apply_rules(rules, df):
                 assigned = target_class
                 break
 
-        predictions.append(assigned if assigned else rules[0][rules[0].index("then")+1])
+        if assigned:
+            predictions.append(assigned)
+        else:
+            predictions.append(random.choice(classes))
 
     return predictions
 
@@ -310,7 +374,7 @@ async def run_IfThen(input_data: IfThenDatasetInput):
         request_id = str(uuid.uuid4())
 
         X_test, y_test, le = prepare_dataset(101, input_data.data, input_data.analysis_columns, input_data.target_column)
-
+        classes = le.inverse_transform(list(set(y_test)))
         cleaned = [] #usuwanie null
         for row in input_data.ifthen:
             new_row = [item for item in row if item]
@@ -330,7 +394,7 @@ async def run_IfThen(input_data: IfThenDatasetInput):
         
         print(rules)
 
-        y_pred = apply_rules(rules, X_test)
+        y_pred = apply_rules(rules, X_test, classes)
         y_pred = le.transform(y_pred)
         print(y_test,y_pred)
 
@@ -339,17 +403,17 @@ async def run_IfThen(input_data: IfThenDatasetInput):
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id
+            "request_id": request_id,
+            "samples_history": []
         }
         
-        """
         if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_train)
-            samples_df = pd.DataFrame(samples, columns=X_train.columns)
+            samples = prepare_user_samples(input_data.user_samples, X_test)  
+            samples_df = pd.DataFrame(samples, columns=X_test.columns)
             print(samples_df)
-            prediction = nb.predict(samples_df)
+            prediction = apply_rules(rules, samples_df, classes)
+            metrics["samples_history"] = prediction  
             print(prediction)
-        """
 
         print("IfThen Response:", metrics)
         
@@ -360,38 +424,3 @@ async def run_IfThen(input_data: IfThenDatasetInput):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-@app.post("/lr", response_model=ModelOutput)
-async def run_lr(input_data: LogisticRegressionInput):
-    try:
-        request_id = str(uuid.uuid4())
-
-        X_train, X_test, y_train, y_test, le = prepare_dataset(input_data.training_size, input_data.data, input_data.analysis_columns, input_data.target_column)
-
-        lr = LogisticRegression()
-        lr.fit(X_train, y_train)
-        y_pred = lr.predict(X_test)
-
-        metrics = {
-            "f1": f1_score(y_test, y_pred, average='weighted'),
-            "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
-            "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
-            "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id
-        }
-
-        if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_train)
-            samples_df = pd.DataFrame(samples, columns=X_train.columns)
-            print(samples_df)
-            prediction = lr.predict(samples_df)
-            prediction = le.inverse_transform(prediction)
-            print(prediction) 
-
-        print("LR Response:", metrics)
-
-        return ModelOutput(**metrics)
-
-    except Exception as e:
-        print("Error in LR:", str(e))
-        raise HTTPException(status_code=500, detail=str(e))
