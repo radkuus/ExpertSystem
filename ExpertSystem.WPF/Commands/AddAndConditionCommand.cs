@@ -48,7 +48,7 @@ namespace ExpertSystem.WPF.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return _analysisViewModel.IfThenConditions.Any() && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
+            return _analysisViewModel.IfThenConditions.Any() && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.SelectedType == "then");
         }
 
         public void Execute(object? parameter)
@@ -59,7 +59,7 @@ namespace ExpertSystem.WPF.Commands
                 SelectedColumn = null,
                 SelectedOperator = null,
                 SelectedValue = null,
-                Type = "and"
+                SelectedType = "and"
             });
         }
     }

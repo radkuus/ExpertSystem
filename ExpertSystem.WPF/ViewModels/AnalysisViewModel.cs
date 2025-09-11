@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -100,6 +102,87 @@ namespace ExpertSystem.WPF.ViewModels
             RemoveThenInConditionCommand = new RemoveThenInConditionCommand(this);
 
             SelectedColumnsForAnalysis.CollectionChanged += (s, e) => UpdateColumnsForAnalysis();
+            _userSample.UserSamples.CollectionChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(CanGenerateResultUserSamples));
+                OnPropertyChanged(nameof(CanGenerateResult));
+            };
+            _userSample.AddNewSampleCallback = () =>
+            {
+                OnPropertyChanged(nameof(CanGenerateResultUserSamples));
+                OnPropertyChanged(nameof(CanGenerateResult));
+            };
+
+            IfThenConditions.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CanGenerateResultIfThen));
+            IfThenConditions.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CanGenerateResult));
+            IfThenConditions.CollectionChanged += (s, e) =>
+            {
+                if (e.NewItems != null)
+                {
+                    foreach (IfThenConditionGroup group in e.NewItems)
+                    {
+                        SubscribeToGroup(group);
+                    }
+                }
+
+                if (e.OldItems != null)
+                {
+                    foreach (IfThenConditionGroup group in e.OldItems)
+                    {
+                        UnsubscribeFromGroup(group);
+                    }
+                }
+
+                OnPropertyChanged(nameof(CanGenerateResultIfThen));
+                OnPropertyChanged(nameof(CanGenerateResult));
+            };
+        }
+        private void SubscribeToGroup(IfThenConditionGroup group)
+        {
+            group.Conditions.CollectionChanged += Conditions_CollectionChanged;
+
+            foreach (var condition in group.Conditions)
+            {
+                condition.PropertyChanged += Condition_PropertyChanged;
+            }
+        }
+
+        private void UnsubscribeFromGroup(IfThenConditionGroup group)
+        {
+            group.Conditions.CollectionChanged -= Conditions_CollectionChanged;
+
+            foreach (var condition in group.Conditions)
+            {
+                condition.PropertyChanged -= Condition_PropertyChanged;
+            }
+        }
+
+        private void Conditions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (IfThenCondition condition in e.NewItems)
+                {
+                    condition.PropertyChanged += Condition_PropertyChanged;
+                }
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (IfThenCondition condition in e.OldItems)
+                {
+                    condition.PropertyChanged -= Condition_PropertyChanged;
+                }
+            }
+
+            OnPropertyChanged(nameof(CanGenerateResultIfThen));
+            OnPropertyChanged(nameof(CanGenerateResult));
+        }
+
+        private void Condition_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CanGenerateResultIfThen));
+            OnPropertyChanged(nameof(CanGenerateResult));
         }
 
         public bool IsKnnChecked
@@ -115,8 +198,9 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(AreDetailsChecked));
-                    OnPropertyChanged(nameof(IsIfThenEnabled));
-                    OnPropertyChanged(nameof(AreOtherModelsEnabled));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                    OnPropertyChanged(nameof(CanGenerateResult)); 
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
                     UpdateSelectedModels();
                 }
                 if (!_isKnnChecked)
@@ -138,6 +222,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedNeighbours = value;
                 OnPropertyChanged(nameof(SelectedNeighbours));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(CanGenerateResult));
             }
         }
 
@@ -154,8 +239,9 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(AreDetailsChecked));
-                    OnPropertyChanged(nameof(IsIfThenEnabled));
-                    OnPropertyChanged(nameof(AreOtherModelsEnabled));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                    OnPropertyChanged(nameof(CanGenerateResult));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
                     UpdateSelectedModels();
 
                 }
@@ -178,6 +264,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedLayers = value;
                 OnPropertyChanged(nameof(SelectedLayers));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(CanGenerateResult));
                 UpdateNeuronCounts();
             }
         }
@@ -194,8 +281,9 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsLogisticRegressionChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
-                    OnPropertyChanged(nameof(IsIfThenEnabled));
-                    OnPropertyChanged(nameof(AreOtherModelsEnabled));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                    OnPropertyChanged(nameof(CanGenerateResult));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
                     UpdateSelectedModels();
 
                 }
@@ -219,8 +307,9 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsBayesChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
-                    OnPropertyChanged(nameof(IsIfThenEnabled));
-                    OnPropertyChanged(nameof(AreOtherModelsEnabled));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                    OnPropertyChanged(nameof(CanGenerateResult));
+                    OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
                     UpdateSelectedModels();
 
                 }
@@ -243,9 +332,9 @@ namespace ExpertSystem.WPF.ViewModels
                     _isIfThenChecked = value;
                     OnPropertyChanged(nameof(IsIfThenChecked));
                     OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
-                    OnPropertyChanged(nameof(IsIfThenEnabled));
-                    OnPropertyChanged(nameof(AreOtherModelsEnabled));
                     OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
+                    OnPropertyChanged(nameof(IsAnyModelChecked));
+                    OnPropertyChanged(nameof(CanGenerateResult));
                     UpdateSelectedModels();
 
                 }
@@ -265,6 +354,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedDistanceMetrics = value;
                 OnPropertyChanged(nameof(SelectedDistanceMetrics));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(CanGenerateResult));
 
             }
         }
@@ -290,6 +380,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedResultColumn = value;
                 OnPropertyChanged(nameof(SelectedResultColumn));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(CanGenerateResult));
                 OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
                 OnPropertyChanged(nameof(UniqueNamesFromClassifyingColumn));
                 IfThenConditions.Clear();
@@ -304,6 +395,7 @@ namespace ExpertSystem.WPF.ViewModels
                 _selectedTrainingSetPercentage = value;
                 OnPropertyChanged(nameof(SelectedTrainingSetPercentage));
                 OnPropertyChanged(nameof(AreDetailsChecked));
+                OnPropertyChanged(nameof(CanGenerateResult));
             }
         }
 
@@ -370,10 +462,10 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public bool IsIfThenEnabled => !IsKnnChecked && !IsLogisticRegressionChecked && !IsBayesChecked && !IsNeuralNetworkChecked;
-        public bool AreOtherModelsEnabled => !IsIfThenChecked;
         public bool IsIfThenAndResultColumnChecked => IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && SelectedColumnsForAnalysis.Any();
         public bool IsModelWithParametersChecked => IsKnnChecked || IsNeuralNetworkChecked;
+        public bool IsAnyModelChecked => IsKnnChecked || IsBayesChecked || IsLogisticRegressionChecked || IsNeuralNetworkChecked || IsIfThenChecked;
+        public bool IsAnyModelWithoutIfThenChecked => IsKnnChecked || IsBayesChecked || IsLogisticRegressionChecked || IsNeuralNetworkChecked;
         public bool IsAnyModelAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked || IsIfThenChecked) && SelectedColumnsForAnalysis.Any();
         public bool IsAnyModelWithoutIfThenAndColumnForAnalysisChecked => (IsKnnChecked || IsNeuralNetworkChecked || IsLogisticRegressionChecked || IsBayesChecked) && SelectedColumnsForAnalysis.Any();
         public bool AreDetailsChecked =>
@@ -395,12 +487,21 @@ namespace ExpertSystem.WPF.ViewModels
                     NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount))
                 )
             )
-            )
-            ||
-            (
-                IsIfThenChecked &&
-                !string.IsNullOrWhiteSpace(SelectedResultColumn)
             );
+        public bool CanGenerateResult => (IsAnyModelWithoutIfThenChecked && IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples && CanGenerateResultIfThen) || (!IsAnyModelWithoutIfThenChecked && IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && CanGenerateResultIfThen) || (IsAnyModelWithoutIfThenChecked && !IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples);
+        public bool CanGenerateResultUserSamples => _userSample.UserSamples.Count == 0 || _userSample.UserSamples.All(sample => sample.All(entry => !string.IsNullOrWhiteSpace(entry.Value)));
+        public bool CanGenerateResultIfThen => IfThenConditions.Count() != 0 &&
+                    IfThenConditions.All(group => group.Conditions.Any((condition => condition.SelectedType == "then"))) &&
+                    IfThenConditions.All(group => group.Conditions.All(condition => (condition.SelectedType == "If" &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedColumn) &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedOperator) &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedValue) ||
+                    (condition.SelectedType == "then" &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedClass) ||
+                    (condition.SelectedType == "and" &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedColumn) &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedOperator) &&
+                    !string.IsNullOrWhiteSpace(condition.SelectedValue))))));
 
         public UserSample UserSample => _userSample;
 
@@ -446,9 +547,10 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public void RaiseAreDetailsChanged()
+        public void RaiseAreDetailsChangedAndCanGenerateResult()
         {
             OnPropertyChanged(nameof(AreDetailsChecked));
+            OnPropertyChanged(nameof(CanGenerateResult));
         }
 
         private void UpdateColumnsForAnalysis()

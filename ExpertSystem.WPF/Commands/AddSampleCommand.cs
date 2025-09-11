@@ -52,12 +52,6 @@ namespace ExpertSystem.WPF.Commands
         public void Execute(object? parameter)
         {
             var columnsForAnalysis = _analysisViewModel.SelectedColumnsForAnalysis;
-            if (columnsForAnalysis == null || columnsForAnalysis.Count == 0)
-            {
-                MessageBox.Show("Brak kolumn do utworzenia próbki.");
-                return;
-            }
-
             _analysisViewModel.UserSample.AddNewSample(columnsForAnalysis, RaiseCanExecuteChanged);
         }
     }

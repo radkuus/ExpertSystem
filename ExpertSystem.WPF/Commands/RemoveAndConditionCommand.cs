@@ -50,7 +50,7 @@ namespace ExpertSystem.WPF.Commands
         {
             return _analysisViewModel.IfThenConditions.Any() 
                    && _analysisViewModel.IfThenConditions.Last().Conditions.Count > 1 
-                   && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
+                   && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.SelectedType == "then");
         }
 
         public void Execute(object? parameter)

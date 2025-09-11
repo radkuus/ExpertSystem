@@ -12,6 +12,7 @@ namespace ExpertSystem.WPF.Helpers.Sample
     public class UserSample
     {
         public ObservableCollection<ObservableCollection<SampleEntry>> UserSamples { get; set; } = new();
+        public Action AddNewSampleCallback { get; set; }
 
         public void AddNewSample(ObservableCollection<string> columnNames, Action onValueChangedCallback)
         {
@@ -21,7 +22,11 @@ namespace ExpertSystem.WPF.Helpers.Sample
                 newSample.Add(new SampleEntry
                 {
                     ColumnName = columnName,
-                    OnValueChanged = onValueChangedCallback
+                    OnValueChanged = () =>
+                    {
+                        onValueChangedCallback?.Invoke();
+                        AddNewSampleCallback?.Invoke();
+                    }
                 });
             }
 

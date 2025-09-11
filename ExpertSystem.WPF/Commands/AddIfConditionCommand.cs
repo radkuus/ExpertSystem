@@ -18,14 +18,44 @@ namespace ExpertSystem.WPF.Commands
         public AddIfConditionCommand(AnalysisViewModel analysisViewModel)
         {
             _analysisViewModel = analysisViewModel;
-            _analysisViewModel.IfThenConditions.CollectionChanged += (s, e) => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            _analysisViewModel.IfThenConditions.CollectionChanged += (s, e) =>
+            {
+                if (e.NewItems != null)
+                {
+                    foreach (IfThenConditionGroup newGroup in e.NewItems)
+                    {
+                        SubscribeToConditionChanges(newGroup);
+                    }
+                }
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            };
+
+            foreach (var group in _analysisViewModel.IfThenConditions)
+            {
+                SubscribeToConditionChanges(group);
+            }
+        }
+
+        private void SubscribeToConditionChanges(IfThenConditionGroup group)
+        {
+            group.Conditions.CollectionChanged += (s, e) =>
+            {
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            };
         }
 
         public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            if (!_analysisViewModel.IfThenConditions.Any())
+            {
+                return true;
+            }
+            else
+            {
+                return _analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.SelectedType == "then");
+            }
         }
 
         public void Execute(object? parameter)
@@ -36,7 +66,7 @@ namespace ExpertSystem.WPF.Commands
                 SelectedColumn = null,
                 SelectedOperator = null,
                 SelectedValue = null,
-                Type = "If"
+                SelectedType = "If"
             });
 
             _analysisViewModel.IfThenConditions.Add(newGroup);

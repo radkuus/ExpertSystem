@@ -52,7 +52,7 @@ namespace ExpertSystem.WPF.Commands
         public bool CanExecute(object? parameter)
         {
             return parameter is Dataset && _analysisViewModel.IfThenConditions.Any() 
-                                        && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.Type == "then");
+                                        && !_analysisViewModel.IfThenConditions.Last().Conditions.Any(c => c.SelectedType == "then");
         }
 
         public async void Execute(object? parameter)
@@ -65,7 +65,7 @@ namespace ExpertSystem.WPF.Commands
                 var lastGroup = _analysisViewModel.IfThenConditions.Last();
                 lastGroup.Conditions.Add(new IfThenCondition
                 {
-                    Type = "then",
+                    SelectedType = "then",
                     SelectedClass = null
                 });
             }

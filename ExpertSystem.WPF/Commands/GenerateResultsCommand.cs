@@ -52,7 +52,7 @@ namespace ExpertSystem.WPF.Commands
         }
         public bool CanExecute(object? parameter)
         {
-            return _viewModel.AreDetailsChecked;
+            return true;
         }
 
         public async void Execute(object? parameter)
