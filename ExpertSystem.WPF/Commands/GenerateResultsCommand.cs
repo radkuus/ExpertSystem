@@ -218,13 +218,13 @@ namespace ExpertSystem.WPF.Commands
                     {
                         // szukanie pierwszego warunku, który ma "then"- zwraca tylko jak znajdzie (mozna potem zablokowac przycisk
                         // Generate jesli brakuje then)
-                        var thenClass = row.Conditions.FirstOrDefault(c => c.Type == "then")?.SelectedClass ?? "";
+                        var thenClass = row.Conditions.FirstOrDefault(c => c.SelectedType == "then")?.SelectedClass ?? "";
 
                         // znalezienie indeksu ostatniego warunku, który nie ma "then"
                         int lastNonThenIndex = -1;
                         for (int i = 0; i < row.Conditions.Count; i++)
                         {
-                            if (row.Conditions[i].Type != "then")
+                            if (row.Conditions[i].SelectedType != "then")
                                 lastNonThenIndex = i;
                         }
 
@@ -235,7 +235,7 @@ namespace ExpertSystem.WPF.Commands
                             // dodanie do ifthen dla API
                             ifthen.Add(new List<string>
                             {
-                                col.Type ?? "",
+                                col.SelectedType ?? "",
                                 col.SelectedColumn ?? "",
                                 col.SelectedOperator ?? "",
                                 col.SelectedValue?.ToString() ?? "",
@@ -243,7 +243,7 @@ namespace ExpertSystem.WPF.Commands
                             });
 
                             // tworzenie DecisionRule tylko dla warunków bez then
-                            if (col.Type != "then")
+                            if (col.SelectedType != "then")
                             {
                                 bool isLastNonThen = (i == lastNonThenIndex);
 
