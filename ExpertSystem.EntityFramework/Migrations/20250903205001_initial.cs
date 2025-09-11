@@ -14,11 +14,8 @@ namespace ExpertSystem.EntityFramework.Migrations
         {
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:Enum:logic_operator", "and,or")
-                .Annotation("Npgsql:Enum:metric", "accuracy,f1score,precision,recall")
                 .Annotation("Npgsql:Enum:model_type", "knn,logistic_regression,bayes,neural_network,own")
-                .Annotation("Npgsql:Enum:operator", "greater_than,greater_than_or_equal,less_than,less_than_or_equal")
-                .Annotation("Npgsql:Enum:plot_type", "confusion_matrix,roc")
-                .Annotation("Npgsql:Enum:set_type", "training_set,validation_set,test_set");
+                .Annotation("Npgsql:Enum:operator", "greater_than,greater_than_or_equal,less_than,less_than_or_equal");
 
             migrationBuilder.CreateTable(
                 name: "Users",
@@ -89,10 +86,11 @@ namespace ExpertSystem.EntityFramework.Migrations
                     RuleId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExperimentID = table.Column<int>(type: "integer", nullable: false),
-                    Metric = table.Column<string>(type: "text", nullable: false),
+                    Column = table.Column<string>(type: "text", nullable: false),
                     Operator = table.Column<string>(type: "text", nullable: false),
                     Threshold = table.Column<double>(type: "double precision", nullable: false),
-                    LogicOperator = table.Column<string>(type: "text", nullable: false)
+                    LogicOperator = table.Column<string>(type: "text", nullable: false),
+                    Result = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,7 +111,8 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExperimentId = table.Column<int>(type: "integer", nullable: false),
                     ModelType = table.Column<string>(type: "text", nullable: false),
-                    Hyperparameters = table.Column<string>(type: "jsonb", nullable: false)
+                    Hyperparameters = table.Column<string>(type: "jsonb", nullable: false),
+                    Samples = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,12 +132,12 @@ namespace ExpertSystem.EntityFramework.Migrations
                     ResultId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ConfigId = table.Column<int>(type: "integer", nullable: false),
-                    SetType = table.Column<string>(type: "text", nullable: false),
                     Accuracy = table.Column<int>(type: "integer", nullable: false),
                     F1Score = table.Column<int>(type: "integer", nullable: false),
                     Precision = table.Column<int>(type: "integer", nullable: false),
                     Recall = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SamplesHistory = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,27 +147,6 @@ namespace ExpertSystem.EntityFramework.Migrations
                         column: x => x.ConfigId,
                         principalTable: "ModelConfigurations",
                         principalColumn: "ConfigId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Plots",
-                columns: table => new
-                {
-                    PlotId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ResultId = table.Column<int>(type: "integer", nullable: false),
-                    PlotType = table.Column<string>(type: "text", nullable: false),
-                    FilePath = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Plots", x => x.PlotId);
-                    table.ForeignKey(
-                        name: "FK_Plots_ModelResults_ResultId",
-                        column: x => x.ResultId,
-                        principalTable: "ModelResults",
-                        principalColumn: "ResultId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -201,11 +179,6 @@ namespace ExpertSystem.EntityFramework.Migrations
                 name: "IX_ModelResults_ConfigId",
                 table: "ModelResults",
                 column: "ConfigId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Plots_ResultId",
-                table: "Plots",
-                column: "ResultId");
         }
 
         /// <inheritdoc />
@@ -213,9 +186,6 @@ namespace ExpertSystem.EntityFramework.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DecisionRules");
-
-            migrationBuilder.DropTable(
-                name: "Plots");
 
             migrationBuilder.DropTable(
                 name: "ModelResults");

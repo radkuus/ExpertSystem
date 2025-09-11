@@ -9,6 +9,6 @@ namespace ExpertSystem.Domain.Services
 {
     public interface IExperimentService
     {
-        Task<int> CreateExperimentWithResults(int userId, int datasetId, List<ModelAnalysisResult> analysisResults, Dictionary<string, string> hyperparameters);
+        Task<int> CreateExperimentWithResults(int userId, int datasetId, List<ModelAnalysisResult> analysisResults, Dictionary<string, string> hyperparameters, Dictionary<string, string> samples, List<DecisionRule> decisionRules);
     }
 }
