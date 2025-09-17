@@ -64,9 +64,15 @@ namespace ExpertSystem.EntityFramework
                 .Property(mc => mc.Samples)
                 .HasColumnType("jsonb");
 
+            modelBuilder.Entity<ModelConfiguration>()
+                .Property(mc => mc.AnalysisColumns)
+                .HasColumnType("text[]");
+
             modelBuilder.Entity<ModelResult>()
                 .Property(mr => mr.SamplesHistory)
                 .HasColumnType("jsonb");
+
+
 
             modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("UserId");
             modelBuilder.Entity<Dataset>().Property(d => d.Id).HasColumnName("DatasetId");

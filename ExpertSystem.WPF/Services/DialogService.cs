@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.ViewModels;
 using ExpertSystem.WPF.Views;
-using ExpertSystem.Domain.Models;
+
 
 namespace ExpertSystem.WPF.Services
 {
@@ -23,6 +23,15 @@ namespace ExpertSystem.WPF.Services
         {
             var statisticsView = new DatasetStatisticsView(statisticsTable);
             statisticsView.Show();
+        }
+
+        public void ShowExperimentDetails(ExperimentDetailsViewModel viewModel)
+        {
+            var window = new ExperimentDetailsView
+            {
+                DataContext = viewModel
+            };
+            window.Show();
         }
     }
 }

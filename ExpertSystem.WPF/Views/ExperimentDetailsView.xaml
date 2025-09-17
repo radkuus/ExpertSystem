@@ -1,0 +1,47 @@
+﻿<Window x:Class="ExpertSystem.WPF.Views.ExperimentDetailsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Experiment Details" Height="400" Width="600">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Results" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <TabControl Grid.Row="1" ItemsSource="{Binding Models}" SelectedIndex="0">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <TabControl>
+                        <TabItem Header="Classification">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBox Text="{Binding ClassificationReport}"
+                                     IsReadOnly="True"
+                                     FontFamily="Consolas"
+                                     TextWrapping="Wrap" 
+                                     Margin="10"/>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Confusion Matrix">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBox Text="{Binding ConfusionMatrixText}"
+                                     IsReadOnly="True"
+                                     FontFamily="Consolas"
+                                     TextWrapping="Wrap"
+                                     Margin="10"/>
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+</Window>

@@ -291,6 +291,9 @@ namespace ExpertSystem.WPF.Commands
                 await _experimentService.CreateExperimentWithResults(
                     userId: dataset.UserId,
                     datasetId: dataset.Id,
+                    analysisColumns: analysis_columns.ToList(),
+                    targetColumn: target_column,
+                    trainingSize: int.Parse(training_size),
                     analysisResults: results,
                     hyperparameters: hyperparameters,
                     samples: samples,

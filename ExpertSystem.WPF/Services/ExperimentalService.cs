@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ExpertSystem.Domain.Models;
@@ -30,6 +31,9 @@ public class ExperimentService : IExperimentService
     public async Task<int> CreateExperimentWithResults(
         int userId,
         int datasetId,
+        List<string> analysisColumns,
+        string targetColumn,
+        int trainingSize,
         List<ModelAnalysisResult> analysisResults,
         Dictionary<string, string> hyperparameters,
         Dictionary<string, string> samples,
@@ -60,6 +64,9 @@ public class ExperimentService : IExperimentService
             {
                 ExperimentId = createdExperiment.Id,
                 ModelType = modelType,
+                AnalysisColumns = analysisColumns,
+                TargetColumn = targetColumn,
+                TrainingSize = trainingSize,
                 Hyperparameters = hyperparameters.ContainsKey(result.ModelName)
                 ? (hyperparameters[result.ModelName] ?? "{}")
                 : "{}",

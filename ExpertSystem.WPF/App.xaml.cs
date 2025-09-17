@@ -108,7 +108,11 @@ public partial class App : Application
 
         services.AddSingleton<CreateViewModel<HistoryViewModel>>(provider =>
             () => new HistoryViewModel(
-                provider.GetRequiredService<INavigator>()
+                provider.GetRequiredService<GenericDataService<Experiment>>(),
+                provider.GetRequiredService<GenericDataService<Dataset>>(),
+                provider.GetRequiredService<GenericDataService<ModelConfiguration>>(),
+                provider.GetRequiredService<GenericDataService<ModelResult>>(),
+                provider.GetRequiredService<IDialogService>()
             )
         );
 

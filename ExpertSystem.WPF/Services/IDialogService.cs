@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ExpertSystem.Domain.Models;
+using ExpertSystem.WPF.ViewModels;
 
 namespace ExpertSystem.Domain.Services
 {
@@ -12,5 +12,7 @@ namespace ExpertSystem.Domain.Services
     {
         void ShowDataFrameDialog(DataTable table);
         void ShowDatasetStatistics(DataTable statisticsTable);
+        void ShowExperimentDetails(ExperimentDetailsViewModel detailsViewModel);
+
     }
 }

@@ -18,7 +18,13 @@ namespace ExpertSystem.Domain.Models
     {
         public int ExperimentId { get; set; }
         public ModelType ModelType { get; set; }
+
+        public List<string>? AnalysisColumns { get; set; }
+
+        public string TargetColumn { get; set; }
         public string Hyperparameters { get; set; }
+
+        public int TrainingSize { get; set; }
         public string Samples { get; set; }
 
 

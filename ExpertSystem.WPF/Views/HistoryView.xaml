@@ -4,9 +4,61 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
+             xmlns:local1="clr-namespace:ExpertSystem.WPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+
+    <UserControl.Resources>
+        <local1:BoolToCheckMarkConverter x:Key="BoolToCheckMarkConverter"/>
+    </UserControl.Resources>
+
     <Grid>
-        <TextBlock Text="COOMING SOON" FontSize="100" FontWeight="Bold" Margin="0,150,0,0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0"
+         Content="Show details"
+         Command="{Binding ShowDetailsCommand}"
+         CommandParameter="{Binding SelectedExperiment}"
+         Style="{StaticResource CustomButtonStyle}"/>
+
+
+        <DataGrid Grid.Row="1" 
+          VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          AlternatingRowBackground="#FFF7FAFC"
+          RowBackground="White"
+          HeadersVisibility="Column"
+          ColumnHeaderHeight="34"
+          RowHeight="32"
+          GridLinesVisibility="None"
+          SelectionUnit="FullRow"
+          Padding="6"
+          IsReadOnly="True"
+          ItemsSource="{Binding ExperimentsHistory}"
+          SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="3*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Dataset" Binding="{Binding Dataset}" Width="4*" />
+                <DataGridTextColumn Header="Models" Binding="{Binding ModelsDisplay}" Width="4*" />
+
+                <DataGridTemplateColumn Header="Samples" Width="0.5*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock FontSize="16" TextAlignment="Center"
+                           Text="{Binding HasSamples, Converter={StaticResource BoolToCheckMarkConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </UserControl>
