@@ -8,13 +8,20 @@ namespace ExpertSystem.Domain.Models
 {
     public class ModelHistory
     {
+        public int ExperimentId { get; set; }
         public DateTime Date { get; set; }
         public string Dataset { get; set; }
         public List<string> Models { get; set; } = new List<string>();
 
+        public List<string> AnalyzedColumns { get; set; } = new List<string>();
+
+        public string TargetColumn { get; set; }
+        public int TrainingSize {get; set; }
+
         public bool HasSamples { get; set; }
 
-        public int ExperimentId { get; set; }
-
+        public string ModelsDisplay => Models.Count == 1
+            ? Models[0]
+            : string.Join(", ", Models);
     }
 }

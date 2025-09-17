@@ -62,6 +62,11 @@ namespace ExpertSystem.WPF.ViewModels
                 var date = relatedResults.Min(r => r.CreatedAt);
 
                 var models = relatedConfigs.Select(c => c.ModelType.ToString()).ToList();
+
+                var analyzedColumns = relatedConfigs.FirstOrDefault()?.AnalysisColumns ?? new List<string>(); 
+
+                var targetColumn = relatedConfigs.FirstOrDefault()?.TargetColumn ?? "Unknown";
+                var trainingSize = relatedConfigs.FirstOrDefault()?.TrainingSize ?? 0;
                 bool hasSamples = relatedConfigs.Any(c => !string.IsNullOrEmpty(c.Samples) && c.Samples != "{}" && c.Samples != "[]");
 
                 ExperimentsHistory.Add(new ModelHistory
@@ -70,6 +75,9 @@ namespace ExpertSystem.WPF.ViewModels
                     Date = date,
                     Dataset = dataset?.Name ?? "Unknown",
                     Models = models,
+                    AnalyzedColumns = analyzedColumns,
+                    TargetColumn = targetColumn,
+                    TrainingSize = trainingSize,
                     HasSamples = hasSamples
                 });
             }

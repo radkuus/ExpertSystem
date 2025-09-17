@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <local1:BoolToCheckMarkConverter x:Key="BoolToCheckMarkConverter"/>
+        <local1:ListToStringConverter x:Key="ListToStringConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -44,11 +45,19 @@
           SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="3*" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Dataset" Binding="{Binding Dataset}" Width="4*" />
-                <DataGridTextColumn Header="Models" Binding="{Binding ModelsDisplay}" Width="4*" />
-
-                <DataGridTemplateColumn Header="Samples" Width="0.5*">
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="1.5*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Dataset" Binding="{Binding Dataset}" Width="1.5*" />
+                <DataGridTextColumn Header="Models" Binding="{Binding ModelsDisplay}" Width="2*" />
+                <DataGridTemplateColumn Header="Analyzed columns" Width="3*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AnalyzedColumns, Converter={StaticResource ListToStringConverter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Target column" Binding="{Binding TargetColumn}" Width="*"/>
+                <DataGridTextColumn Header="Training size (%)" Binding="{Binding TrainingSize}" Width="0.3*" />
+                <DataGridTemplateColumn Header="Samples" Width="0.3*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock FontSize="16" TextAlignment="Center"
