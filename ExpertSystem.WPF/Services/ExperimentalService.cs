@@ -36,7 +36,7 @@ public class ExperimentService : IExperimentService
         int trainingSize,
         List<ModelAnalysisResult> analysisResults,
         Dictionary<string, string> hyperparameters,
-        Dictionary<string, string> samples,
+        Dictionary<string, List<Dictionary<string, string>>> samples,
         List<DecisionRule> decisionRules)
 
     {
@@ -71,7 +71,7 @@ public class ExperimentService : IExperimentService
                 ? (hyperparameters[result.ModelName] ?? "{}")
                 : "{}",
                 Samples = samples.ContainsKey(result.ModelName)
-                ? (samples[result.ModelName] ?? "{}")
+                ? JsonSerializer.Serialize(samples[result.ModelName])  
                 : "{}"
 
             };

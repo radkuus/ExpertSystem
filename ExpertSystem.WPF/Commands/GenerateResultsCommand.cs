@@ -33,7 +33,7 @@ namespace ExpertSystem.WPF.Commands
         private readonly CreateViewModel<ResultsViewModel> _resultsFactory;
         private readonly INavigator _navigator;
         private readonly MainViewModel _mainViewModel;
-
+        List<Dictionary<string, string>> user_samples = null;
         public GenerateResultsCommand(
             AnalysisViewModel viewModel,
             IDialogService dialogService,
@@ -75,26 +75,23 @@ namespace ExpertSystem.WPF.Commands
                 var training_size = _viewModel.SelectedTrainingSetPercentage;
                 var data = new List<List<string>>();
 
-                var user_samples_raw = _viewModel.UserSample;
-                var user_samples = new List<List<string>>();
-                var samples = new Dictionary<string, string>();
+                var samples = new Dictionary<string, List<Dictionary<string, string>>>();
 
-                if (user_samples_raw == null)
+                var user_samples_raw = _viewModel.UserSample;
+                if (user_samples_raw != null)
                 {
-                    user_samples = null;
-                }
-                else
-                {
+                    user_samples = new List<Dictionary<string, string>>();
+
                     foreach (var row in user_samples_raw.UserSamples)
                     {
+                        var dict = new Dictionary<string, string>();
                         foreach (var entry in row)
                         {
-                            // lista dla API
-                            user_samples.Add(new List<string> { entry.ColumnName, entry.Value });
+                            dict[entry.ColumnName] = entry.Value;
                         }
+                        user_samples.Add(dict);
                     }
                 }
-
                 var results = new List<ModelAnalysisResult>();
                 var hyperparameters = new Dictionary<string, string>();
                 var decisionRules = new List<DecisionRule>();
@@ -138,7 +135,7 @@ namespace ExpertSystem.WPF.Commands
                     hyperparameters["KNN"] = JsonSerializer.Serialize(new { neighbors });
 
                     if (user_samples != null)
-                        samples["KNN"] = JsonSerializer.Serialize(user_samples);
+                        samples["KNN"] = user_samples;
 
                 }
 
@@ -159,7 +156,7 @@ namespace ExpertSystem.WPF.Commands
                     results.Add(response);
                     hyperparameters["Bayes"] = null;
                     if (user_samples != null)
-                        samples["Bayes"] = JsonSerializer.Serialize(user_samples);
+                        samples["Bayes"] = user_samples;
                 }
 
                 // LR model
@@ -178,7 +175,7 @@ namespace ExpertSystem.WPF.Commands
                     results.Add(response);
                     hyperparameters["LogisticRegression"] = null;
                     if (user_samples != null)
-                        samples["LogisticRegression"] = JsonSerializer.Serialize(user_samples);
+                        samples["LogisticRegression"] = user_samples;
                 }
 
 
@@ -205,7 +202,7 @@ namespace ExpertSystem.WPF.Commands
                     results.Add(response);
                     hyperparameters["NeuralNetwork"] = JsonSerializer.Serialize(new { layers, neurons });
                     if (user_samples != null)
-                        samples["NeuralNetwork"] = JsonSerializer.Serialize(user_samples);
+                        samples["NeuralNetwork"] = user_samples;
                 }
 
                 if (_viewModel.IsIfThenChecked)
@@ -282,7 +279,7 @@ namespace ExpertSystem.WPF.Commands
                     hyperparameters["Own"] = null;
 
                     if (user_samples != null)
-                        samples["Own"] = JsonSerializer.Serialize(user_samples);
+                        samples["Own"] = user_samples;
                 }
 
 

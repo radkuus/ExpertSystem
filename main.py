@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import json
 import random
-from typing import Optional
+from typing import Any, Dict, Optional
 from typing import List
 import pandas as pd
 import uuid
@@ -25,14 +25,14 @@ class KNNDatasetInput(BaseModel):
     training_size: float
     neighbors: int
     distance_metric: str
-    user_samples: Optional[List[List[str]]] = None  ## tylko jak uzytkownik da przyklady
+    user_samples: Optional[List[Dict[str, Any]]] = None   ## tylko jak uzytkownik da przyklady
 
 class BayesDatasetInput(BaseModel):
     data: List[List[str]]
     analysis_columns: List[str]
     target_column: str
     training_size: float
-    user_samples: Optional[List[List[str]]] = None
+    user_samples: Optional[List[Dict[str, Any]]] = None  
 
 class NeuralNetworkDatasetInput(BaseModel):
     data: List[List[str]]
@@ -41,13 +41,13 @@ class NeuralNetworkDatasetInput(BaseModel):
     layers: int
     target_column: str
     training_size: float
-    user_samples: Optional[List[List[str]]] = None
+    user_samples: Optional[List[Dict[str, Any]]] = None  
 
 class IfThenDatasetInput(BaseModel):
     data: List[List[str]]
     analysis_columns: List[str]
     target_column: str
-    user_samples: Optional[List[List[str]]] = None  
+    user_samples: Optional[List[Dict[str, Any]]] = None   
     ifthen: List[List[str]]
 
 class LogisticRegressionInput(BaseModel):
@@ -55,7 +55,7 @@ class LogisticRegressionInput(BaseModel):
     analysis_columns: List[str]
     target_column: str
     training_size: float
-    user_samples: Optional[List[List[str]]] = None
+    user_samples: Optional[List[Dict[str, Any]]] = None  
 
 class ModelOutput(BaseModel):
     f1: float
@@ -100,31 +100,16 @@ def prepare_dataset(training_size, data, analysis_columns, target_column):
     return X_train, X_test, y_train, y_test, le
 
 def prepare_user_samples(user_samples, X_train):
+    ## teraz inputem jest json, więc po prostu przekształcam go na dataframe i zostawiam kolumny dgodne z X_train.columns (wybór uzytkownika)
+    ## zmieniam przecinki na kropki 
+    samples_df = pd.DataFrame(user_samples)
+    samples_df = samples_df[X_train.columns]
+    for col in samples_df.columns:
+        samples_df[col] = samples_df[col].astype(str).str.replace(",", ".")
+        samples_df[col] = pd.to_numeric(samples_df[col], errors="coerce")
 
-    columns = list(X_train.columns)
-    samples = [user_samples[0]]
+    return samples_df
 
-    tem=user_samples[0][0]
-    j=0
-    for i in range(1, len(user_samples)):
-        if user_samples[i][0] == tem:
-            samples.append(user_samples[i])
-            j+=1
-        else:
-            samples[j].extend([user_samples[i][0],user_samples[i][1]]) 
-
-    tem=len(samples[0])
-
-    for i in range(len(samples)):
-        j=tem-2
-        for t in range(int(tem/2)):
-            samples[i].pop(j)
-            if "," in samples[i][j]:
-                samples[i][j]=samples[i][j].replace(",",".")
-            samples[i][j]=float(samples[i][j])
-            j-=2 
-
-    return samples
 
 @app.get("/health")
 def health_check():
@@ -156,13 +141,9 @@ async def run_knn(input_data: KNNDatasetInput):
         }
 
         if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_train)
-            samples_df = pd.DataFrame(samples, columns=X_train.columns)
-            print(samples_df)
-            prediction = knn.predict(samples_df)
+            samples_df = prepare_user_samples(input_data.user_samples, X_train)
+            prediction = knn.predict(samples_df)   
             prediction = le.inverse_transform(prediction)
-            print(prediction)   
-
 
             metrics["samples_history"] = [str(p) for p in prediction]
 
@@ -198,12 +179,9 @@ async def run_lr(input_data: LogisticRegressionInput):
         }
 
         if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_train)
-            samples_df = pd.DataFrame(samples, columns=X_train.columns)
-            print(samples_df)
-            prediction = lr.predict(samples_df)
+            samples_df = prepare_user_samples(input_data.user_samples, X_train)
+            prediction = lr.predict(samples_df)   
             prediction = le.inverse_transform(prediction)
-            print(prediction)   
 
 
             metrics["samples_history"] = [str(p) for p in prediction]
@@ -237,12 +215,9 @@ async def run_bayes(input_data: BayesDatasetInput):
         }
 
         if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_train)
-            samples_df = pd.DataFrame(samples, columns=X_train.columns)
-            print(samples_df)
-            prediction = nb.predict(samples_df)
-            prediction = le.inverse_transform(prediction)
-            print(prediction)   
+            samples_df = prepare_user_samples(input_data.user_samples, X_train)
+            prediction = nb.predict(samples_df)   
+            prediction = le.inverse_transform(prediction)   
 
 
             metrics["samples_history"] = [str(p) for p in prediction]
@@ -298,16 +273,17 @@ async def run_NeuralNetwork(input_data: NeuralNetworkDatasetInput):
 
 
         if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_train)
-            samples_df = pd.DataFrame(samples, columns=X_train.columns)
-            print(samples_df)
-            prediction = model.predict(samples_df)
-            prediction = prediction.tolist()
-            prediction = [[row.index(max(row))] for row in prediction]
+            samples_df = prepare_user_samples(input_data.user_samples, X_train)
+            prediction_prob = model.predict(samples_df)
+
+            if num_classes == 2:
+                prediction = (prediction_prob > 0.5).astype(int).flatten()
+            else:
+                prediction = prediction_prob.argmax(axis=1)
+
             prediction = le.inverse_transform(prediction)
-            print(prediction) 
-            
             metrics["samples_history"] = [str(p) for p in prediction]
+
 
         print("Neural Network Response:", metrics)
 
@@ -375,7 +351,7 @@ async def run_IfThen(input_data: IfThenDatasetInput):
 
         X_test, y_test, le = prepare_dataset(101, input_data.data, input_data.analysis_columns, input_data.target_column)
         classes = le.inverse_transform(list(set(y_test)))
-        cleaned = [] #usuwanie null
+        cleaned = [] #usuwanie null 
         for row in input_data.ifthen:
             new_row = [item for item in row if item]
             cleaned.append(new_row)
@@ -408,12 +384,9 @@ async def run_IfThen(input_data: IfThenDatasetInput):
         }
         
         if input_data.user_samples:
-            samples = prepare_user_samples(input_data.user_samples, X_test)  
-            samples_df = pd.DataFrame(samples, columns=X_test.columns)
-            print(samples_df)
+            samples_df = prepare_user_samples(input_data.user_samples, X_test)
             prediction = apply_rules(rules, samples_df, classes)
-            metrics["samples_history"] = prediction  
-            print(prediction)
+            metrics["samples_history"] = [str(p) for p in prediction]
 
         print("IfThen Response:", metrics)
         
