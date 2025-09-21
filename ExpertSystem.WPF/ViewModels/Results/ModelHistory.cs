@@ -16,7 +16,7 @@ namespace ExpertSystem.Domain.Models
         public List<string> AnalyzedColumns { get; set; } = new List<string>();
 
         public string TargetColumn { get; set; }
-        public int TrainingSize {get; set; }
+        public string TrainingSize {get; set; }  // string, żeby móc wyswietlic "-" dla modelu Own 
 
         public bool HasSamples { get; set; }
 

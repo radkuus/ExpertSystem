@@ -15,6 +15,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly GenericDataService<Dataset> _datasetService;
         private readonly GenericDataService<ModelConfiguration> _configService;
         private readonly GenericDataService<ModelResult> _resultService;
+        private readonly GenericDataService<DecisionRule> _rulesService;
 
         public ObservableCollection<ModelHistory> ExperimentsHistory { get; set; }
             = new ObservableCollection<ModelHistory>();
@@ -27,17 +28,20 @@ namespace ExpertSystem.WPF.ViewModels
                                 GenericDataService<Dataset> datasetService,
                                 GenericDataService<ModelConfiguration> configService,
                                 GenericDataService<ModelResult> resultService,
-                                IDialogService dialogService)
+                                IDialogService dialogService,
+                                GenericDataService<DecisionRule> rulesService)
         {
             _experimentService = experimentService;
             _datasetService = datasetService;
             _configService = configService;
             _resultService = resultService;
+            _rulesService = rulesService;
 
 
             _ = LoadData();
 
-            ShowDetailsCommand = new ShowDetailsCommand(this, dialogService, configService, resultService);
+            ShowDetailsCommand = new ShowDetailsCommand(this, dialogService, configService, resultService, rulesService);
+            _rulesService = rulesService;
         }
 
         private async Task LoadData()
@@ -63,7 +67,7 @@ namespace ExpertSystem.WPF.ViewModels
 
                 var models = relatedConfigs.Select(c => c.ModelType.ToString()).ToList();
 
-                var analyzedColumns = relatedConfigs.FirstOrDefault()?.AnalysisColumns ?? new List<string>(); 
+                var analyzedColumns = relatedConfigs.FirstOrDefault()?.AnalysisColumns ?? new List<string>();
 
                 var targetColumn = relatedConfigs.FirstOrDefault()?.TargetColumn ?? "Unknown";
                 var trainingSize = relatedConfigs.FirstOrDefault()?.TrainingSize ?? 0;
@@ -77,7 +81,7 @@ namespace ExpertSystem.WPF.ViewModels
                     Models = models,
                     AnalyzedColumns = analyzedColumns,
                     TargetColumn = targetColumn,
-                    TrainingSize = trainingSize,
+                    TrainingSize = trainingSize == 0 ? "-" : trainingSize.ToString(), // "-"dla "Own" 
                     HasSamples = hasSamples
                 });
             }

@@ -112,7 +112,8 @@ public partial class App : Application
                 provider.GetRequiredService<GenericDataService<Dataset>>(),
                 provider.GetRequiredService<GenericDataService<ModelConfiguration>>(),
                 provider.GetRequiredService<GenericDataService<ModelResult>>(),
-                provider.GetRequiredService<IDialogService>()
+                provider.GetRequiredService<IDialogService>(),
+                provider.GetRequiredService<GenericDataService<DecisionRule>>()
             )
         );
 

@@ -290,7 +290,7 @@ namespace ExpertSystem.WPF.Commands
                     datasetId: dataset.Id,
                     analysisColumns: analysis_columns.ToList(),
                     targetColumn: target_column,
-                    trainingSize: int.Parse(training_size),
+                    trainingSize: int.TryParse(training_size, out int temp) ? temp : 0,
                     analysisResults: results,
                     hyperparameters: hyperparameters,
                     samples: samples,
@@ -298,7 +298,7 @@ namespace ExpertSystem.WPF.Commands
                 );
 
                 var resultsVm = _resultsFactory();
-                resultsVm.LoadResults(results);
+                resultsVm.LoadResults(results, samples);
 
                 _navigator.CurrentViewModel = resultsVm;
                 _navigator.CurrentViewType = ViewType.Results;
@@ -341,7 +341,7 @@ namespace ExpertSystem.WPF.Commands
 
             // check if server is is up and responding
             using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(1) };
-            var maxTries = 10;
+            var maxTries = 20;
             for (int i = 0; i < maxTries; i++)
             {
                 try

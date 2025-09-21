@@ -16,7 +16,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
 
@@ -38,6 +38,7 @@
           ColumnHeaderHeight="34"
           RowHeight="32"
           GridLinesVisibility="None"
+          SelectionMode="Single"
           SelectionUnit="FullRow"
           Padding="6"
           IsReadOnly="True"

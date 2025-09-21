@@ -10,17 +10,20 @@ public class ShowDetailsCommand : ICommand
     private readonly IDialogService _dialogService;
     private readonly GenericDataService<ModelConfiguration> _configService;
     private readonly GenericDataService<ModelResult> _resultService;
+    private readonly GenericDataService<DecisionRule> _rulesService;
 
     public ShowDetailsCommand(
         HistoryViewModel historyVm,
         IDialogService dialogService,
         GenericDataService<ModelConfiguration> configService,
-        GenericDataService<ModelResult> resultService)
+        GenericDataService<ModelResult> resultService,
+        GenericDataService<DecisionRule> rulesService)
     {
         _historyVm = historyVm;
         _dialogService = dialogService;
         _configService = configService;
         _resultService = resultService;
+        _rulesService = rulesService;
     }
 
     public bool CanExecute(object? parameter) => _historyVm.SelectedExperiment != null;
@@ -30,7 +33,7 @@ public class ShowDetailsCommand : ICommand
         var exp = _historyVm.SelectedExperiment;
         if (exp == null) return;
 
-        var detailsVm = new ExperimentDetailsViewModel(_configService, _resultService)
+        var detailsVm = new ExperimentDetailsViewModel(_configService, _resultService, _rulesService)
         {
             ExperimentId = exp.ExperimentId,
             DatasetName = exp.Dataset
