@@ -327,7 +327,7 @@
                 </Border>
 
                 <Border BorderBrush="Black" BorderThickness="1" Margin="10"
-                        Visibility="{Binding AreDetailsChecked, Converter={StaticResource BoolToVisibilityConverter}}">
+                        Visibility="{Binding CanViewUserSample, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>

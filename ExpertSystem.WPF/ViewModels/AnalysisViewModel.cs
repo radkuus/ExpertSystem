@@ -201,6 +201,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResult)); 
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
+                    OnPropertyChanged(nameof(CanViewUserSample));
                     UpdateSelectedModels();
                 }
                 if (!_isKnnChecked)
@@ -242,6 +243,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResult));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
+                    OnPropertyChanged(nameof(CanViewUserSample));
                     UpdateSelectedModels();
 
                 }
@@ -265,6 +267,7 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(SelectedLayers));
                 OnPropertyChanged(nameof(AreDetailsChecked));
                 OnPropertyChanged(nameof(CanGenerateResult));
+                OnPropertyChanged(nameof(CanViewUserSample));
                 UpdateNeuronCounts();
             }
         }
@@ -284,6 +287,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResult));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
+                    OnPropertyChanged(nameof(CanViewUserSample));
                     UpdateSelectedModels();
 
                 }
@@ -310,6 +314,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResult));
                     OnPropertyChanged(nameof(IsAnyModelWithoutIfThenChecked));
+                    OnPropertyChanged(nameof(CanViewUserSample));
                     UpdateSelectedModels();
 
                 }
@@ -335,6 +340,7 @@ namespace ExpertSystem.WPF.ViewModels
                     OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
                     OnPropertyChanged(nameof(IsAnyModelChecked));
                     OnPropertyChanged(nameof(CanGenerateResult));
+                    OnPropertyChanged(nameof(CanViewUserSample));
                     UpdateSelectedModels();
 
                 }
@@ -355,6 +361,7 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(SelectedDistanceMetrics));
                 OnPropertyChanged(nameof(AreDetailsChecked));
                 OnPropertyChanged(nameof(CanGenerateResult));
+                OnPropertyChanged(nameof(CanViewUserSample));
 
             }
         }
@@ -383,6 +390,7 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(CanGenerateResult));
                 OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
                 OnPropertyChanged(nameof(UniqueNamesFromClassifyingColumn));
+                OnPropertyChanged(nameof(CanViewUserSample));
                 IfThenConditions.Clear();
             }
         }
@@ -396,6 +404,7 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(SelectedTrainingSetPercentage));
                 OnPropertyChanged(nameof(AreDetailsChecked));
                 OnPropertyChanged(nameof(CanGenerateResult));
+                OnPropertyChanged(nameof(CanViewUserSample));
             }
         }
 
@@ -449,6 +458,7 @@ namespace ExpertSystem.WPF.ViewModels
                 OnPropertyChanged(nameof(IsAnyModelAndColumnForAnalysisChecked));
                 OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
                 OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
+                OnPropertyChanged(nameof(CanViewUserSample));
             }
         }
 
@@ -488,7 +498,11 @@ namespace ExpertSystem.WPF.ViewModels
                 )
             )
             );
-        public bool CanGenerateResult => (IsAnyModelWithoutIfThenChecked && IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples && CanGenerateResultIfThen) || (!IsAnyModelWithoutIfThenChecked && IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && CanGenerateResultIfThen) || (IsAnyModelWithoutIfThenChecked && !IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples);
+        public bool CanViewUserSample => (!IsAnyModelWithoutIfThenChecked && IsIfThenAndResultColumnChecked) ||
+                                         (IsAnyModelWithoutIfThenChecked && AreDetailsChecked);
+        public bool CanGenerateResult => (IsAnyModelWithoutIfThenChecked && IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples && CanGenerateResultIfThen) || 
+                                         (!IsAnyModelWithoutIfThenChecked && IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && CanGenerateResultIfThen && CanGenerateResultUserSamples) || 
+                                         (IsAnyModelWithoutIfThenChecked && !IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples);
         public bool CanGenerateResultUserSamples => _userSample.UserSamples.Count == 0 || _userSample.UserSamples.All(sample => sample.All(entry => !string.IsNullOrWhiteSpace(entry.Value)));
         public bool CanGenerateResultIfThen => IfThenConditions.Count() != 0 &&
                     IfThenConditions.All(group => group.Conditions.Any((condition => condition.SelectedType == "then"))) &&
