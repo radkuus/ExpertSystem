@@ -23,5 +23,16 @@ namespace ExpertSystem.Domain.Models
         public string ModelsDisplay => Models.Count == 1
             ? Models[0]
             : string.Join(", ", Models);
+
+
+        // zeby godzina była zgodna ze strefa czasową (wedlug systemu)
+        public string DateDisplay
+        {
+            get
+            {
+                DateTimeOffset localTime = Date.ToLocalTime();
+                return localTime.ToString("dd.MM.yyyy HH:mm:ss");
+            }
+        }
     }
 }

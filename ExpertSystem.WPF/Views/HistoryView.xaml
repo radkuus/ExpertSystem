@@ -46,7 +46,7 @@
           SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date}" Width="1.5*" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding DateDisplay}" Width="1.5*" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Dataset" Binding="{Binding Dataset}" Width="1.5*" />
                 <DataGridTextColumn Header="Models" Binding="{Binding ModelsDisplay}" Width="2*" />
                 <DataGridTemplateColumn Header="Analyzed columns" Width="3*">
