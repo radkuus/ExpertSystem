@@ -111,9 +111,9 @@ def prepare_user_samples(user_samples, X_train):
     return samples_df
 
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+@app.get("/ServerStatus")
+def server_status():
+    return {"status": "available"}
 
          
             

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Windows;
 
 namespace ExpertSystem.WPF;
@@ -23,9 +24,13 @@ namespace ExpertSystem.WPF;
 /// </summary>
 public partial class App : Application
 {
+    public static IServiceProvider? serviceProvider { get; private set; }
     protected override void OnStartup(StartupEventArgs e)
     {
-        IServiceProvider serviceProvider = CreateServiceProvider();
+        serviceProvider = CreateServiceProvider();
+        var serverService = serviceProvider.GetRequiredService<IServerService>();
+        _ = AsyncStartServer(serverService);
+
         IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
         authentication.Register("kamil", "Testowanko1", "Testowanko1", "kamil.kamil@gmail.com", true);
         Window window = serviceProvider.GetRequiredService<MainWindow>();
@@ -34,10 +39,42 @@ public partial class App : Application
         base.OnStartup(e);
     }
 
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        var serverService = serviceProvider.GetRequiredService<IServerService>();
+        if (serverService != null)
+        {
+            try
+            {
+                await serverService?.StopServer();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error has occurred.");
+            }
+        }
+
+        base.OnExit(e);
+    }
+
+    private async Task AsyncStartServer(IServerService serverService)
+    {
+        try
+        {
+            await serverService.StartServer();
+        }
+        catch (TimeoutException ex)
+        {
+            MessageBox.Show("Server did not respond in time. Try restarting the app and make sure port 8000 is free.");
+        }
+        
+    }
+
     private IServiceProvider CreateServiceProvider()
     {
         IServiceCollection services = new ServiceCollection();
 
+        services.AddSingleton<IServerService, ServerService>();
         services.AddSingleton<ExpertSystemDbContextFactory>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         //services.AddSingleton<IDataService<User>, GenericDataService<User>>();

@@ -62,11 +62,6 @@ namespace ExpertSystem.WPF.Commands
 
             try
             {
-                // check server status
-                await EnsureServerRunning();
-
-
-
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
@@ -132,7 +127,7 @@ namespace ExpertSystem.WPF.Commands
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/knn", request);
                     response.ModelName = "KNN";
                     results.Add(response);
-                    hyperparameters["KNN"] = JsonSerializer.Serialize(new { neighbors });
+                    hyperparameters["KNN"] = JsonSerializer.Serialize(new { neighbors, distance_metric });
 
                     if (user_samples != null)
                         samples["KNN"] = user_samples;
@@ -308,56 +303,6 @@ namespace ExpertSystem.WPF.Commands
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
-        }
-
-
-        private async Task EnsureServerRunning()
-        {
-            if (_apiProcess != null && !_apiProcess.HasExited)
-                return;
-
-            var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
-            var solutionRoot = Path.GetFullPath(Path.Combine(exeFolder, "..", "..", "..", ".."));
-            var mainPy = Path.Combine(solutionRoot, "main.py");
-
-            if (!File.Exists(mainPy))
-                throw new FileNotFoundException($"Can't find file main.py in {solutionRoot}");
-
-            // "open" cmd and write -m
-            // uvicorn main:app --host 127.0.0.1 --port 8000
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "python",
-                Arguments = "-m uvicorn main:app --host 127.0.0.1 --port 8000",
-                WorkingDirectory = solutionRoot,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-
-            _apiProcess = Process.Start(startInfo)
-                ?? throw new InvalidOperationException("Failed to start FastAPI server.");
-
-            // check if server is is up and responding
-            using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(1) };
-            var maxTries = 20;
-            for (int i = 0; i < maxTries; i++)
-            {
-                try
-                {
-                    var r = await client.GetAsync("http://127.0.0.1:8000/health");
-                    if (r.IsSuccessStatusCode)
-                        return;
-                }
-                catch
-                {
-
-                }
-                await Task.Delay(500);
-            }
-
-            throw new TimeoutException("FastAPI didn't respond in time.");
         }
 
         public event EventHandler CanExecuteChanged
