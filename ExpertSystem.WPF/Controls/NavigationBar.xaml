@@ -9,30 +9,33 @@
              xmlns:converters="clr-namespace:ExpertSystem.WPF.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-
     <UserControl.Resources>
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
-
     <UserControl.DataContext>
         <Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
     </UserControl.DataContext>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0" RenderOptions.EdgeMode="Aliased" Background="{StaticResource DarkBlueBrush}">
+        <Grid 
+            Grid.Row="0" 
+            RenderOptions.EdgeMode="Aliased" 
+            Background="{StaticResource DarkBlueBrush}">
+  
             <Grid.Resources>
                 <Style TargetType="RadioButton" BasedOn="{StaticResource NavigationButton}"/>
             </Grid.Resources>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <RadioButton Grid.Column="0" Content="Home"
@@ -53,6 +56,20 @@
                          IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.Results}, Mode=TwoWay}"
                          Visibility="{Binding AreResultsGenerated, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
+            <Border Grid.Column="4" Background="Transparent" 
+                    MouseLeftButtonDown="DragAreaMouse"/>
+
+            <StackPanel Grid.Column="5" Orientation="Horizontal">
+                <Button Content="—" Width="46" Height="32" 
+                        Click="MinimizeButton"
+                        Style="{StaticResource WindowControlButton}"/>
+                <Button Content="▢" Width="46" Height="32" 
+                        Click="MaximizeButton"
+                        Style="{StaticResource WindowControlButton}"/>
+                <Button Content="✕" Width="46" Height="32" 
+                        Click="CloseButton"
+                        Style="{StaticResource WindowControlButtonClose}"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

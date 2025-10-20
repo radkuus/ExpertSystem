@@ -24,5 +24,28 @@ namespace ExpertSystem.WPF.Controls
         {
             InitializeComponent();
         }
+
+        private void DragAreaMouse(object sender, MouseButtonEventArgs e)
+        {
+            Window.GetWindow(this)?.DragMove();
+        }
+
+        private void MinimizeButton(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this).WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow(this);
+            window.WindowState = window.WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
+        }
+
+        private void CloseButton(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this)?.Close();
+        }
     }
 }
