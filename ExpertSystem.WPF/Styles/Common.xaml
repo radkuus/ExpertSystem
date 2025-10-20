@@ -9,6 +9,7 @@
     <Color x:Key="greenblue">#3dddc2</Color>
     <Color x:Key="navyblue">#181735</Color>
     <Color x:Key="blackblue">#100f2d</Color>
+    <Color x:Key="VividPink">#fd15a4</Color>
 
     <!--Brushes-->
     <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
@@ -19,6 +20,7 @@
     <SolidColorBrush x:Key="GreenBlueBrush" Color="{StaticResource greenblue}"/>
     <SolidColorBrush x:Key="NavyBlueBrush" Color="{StaticResource navyblue}"/>
     <SolidColorBrush x:Key="BlackBlueBrush" Color="{StaticResource blackblue}"/>
+    <SolidColorBrush x:Key="VividPinkBrush" Color="{StaticResource VividPink}"/>
 
     <LinearGradientBrush x:Key="BlueBackgroundBrush"
                          StartPoint="0,1" EndPoint="1,0"
@@ -58,7 +60,7 @@
     </Style>
 
     <Style x:Key="CustomButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource LimeBrush}"/>
+        <Setter Property="Background" Value="#3dddc2"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="FontSize" Value="20"/>
@@ -79,7 +81,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource DarkBlueBrush}"/>
+                <Setter Property="Background" Value="{StaticResource VividPinkBrush}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="0.4"/>
@@ -104,10 +106,51 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#fd15a4"/>
+                            <Setter Property="Background" Value="{StaticResource VividPinkBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PinkBlueButton" TargetType="Button">
+        <Setter Property="Width" Value="80"/>
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="Background" Value="{StaticResource VividPinkBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="20"
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#3dddc2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--Borders-->
+    
+    <Style x:Key="PurpleGradientBorderStyle" TargetType="Border">
+        <Setter Property="BorderThickness" Value="1.9" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="1,0" EndPoint="0,1">
+                    <GradientStop Color="#6F02B3" Offset="0" />
+                    <GradientStop Color="#3A0160" Offset="1" />
+                </LinearGradientBrush>
             </Setter.Value>
         </Setter>
     </Style>

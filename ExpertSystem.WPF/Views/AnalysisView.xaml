@@ -30,7 +30,9 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
+        <Border Grid.Row="0" 
+                Grid.Column="0" 
+                Style="{StaticResource PurpleGradientBorderStyle}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
@@ -38,7 +40,12 @@
                 </Grid.RowDefinitions>
 
                 <Grid Margin="5" Grid.Row="0">
-                    <TextBlock Text="Choose dataset" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Choose dataset" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"
+                                Foreground="White"/>
                 </Grid>
 
                 <ListView ItemsSource="{Binding UserDatasets}" FontSize="15" Margin="5" Grid.Row="1" SelectedItem="{Binding SelectedDataset}">
@@ -61,7 +68,9 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10"
+        <Border Grid.Row="0" 
+                Grid.Column="1" 
+                Style="{StaticResource PurpleGradientBorderStyle}"
                 Visibility="{Binding SelectedDataset, Converter={StaticResource NullToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -73,10 +82,19 @@
                 </Grid.RowDefinitions>
 
                 <Grid Margin="5" Grid.Row="0">
-                    <TextBlock Text="Choose model and columns for analysis" FontSize="20" FontWeight="Bold" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                    <TextBlock Text="Choose model and columns for analysis" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               TextWrapping="Wrap" 
+                               VerticalAlignment="Center"
+                               Foreground="White"/>
                 </Grid>
 
-                <TextBlock Grid.Row="1" Text="Model" Margin="5,10,0,0" FontSize="17"/>
+                <TextBlock Grid.Row="1" 
+                           Text="Model" 
+                           Margin="5,10,0,0" 
+                           FontSize="17"
+                           Foreground="White"/>
 
                 <StackPanel Grid.Row="2" Margin="5,10,0,0">
                     <StackPanel.Resources>
@@ -85,11 +103,21 @@
                         </Style>
                     </StackPanel.Resources>
 
-                    <CheckBox Content="KNN" IsChecked="{Binding IsKnnChecked}"/>
-                    <CheckBox Content="Logistic Regression" IsChecked="{Binding IsLogisticRegressionChecked}"/>
-                    <CheckBox Content="Bayes" IsChecked="{Binding IsBayesChecked}"/>
-                    <CheckBox Content="Neural Network" IsChecked="{Binding IsNeuralNetworkChecked}"/>
-                    <CheckBox Content="If=>Then" IsChecked="{Binding IsIfThenChecked}"/>
+                    <CheckBox Content="KNN"  
+                              IsChecked="{Binding IsKnnChecked}"
+                              Foreground="White" />
+                    <CheckBox Content="Logistic Regression"  
+                              IsChecked="{Binding IsLogisticRegressionChecked}"
+                              Foreground="White" />
+                    <CheckBox Content="Bayes"  
+                              IsChecked="{Binding IsBayesChecked}"
+                              Foreground="White"/>
+                    <CheckBox Content="Neural Network"  
+                              IsChecked="{Binding IsNeuralNetworkChecked}"
+                              Foreground="White"/>
+                    <CheckBox Content="If=>Then"  
+                              IsChecked="{Binding IsIfThenChecked}"
+                              Foreground="White" />
                 </StackPanel>
 
                 <Grid Grid.Row="3">
@@ -98,10 +126,22 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="Columns for analysis" Margin="5,10,0,0" FontSize="17"/>
+                    <TextBlock Grid.Row="0" 
+                               Text="Columns for analysis" 
+                               Margin="5,10,0,0" 
+                               FontSize="17"
+                               Foreground="White"/>
 
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
-                        <TextBlock Text="Columns:" FontSize="14" VerticalAlignment="Center" Margin="5,0,10,0"/>
+                    <StackPanel Grid.Row="1" 
+                                Orientation="Horizontal" 
+                                VerticalAlignment="Center" 
+                                Margin="0,5,0,5">
+                        
+                        <TextBlock Text="Columns:" 
+                                   FontSize="14" 
+                                   VerticalAlignment="Center" 
+                                   Margin="5,0,10,0"
+                                    Foreground="White"/>
                         <ListBox Width="150" Height="200" FontSize="15"
                                  ItemsSource="{Binding DatasetNumericColumnNames}"
                                  SelectionMode="Multiple"
@@ -112,7 +152,9 @@
         </Border>
 
 
-        <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="1" Margin="10" 
+        <Border Grid.Row="0" 
+                Grid.Column="2" 
+                Style="{StaticResource PurpleGradientBorderStyle}" 
                 Visibility="{Binding IsAnyModelAndColumnForAnalysisChecked, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -121,7 +163,13 @@
                 </Grid.RowDefinitions>
 
                 <Grid Margin="5" Grid.Row="0">
-                    <TextBlock Text="Choose details" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Choose details" 
+                               TextWrapping="Wrap" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"
+                               Foreground="White"/>
                 </Grid>
 
                 <StackPanel Grid.Row="1" Margin="5">
@@ -140,9 +188,16 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="KNN" Margin="0,0,0,5"/>
+                        <TextBlock Grid.Row="0" 
+                                   Text="KNN" 
+                                   Margin="0,0,0,5"  
+                                   Foreground="White"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Neighbours:" FontSize="14" Width="105" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Neighbours:" 
+                                       FontSize="14" Width="105" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,10,0"  
+                                       Foreground="White"/>
                             <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
                                       SelectedValue="{Binding SelectedNeighbours, Mode=TwoWay}" 
                                       SelectedValuePath="Content">
@@ -153,8 +208,17 @@
                                 <ComboBoxItem Content="6"/>
                             </ComboBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Margin="0 5 0 0" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Distance metrics:" FontSize="14" Width="105" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <StackPanel Grid.Row="2" 
+                                    Margin="0 5 0 0" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center">
+                            
+                            <TextBlock Text="Distance metrics:" 
+                                       FontSize="14" 
+                                       Width="105" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,10,0"  
+                                       Foreground="White"/>
                             <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
                                       SelectedValue="{Binding SelectedDistanceMetrics, Mode=TwoWay}" 
                                       SelectedValuePath="Content">
@@ -172,9 +236,16 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Neural Network" Margin="0,10,0,0"/>
+                        <TextBlock Grid.Row="0" 
+                                   Text="Neural Network" 
+                                   Margin="0,10,0,0"  
+                                   Foreground="White"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
-                            <TextBlock Text="Layers:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Layers:" 
+                                       FontSize="14" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,10,0"  
+                                       Foreground="White"/>
                             <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsNeuralNetworkChecked}" 
                                       SelectedValue="{Binding SelectedLayers, Mode=TwoWay}" 
                                       SelectedValuePath="Content">
@@ -207,9 +278,15 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Training set percentage(20% - 89%)" Margin="0,10,0,0"/>
+                        <TextBlock Grid.Row="0" 
+                                   Text="Training set percentage(20% - 89%)" Margin="0,10,0,0"  
+                                   Foreground="White"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
-                            <TextBlock Text="Percent:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Percent:" 
+                                       FontSize="14" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,10,0"  
+                                       Foreground="White"/>
                             <TextBox Width="100" Height="25" FontSize="15" Text="{Binding SelectedTrainingSetPercentage,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MaxLength="4">
                                 <i:Interaction.Behaviors>
                                     <behaviors:NumericInputBehaviorTrainingSetPercentage/>
@@ -223,9 +300,16 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Result column" Margin="0,10,0,0"/>
+                        <TextBlock Grid.Row="0" 
+                                   Text="Result column" 
+                                   Margin="0,10,0,0"  
+                                   Foreground="White"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
-                            <TextBlock Text="Column:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Column:" 
+                                       FontSize="14" 
+                                       VerticalAlignment="Center" 
+                                       Margin="0,0,10,0"  
+                                       Foreground="White"/>
                             <ComboBox Width="100" FontSize="15" 
                                       ItemsSource="{Binding DatasetColumnNames}" 
                                       SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"/>
@@ -245,7 +329,7 @@
 
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
             <StackPanel>
-                <Border BorderBrush="Black" BorderThickness="1" Margin="10"
+                <Border Style="{StaticResource PurpleGradientBorderStyle}"
                         Visibility="{Binding IsIfThenAndResultColumnChecked, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -257,23 +341,56 @@
 
                         <Grid Margin="5" Grid.Row="0">
                             <TextBlock Text="Create your own conditions" FontSize="20" FontWeight="Bold" 
-                                       Grid.Column="0" VerticalAlignment="Center"/>
+                                       Grid.Column="0" VerticalAlignment="Center" Foreground="White"/>
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                            <Button Content="Add if condition" Height="35" Width="Auto" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding AddIfConditionCommand}"/>
-                            <Button Content="Add and condition" Height="35" Width="Auto" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding AddAndConditionCommand}"/>
-                            <Button Content="Remove if condition" Height="35" Width="Auto" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding RemoveIfConditionCommand}"/>
-                            <Button Content="Remove and condition" Height="35" Width="Auto" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding RemoveAndConditionCommand}"/>
-                            <Button Content="Add then" Height="35" Width="Auto" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding AddThenInConditionCommand}" 
+                        <StackPanel Grid.Row="1" 
+                                    Orientation="Horizontal" 
+                                    Margin="10">
+                            
+                            <Button Content="Add if condition" 
+                                    Height="35" 
+                                    Width="Auto" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top" 
+                                    Command="{Binding AddIfConditionCommand}"/>
+                            <Button Content="Add and condition" 
+                                    Height="35" 
+                                    Width="Auto" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top" 
+                                    Command="{Binding AddAndConditionCommand}"/>
+                            <Button Content="Remove if condition" 
+                                    Height="35" 
+                                    Width="Auto" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top" 
+                                    Command="{Binding RemoveIfConditionCommand}"/>
+                            <Button Content="Remove and condition" 
+                                    Height="35" 
+                                    Width="Auto" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top" 
+                                    Command="{Binding RemoveAndConditionCommand}"/>
+                            <Button Content="Add then" 
+                                    Height="35" 
+                                    Width="Auto" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top"
+                                    Command="{Binding AddThenInConditionCommand}" 
                                     CommandParameter="{Binding SelectedDataset}"/>
-                            <Button Content="Remove then" Height="35" Width="Auto" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding RemoveThenInConditionCommand}"/>
+                            <Button Content="Remove then" 
+                                    Height="35" 
+                                    Width="Auto" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top" 
+                                    Command="{Binding RemoveThenInConditionCommand}"/>
                         </StackPanel>
 
                         <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
@@ -290,17 +407,25 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal" Margin="5">
-                                                            <TextBlock Text="{Binding SelectedType}" FontSize="20" Margin="5"/>
+                                                            <TextBlock Text="{Binding SelectedType}" 
+                                                                       FontSize="20" 
+                                                                       Margin="5" 
+                                                                       Foreground="White"/>
 
                                                             <StackPanel Orientation="Horizontal" Margin="5"
                                                                         Visibility="{Binding SelectedType, Converter={StaticResource IfThenConditionTypeToVisibilityConverter}, ConverterParameter=if/and}">
                                                                 <ComboBox Width="100" Height="30" FontSize="15"
                                                                           ItemsSource="{Binding DataContext.SelectedColumnsForAnalysis, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                           SelectedItem="{Binding SelectedColumn}" />
-                                                                <ComboBox Width="40" Height="30" FontSize="15"
+                                                                <ComboBox Width="40" 
+                                                                          Height="30" 
+                                                                          FontSize="15"
                                                                           ItemsSource="{Binding DataContext.Operators, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                           SelectedItem="{Binding SelectedOperator}" />
-                                                                <TextBox Width="73" Height="30" FontSize="20" 
+                                                                <TextBox Width="73" 
+                                                                         Height="30" 
+                                                                         FontSize="20" 
+                                                                         Foreground="White" 
                                                                           Text="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="6">
                                                                     <i:Interaction.Behaviors>
                                                                         <behaviors:NumericInputBehaviorUserSample/>
@@ -326,7 +451,7 @@
                     </Grid>
                 </Border>
 
-                <Border BorderBrush="Black" BorderThickness="1" Margin="10"
+                <Border Style="{StaticResource PurpleGradientBorderStyle}"
                         Visibility="{Binding CanViewUserSample, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -338,7 +463,9 @@
 
                         <Grid Margin="5" Grid.Row="0">
                             <TextBlock Text="Create your own samples" FontSize="20" FontWeight="Bold" 
-                                       Grid.Column="0" VerticalAlignment="Center"/>
+                                       Grid.Column="0" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White"/>
                         </Grid>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
@@ -348,7 +475,9 @@
                                     VerticalAlignment="Top" Command="{Binding RemoveSampleCommand}"/>
                         </StackPanel>
 
-                        <ItemsControl ItemsSource="{Binding UserSample.UserSamples}" Grid.Row="2">
+                        <ItemsControl ItemsSource="{Binding UserSample.UserSamples}" 
+                                      Grid.Row="2" 
+                                      Foreground="White">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal" />

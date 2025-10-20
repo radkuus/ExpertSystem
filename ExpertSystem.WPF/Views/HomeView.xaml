@@ -11,6 +11,8 @@
 
     <Grid Grid.IsSharedSizeScope="True"
           Background="{StaticResource BlueBackgroundBrush}">
+        
+
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,14 +26,24 @@
 
         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
                    Text="{Binding Nickname, StringFormat='Hi {0}!'}" 
-                   FontSize="30" FontWeight="Bold" 
-                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"/>
+                   FontSize="30" 
+                   FontWeight="Bold" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left" 
+                   Margin="10"
+                   Foreground="White"/>
 
-        <Button Content="Logout" Command="{Binding LogoutCommand}" 
-                Grid.Column="1" Margin="0 5 5 5" HorizontalAlignment="Right" Height="Auto" 
-                Style="{StaticResource CustomButtonStyle}" />
+        <Button Content="Logout" 
+                Command="{Binding LogoutCommand}" 
+                Grid.Column="1" Margin="0, 15, 10, 10" 
+                HorizontalAlignment="Right" 
+                Height="Auto" 
+                Style="{StaticResource PinkBlueButton}" />
 
-        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
+        <Border Grid.Row="1" 
+                Grid.Column="0" 
+                Style="{StaticResource PurpleGradientBorderStyle}">
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
@@ -44,7 +56,12 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Your Datasets" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Your Datasets" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"
+                                Foreground="White"/>
                     <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" 
                         Grid.Column="1" HorizontalAlignment="Center" 
                         Style="{StaticResource CustomButtonStyle}" />
@@ -70,7 +87,9 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">
+        <Border Grid.Row="1" 
+                Grid.Column="1" 
+                Style="{StaticResource PurpleGradientBorderStyle}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
@@ -83,7 +102,12 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Your Results" FontSize="20" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Your Results" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Grid.Column="0" 
+                               VerticalAlignment="Center"
+                                Foreground="White"/>
                 </Grid>
 
                 <ListView Margin="10" Grid.Row="1">
