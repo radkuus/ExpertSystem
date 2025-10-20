@@ -8,6 +8,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Images\EmailIcon.png" />
+    <None Remove="Images\ExpertSystemLogoGrey.png" />
+    <None Remove="Images\PasswordIcon.png" />
+    <None Remove="Images\UserIcon.png" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
@@ -23,6 +30,13 @@
   <ItemGroup>
     <ProjectReference Include="..\ExpertSystem.Domain\ExpertSystem.Domain.csproj" />
     <ProjectReference Include="..\ExpertSystem.EntityFramework\ExpertSystem.EntityFramework.csproj" />
+  </ItemGroup>	
+	
+  <ItemGroup>
+    <Resource Include="Images\EmailIcon.png" />
+    <Resource Include="Images\ExpertSystemLogoGrey.png" />
+    <Resource Include="Images\PasswordIcon.png" />
+    <Resource Include="Images\UserIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
