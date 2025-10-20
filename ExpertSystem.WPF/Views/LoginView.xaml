@@ -10,15 +10,8 @@
         <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
     </UserControl.Resources>
     <Border  MouseDown="DragAreaMouse">
-        <!--<Border.Background>
-            <ImageBrush ImageSource="/Images/back-image.jpg"
-                        Stretch="None"/>
-        </Border.Background>-->
 
         <Border Background="{StaticResource BlueBackgroundBrush}">
-
-
-
 
             <Grid>
                 <Grid.RowDefinitions>

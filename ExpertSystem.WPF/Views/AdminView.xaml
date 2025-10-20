@@ -18,32 +18,46 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="4*"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0"
+              Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <Button Content="Create user" Height="30" Width="90" Grid.Column="0" 
-                        Click="RegisterButton" />
+            <Button Content="Create user" 
+                    Height="30" 
+                    Width="90" 
+                    Grid.Column="0" 
+                    Click="RegisterButton" />
 
-                <Button Content="Edit user" Height="30" Width="90" Grid.Column="1" 
-                        Click="EditButton" 
-                        CommandParameter="{Binding SelectedUser}"/>
+            <Button Content="Edit user" 
+                    Height="30" 
+                    Width="90" 
+                    Grid.Column="1" 
+                    Click="EditButton" 
+                    CommandParameter="{Binding SelectedUser}"/>
 
-                <Button Content="Delete user" Height="30" Width="90" Grid.Column="2"
-                        Command="{Binding DeleteUserCommand}"
-                        CommandParameter="{Binding SelectedUser}"/>
-            </Grid>
+            <Button Content="Delete user" 
+                    Height="30" 
+                    Width="90" 
+                    Grid.Column="2"
+                    Command="{Binding DeleteUserCommand}"
+                    CommandParameter="{Binding SelectedUser}"/>
+        </Grid>
 
-            <ListView ItemsSource="{Binding Users}" Margin="20" Grid.Row="1"
+
+
+        <ListView ItemsSource="{Binding Users}" 
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Margin="20" 
                       SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
                       SelectionChanged="ListView_SelectionChanged">
                 <ListView.View>
@@ -52,67 +66,144 @@
                         <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="auto"/>
                     </GridView>
                 </ListView.View>
-            </ListView>
-        </Grid>
+        </ListView>
 
-        <Grid Grid.IsSharedSizeScope="True" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Button Content="Logout" 
+                Command="{Binding LogoutCommand}"
+                Grid.Column="1"
+                Grid.Row="0"
+                Height="30" 
+                Width="90"
+                Style="{StaticResource PinkBlueButton}"/>
 
-            <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,5,0,5"
-                      HorizontalAlignment="Center"
-                      DataContext="{Binding ErrorMessageViewModel}"
-                      Foreground="Red"
-                      Text="{Binding Message}"
-                      TextWrapping="Wrap"
-                      Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+        <StackPanel  Width="180"
+             Grid.Row="1"
+             Grid.Column="1"
+             Orientation="Vertical">
+        
+            <TextBlock  Text="Nickname"
+                        HorizontalAlignment="Center"
+                        Foreground="LightGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Tahoma"                             
+                        Margin="0,35,0,0"/>
 
-            <Grid Grid.Row="0" Margin="0 45 0 45" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Nickname" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                         Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid Height="28" Margin="0,5,0,0">
+
+                <TextBox x:Name="usertb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"
+                                 Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Image Source="/Images/UserIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
             </Grid>
 
-            <Grid Grid.Row="1" Margin="0 45 0 45" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="E-mail" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <TextBox Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock  Text="Email"
+                        HorizontalAlignment="Center"
+                        Foreground="LightGray"
+                        FontSize="12"
+                        FontWeight="Medium"
+                        FontFamily="Tahoma"                             
+                        Margin="0,25,0,0"/>
+
+            <Grid Height="28" 
+                  Margin="0,5,0,0">
+
+                <TextBox x:Name="emailtb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"
+                                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Image Source="/Images/UserIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
             </Grid>
 
-            <Grid Grid.Row="2" Margin="0 45 0 45" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Password" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <PasswordBox x:Name="passwordpb" Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock  Text="Password"
+                        HorizontalAlignment="Center"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontFamily="Tahoma"  
+                        FontWeight="Medium"                           
+                        Margin="0,25,0,0"/>
+
+            <Grid Height="28" Margin="0,5,0,0">
+
+                <PasswordBox x:Name="passwordpb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"/>
+
+                <Image Source="/Images/PasswordIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
+
             </Grid>
 
-            <Grid Grid.Row="3" Margin="0 45 0 45" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Confirm password" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <PasswordBox x:Name="password2pb" Grid.Column="1" Width="100" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock  Text="Repeat password"
+                        HorizontalAlignment="Center"
+                        Foreground="DarkGray"
+                        FontSize="12"
+                        FontFamily="Tahoma"  
+                        FontWeight="Medium"                           
+                        Margin="0,25,0,0"/>
+
+            <Grid Height="28" Margin="0,5,0,0">
+
+                <PasswordBox x:Name="password2pb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"/>
+
+                <Image Source="/Images/PasswordIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
+
             </Grid>
 
-            <Button Content="Logout" Command="{Binding LogoutCommand}"
-                    Height="30" Width="90" Grid.Row="5"/>
-        </Grid>
+
+            <TextBlock Margin="0,5,0,5"
+              HorizontalAlignment="Center"
+              DataContext="{Binding ErrorMessageViewModel}"
+              Foreground="Red"
+              Text="{Binding Message}"
+              TextWrapping="Wrap"
+              Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+            
+        </StackPanel>
+        
     </Grid>
 </UserControl>

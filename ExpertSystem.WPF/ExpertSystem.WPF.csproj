@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\DatasetIcon.png" />
     <None Remove="Images\EmailIcon.png" />
     <None Remove="Images\ExpertSystemLogoGrey.png" />
     <None Remove="Images\PasswordIcon.png" />
@@ -33,6 +34,7 @@
   </ItemGroup>	
 	
   <ItemGroup>
+    <Resource Include="Images\DatasetIcon.png" />
     <Resource Include="Images\EmailIcon.png" />
     <Resource Include="Images\ExpertSystemLogoGrey.png" />
     <Resource Include="Images\PasswordIcon.png" />
