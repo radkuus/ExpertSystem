@@ -5,93 +5,252 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="800">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
     </UserControl.Resources>
-    <Grid Grid.IsSharedSizeScope="True" Background="{StaticResource DeepSkyBlueBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+    <Border  MouseDown="DragAreaMouse">
+        <!--<Border.Background>
+            <ImageBrush ImageSource="/Images/back-image.jpg"
+                        Stretch="None"/>
+        </Border.Background>-->
 
-        <TextBlock Grid.Row="0" FontSize="40"  Text="Expert System" HorizontalAlignment="Center"/>
+        <Border                    
+            BorderThickness="2"
+            Opacity="0.98">
 
-        <Grid Grid.Row="1" Margin="0 40" Background="{StaticResource AquaBrush}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#fd15a4" Offset="0"/>
+                    <GradientStop Color="#06B6D4" Offset="0.5"/>
+                    <GradientStop Color="#9948e7" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
 
-            <Grid Grid.Row="0" Margin="0 20 0 10" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
+                    <GradientStop Color="#000000" Offset="0"/>
+                    <GradientStop Color="#0F2027" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
 
-                <TextBlock Grid.Column="0"  Text="Nickname"/>
-                <TextBox Grid.Column="1" Margin="20 0 0 0" Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="REGISTER"
+                               Foreground="LightGray"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               FontSize="10"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Button Content="—" Width="46" Height="32" 
+                        Click="MinimizeButton"
+                        Style="{StaticResource WindowControlButton}"/>
+                        <Button Content="▢" Width="46" Height="32" 
+                        Click="MaximizeButton"
+                        Style="{StaticResource WindowControlButton}"/>
+                        <Button Content="✕" Width="46" Height="32" 
+                        Click="CloseButton"
+                        Style="{StaticResource WindowControlButtonClose}"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Width="220"
+                            Grid.Row="1"
+                            Orientation="Vertical"
+                            Margin="0,34,0,0"
+                            ClipToBounds="False">
+
+                    <Image Source="/Images/ExpertSystemLogoGrey.png"
+                           Width="170" Height="170"/>
+
+
+                    <TextBlock Text="Register a new account"
+                               Foreground="LightGray"
+                               FontSize="12"
+                               TextAlignment="Center"/>
+
+                    <TextBlock Text="Username"
+                               Foreground="LightGray"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               FontFamily="Tahoma"                             
+                               Margin="0,35,0,0"/>
+
+                    <Grid Height="28" Margin="0,5,0,0">
+
+                        <TextBox x:Name="userregistertb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"
+                                 Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Image Source="/Images/UserIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
+
+                    </Grid>
+
+                    <TextBlock Text="Email"
+                               Foreground="LightGray"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               FontFamily="Tahoma"                             
+                               Margin="0,15,0,0"/>
+
+                    <Grid Height="28" Margin="0,5,0,0">
+
+                        <TextBox x:Name="emailregistertb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"
+                                 Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Image Source="/Images/EmailIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
+
+                    </Grid>
+
+                    <TextBlock Text="Password"
+                               Foreground="DarkGray"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               FontFamily="Tahoma"                             
+                               Margin="0,15,0,0"/>
+
+                    <Grid Height="28" Margin="0,5,0,0">
+
+                        <PasswordBox x:Name="passwordpb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"/>
+
+                        <Image Source="/Images/PasswordIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
+
+                    </Grid>
+
+                    <TextBlock Text="Repeat password"
+                               Foreground="DarkGray"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               FontFamily="Tahoma"                             
+                               Margin="0,15,0,0"/>
+
+                    <Grid Height="28" Margin="0,5,0,0">
+
+                        <PasswordBox x:Name="password2pb"
+                                 FontSize="14"
+                                 FontFamily="Tahoma"
+                                 Foreground="Black"
+                                 BorderThickness="0,0,0,1"
+                                 VerticalContentAlignment="Center"
+                                 Padding="24,0,0,0"/>
+
+                        <Image Source="/Images/PasswordIcon.png"
+                               Width="14"
+                               Height="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="6,0,0,0"
+                               IsHitTestVisible="False"/>
+
+                    </Grid>
+
+                    <Grid Grid.Row="3" Height="50">
+                        <TextBlock 
+                            Margin="-190,0,-190,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            DataContext="{Binding ErrorMessageViewModel}"
+                            Foreground="Red"
+                            Text="{Binding Message}"
+                            TextWrapping="Wrap"
+                            TextAlignment="Center"
+                            MaxWidth="600"
+                            Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+                    </Grid>
+
+                    <Button                         
+                            BorderThickness="0"
+                            Content="REGISTER"
+                            Foreground="White"
+                            FontSize="12"
+                            FontFamily="Tohoma"
+                            Cursor="Hand"                           
+                            Margin="0,0,0,0"
+                            Click="RegisterButton"
+                            Style="{StaticResource LoginRegisterButton}">
+                    </Button>
+
+
+
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,15,0,0">
+
+                        <TextBlock Text="Have account?"
+                               Foreground="DarkGray"
+                               FontSize="11"
+                               FontWeight="Medium"
+                               FontFamily="Tohoma"/>
+
+                        <TextBlock Foreground="White"
+                                   FontSize="11"
+                                   FontWeight="Medium"
+                                   FontFamily="Tahoma"
+                                   Cursor="Hand"
+                                   Margin="9,0,0,0">
+                            <Hyperlink Command="{Binding GoToViewLoginCommand}">
+                                Login
+                            </Hyperlink>
+                        </TextBlock>
+
+                    </StackPanel>
+
+                </StackPanel>
+
             </Grid>
 
-            <Grid Grid.Row="1" Margin="0 5 0 10" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+        </Border>
 
-                <TextBlock Grid.Column="0"  Text="E-mail"/>
-                <TextBox Grid.Column="1" Margin="20 0 0 0" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
-            </Grid>
-
-            <Grid Grid.Row="2" Margin="0 5 0 10" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0" Text="Password"/>
-                <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="passwordpb" Grid.Row="1"/>
-            </Grid>
-
-            <Grid Grid.Row="3" Margin="0 5 0 10" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="Label" Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Column="0" Text="Confirm password"/>
-                <PasswordBox Grid.Column="1" Margin="20 0 0 0" x:Name="password2pb" Grid.Row="1"/>
-            </Grid>
-
-
-
-            <Button Grid.Row="4" Grid.Column="2" Width="200" 
-                    HorizontalAlignment="Center" 
-                    Click="RegisterButton"
-                    IsDefault="True" 
-                    Content="Register"  
-                    Style="{StaticResource CustomButtonStyle}"/>
-
-            <TextBlock Grid.Row="5" Margin="0,5,0,5"
-                       HorizontalAlignment="Center"
-                       DataContext="{Binding ErrorMessageViewModel}"
-                       Foreground="Red"
-                       Text="{Binding Message}"
-                       Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
-
-            <Button Grid.Row="6" Grid.Column="2" Width="100" 
-                    Background="Transparent"
-                    Foreground="Blue"
-                    HorizontalAlignment="Center" 
-                    IsDefault="True" 
-                    Content="Login"
-                    Command="{Binding GoToViewLoginCommand}"/>
-            
-        </Grid>
-    </Grid>
+    </Border>
 </UserControl>

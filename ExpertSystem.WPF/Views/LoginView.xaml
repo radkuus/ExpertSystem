@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
     </UserControl.Resources>
@@ -78,7 +78,7 @@
                            Width="170" Height="170"/>
 
 
-                    <TextBlock Text="something smart is written here"
+                    <TextBlock Text="Log in to your account"
                                Foreground="LightGray"
                                FontSize="12"
                                TextAlignment="Center"/>
@@ -87,12 +87,12 @@
                                Foreground="LightGray"
                                FontSize="12"
                                FontWeight="Medium"
-                               FontFamily="Montserrat"                             
+                               FontFamily="Tahoma"                             
                                Margin="0,35,0,0"/>
 
                     <Grid Height="28" Margin="0,5,0,0">
 
-                        <TextBox x:Name="usertb"
+                        <TextBox x:Name="userlogintb"
                                  FontSize="14"
                                  FontFamily="Tahoma"
                                  Foreground="Black"
@@ -114,8 +114,8 @@
                     <TextBlock Text="Password"
                                Foreground="DarkGray"
                                FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"                             
+                               FontFamily="Tahoma"  
+                               FontWeight="Medium"                           
                                Margin="0,15,0,0"/>
 
                     <Grid Height="28" Margin="0,5,0,0">
@@ -140,12 +140,15 @@
 
                     <Grid Grid.Row="3" Height="50">
                         <TextBlock 
-                            Margin="0"
+                            Margin="-190,0,-190,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             DataContext="{Binding ErrorMessageViewModel}"
                             Foreground="Red"
                             Text="{Binding Message}"
+                            TextWrapping="Wrap"
+                            TextAlignment="Center"
+                            MaxWidth="600"
                             Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
                     </Grid>
 
