@@ -13,9 +13,17 @@
         Background="Transparent"
         ResizeMode="CanResizeWithGrip">
     <Border Background="White" 
-            BorderBrush="{StaticResource DarkBlueBrush}" 
-            BorderThickness="1"
-            CornerRadius="0">
+            CornerRadius="0"
+            BorderThickness="2">
+
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#fd15a4" Offset="0"/>
+                <GradientStop Color="#06B6D4" Offset="0.5"/>
+                <GradientStop Color="#9948e7" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+        
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

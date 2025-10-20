@@ -14,7 +14,7 @@
         <local1:ListToStringConverter x:Key="ListToStringConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource BlueBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5*"/>

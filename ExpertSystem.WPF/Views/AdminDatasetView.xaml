@@ -12,7 +12,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource BlueBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>

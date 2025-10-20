@@ -9,7 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid Grid.IsSharedSizeScope="True">
+    <Grid Grid.IsSharedSizeScope="True"
+          Background="{StaticResource BlueBackgroundBrush}">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>

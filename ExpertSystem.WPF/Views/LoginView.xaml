@@ -15,24 +15,10 @@
                         Stretch="None"/>
         </Border.Background>-->
 
-        <Border                    
-            BorderThickness="2"
-            Opacity="0.98">
+        <Border Background="{StaticResource BlueBackgroundBrush}">
 
-            <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#fd15a4" Offset="0"/>
-                    <GradientStop Color="#06B6D4" Offset="0.5"/>
-                    <GradientStop Color="#9948e7" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.BorderBrush>
 
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
-                    <GradientStop Color="#000000" Offset="0"/>
-                    <GradientStop Color="#0F2027" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.Background>
+
 
             <Grid>
                 <Grid.RowDefinitions>

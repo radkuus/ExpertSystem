@@ -18,7 +18,7 @@
         <converters:IfThenConditionTypeToVisibilityConverter x:Key="IfThenConditionTypeToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource BlueBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
