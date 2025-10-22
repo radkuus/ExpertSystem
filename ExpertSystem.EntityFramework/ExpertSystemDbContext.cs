@@ -72,6 +72,10 @@ namespace ExpertSystem.EntityFramework
                 .Property(mr => mr.SamplesHistory)
                 .HasColumnType("jsonb");
 
+            modelBuilder.Entity<ModelResult>()
+                .Property(mr => mr.ConfusionMatrix)
+                .HasColumnType("jsonb");
+
 
 
             modelBuilder.Entity<User>().Property(u => u.Id).HasColumnName("UserId");

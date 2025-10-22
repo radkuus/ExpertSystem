@@ -1,5 +1,6 @@
 ﻿namespace ExpertSystem.Domain.Models
 {
+    using System.Diagnostics;
     using System.Text.Json.Serialization;
 
         public class ModelAnalysisResult
@@ -17,6 +18,10 @@
             public double Accuracy { get; set; }
 
             public string ModelName { get; set; }
+
+
+            [JsonPropertyName("confusion_matrix")]
+            public List<List<int>> ConfusionMatrix { get; set; }
 
             [JsonPropertyName("samples_history")]
             public List<string>? SamplesHistory { get; set; }  // może być null jak nie tworzymy własnych próbek

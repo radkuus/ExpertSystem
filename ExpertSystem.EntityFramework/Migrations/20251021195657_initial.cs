@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -15,7 +16,7 @@ namespace ExpertSystem.EntityFramework.Migrations
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:Enum:logic_operator", "and,or")
                 .Annotation("Npgsql:Enum:model_type", "knn,logistic_regression,bayes,neural_network,own")
-                .Annotation("Npgsql:Enum:operator", "greater_than,greater_than_or_equal,less_than,less_than_or_equal");
+                .Annotation("Npgsql:Enum:operator", "greater_than,equal,less_than");
 
             migrationBuilder.CreateTable(
                 name: "Users",
@@ -111,7 +112,10 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExperimentId = table.Column<int>(type: "integer", nullable: false),
                     ModelType = table.Column<string>(type: "text", nullable: false),
+                    AnalysisColumns = table.Column<List<string>>(type: "text[]", nullable: true),
+                    TargetColumn = table.Column<string>(type: "text", nullable: false),
                     Hyperparameters = table.Column<string>(type: "jsonb", nullable: false),
+                    TrainingSize = table.Column<int>(type: "integer", nullable: false),
                     Samples = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
@@ -137,6 +141,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     Precision = table.Column<int>(type: "integer", nullable: false),
                     Recall = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConfusionMatrix = table.Column<int>(type: "jsonb", nullable: false),
                     SamplesHistory = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>

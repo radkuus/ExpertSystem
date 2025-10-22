@@ -11,7 +11,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score, confusion_matrix
 import tensorflow
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Dense
@@ -58,12 +58,18 @@ class LogisticRegressionInput(BaseModel):
     user_samples: Optional[List[Dict[str, Any]]] = None  
 
 class ModelOutput(BaseModel):
+    request_id: str
     f1: float
     precision: float
     recall: float
     accuracy: float
-    request_id: str
+    confusion_matrix: List[List[int]]
     samples_history: List[str]
+
+
+@app.get("/ServerStatus")
+def server_status():
+    return {"status": "available"}
 
 
 def prepare_dataset(training_size, data, analysis_columns, target_column):
@@ -111,9 +117,6 @@ def prepare_user_samples(user_samples, X_train):
     return samples_df
 
 
-@app.get("/ServerStatus")
-def server_status():
-    return {"status": "available"}
 
          
             
@@ -132,12 +135,13 @@ async def run_knn(input_data: KNNDatasetInput):
         y_pred = knn.predict(X_test)
 
         metrics = {
+            "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id,
-            "samples_history": []             # domyslnie pusta lista
+            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "samples_history": []           # domyslnie pusta lista
         }
 
         if input_data.user_samples:
@@ -148,7 +152,7 @@ async def run_knn(input_data: KNNDatasetInput):
             metrics["samples_history"] = [str(p) for p in prediction]
 
 
-            print("KNN Response:", metrics)
+        print("KNN Response:", metrics)
 
         return ModelOutput(**metrics)
 
@@ -170,11 +174,12 @@ async def run_lr(input_data: LogisticRegressionInput):
         y_pred = lr.predict(X_test)
 
         metrics = {
+            "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id,
+            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
             "samples_history": []
         }
 
@@ -206,11 +211,12 @@ async def run_bayes(input_data: BayesDatasetInput):
         y_pred = nb.predict(X_test)
 
         metrics = {
+            "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id,
+            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
             "samples_history": []
         }
 
@@ -263,11 +269,12 @@ async def run_NeuralNetwork(input_data: NeuralNetworkDatasetInput):
             y_pred = y_pred_prob.argmax(axis=1)
 
         metrics = {
+            "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id,
+            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
             "samples_history": []
         }
 
@@ -375,11 +382,12 @@ async def run_IfThen(input_data: IfThenDatasetInput):
         print(y_test,y_pred)
 
         metrics = {
+            "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "request_id": request_id,
+            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
             "samples_history": []
         }
         

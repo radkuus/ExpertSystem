@@ -85,6 +85,11 @@ public class ExperimentService : IExperimentService
                 Precision = (int)(result.Precision * 100),
                 Recall = (int)(result.Recall * 100),
                 CreatedAt = DateTime.UtcNow,
+
+                ConfusionMatrix = result.ConfusionMatrix != null
+                    ? JsonSerializer.Serialize(result.ConfusionMatrix) 
+                    : "{}",
+
                 SamplesHistory = result.SamplesHistory != null
                      ? JsonSerializer.Serialize(result.SamplesHistory)
                      : "{}"
