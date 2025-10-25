@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
@@ -37,8 +38,14 @@ namespace ExpertSystem.WPF.Commands
         {
             if (parameter is Dataset dataset)
             {
+                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
+                string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
+                string datasetFilePath = Path.Combine(datasetsFolderDirectory, dataset.Name);
+
                 await _datasetService.RemoveDataset(dataset.Id);
                 _viewModel.UserDatasets.Remove(dataset);
+                File.Delete(datasetFilePath);
             }
         }
     }
