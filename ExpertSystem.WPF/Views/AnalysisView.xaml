@@ -56,7 +56,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="View Details" 
-                                                Command="{Binding DataContext.DisplayDatasetAsDataFrameCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                Command="{Binding DataContext.DisplayDatasetAsDataFrameAndStatisticsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                 FontSize="12" Padding="5"
                                                 CommandParameter="{Binding}"/>
                                     </DataTemplate>

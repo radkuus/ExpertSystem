@@ -37,7 +37,7 @@ namespace ExpertSystem.WPF.ViewModels
 
         public ICommand RemoveDatasetCommand { get; }
         public ICommand DisplayUserDatasetsCommand { get; }
-        public ICommand AddDatabaseCommand { get; }
+        public ICommand AddDatasetCommand { get; }
         public ICommand LogoutCommand { get; }
         public ICommand UpdateCurrentViewModelCommand {  get; }
 
@@ -64,7 +64,7 @@ namespace ExpertSystem.WPF.ViewModels
             _datasetStore = datasetStore;
             
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
-            AddDatabaseCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
+            AddDatasetCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
             DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(authenticator, datasetService, datasetStore);
             RemoveDatasetCommand = new RemoveDatasetCommand(this, authenticator, datasetService);
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
