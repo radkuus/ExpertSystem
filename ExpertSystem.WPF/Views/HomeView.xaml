@@ -62,7 +62,7 @@
                                Grid.Column="0" 
                                VerticalAlignment="Center"
                                 Foreground="White"/>
-                    <Button Content="Add dataset" Command="{Binding AddDatabaseCommand}" 
+                    <Button Content="Add dataset" Command="{Binding AddDatasetCommand}" 
                         Grid.Column="1" HorizontalAlignment="Center" 
                         Style="{StaticResource CustomButtonStyle}" />
                 </Grid>

@@ -11,13 +11,13 @@ using ExpertSystem.WPF.Views;
 
 namespace ExpertSystem.WPF.Commands
 {
-    public class DisplayDatasetAsDataFrameCommand : ICommand
+    public class DisplayDatasetAsDataFrameAndStatisticsCommand : ICommand
     {
         private readonly IDatasetService _datasetService;
         private readonly IDialogService _dataFrameDialogService;
         private readonly IDatasetStatisticsService _datasetStatisticsService;
 
-        public DisplayDatasetAsDataFrameCommand(IDatasetService datasetService, IDialogService dataFrameDialogService, IDatasetStatisticsService datasetStatisticsService)
+        public DisplayDatasetAsDataFrameAndStatisticsCommand(IDatasetService datasetService, IDialogService dataFrameDialogService, IDatasetStatisticsService datasetStatisticsService)
         {
             _datasetService = datasetService;
             _dataFrameDialogService = dataFrameDialogService;

@@ -58,7 +58,7 @@ namespace ExpertSystem.WPF.ViewModels
         public ObservableCollection<NeuronLayer> NeuronCounts { get; set; } = new ObservableCollection<NeuronLayer>();
 
         public ICommand UpdateCurrentViewModelCommand { get; }
-        public ICommand DisplayDatasetAsDataFrameCommand { get; }
+        public ICommand DisplayDatasetAsDataFrameAndStatisticsCommand { get; }
         public ICommand LoadDatasetColumnNamesCommand { get; }
         public ICommand AddSampleCommand { get; }
         public ICommand RemoveIfConditionCommand { get; }
@@ -89,7 +89,7 @@ namespace ExpertSystem.WPF.ViewModels
             _userSample = userSample;
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
-            DisplayDatasetAsDataFrameCommand = new DisplayDatasetAsDataFrameCommand(datasetService, dataFrameDialogService, dataStatisticsService);
+            DisplayDatasetAsDataFrameAndStatisticsCommand = new DisplayDatasetAsDataFrameAndStatisticsCommand(datasetService, dataFrameDialogService, dataStatisticsService);
             LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
             AddSampleCommand = new AddSampleCommand(this);
             RemoveIfConditionCommand = new RemoveIfConditionCommand(this);
