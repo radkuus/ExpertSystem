@@ -9,6 +9,6 @@ namespace ExpertSystem.Domain.Services
 {
     public interface IDatasetStatisticsService
     {
-        DataTable CalculateDatasetStatistics(DataTable dataTable);
+        Task<DataTable> CalculateDatasetStatistics(DataTable dataTable);
     }
 }

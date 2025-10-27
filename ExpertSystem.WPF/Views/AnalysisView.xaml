@@ -29,7 +29,19 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="3" Grid.RowSpan="3"
+              Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+              Background="#80000000" 
+              IsHitTestVisible="True"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Panel.ZIndex="999">
 
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                <ProgressBar IsIndeterminate="True" Width="250" Height="50"/>
+                <TextBlock Text="Loading data..." VerticalAlignment="Center" FontSize="40" FontWeight="SemiBold" Foreground="White"/>
+            </StackPanel>
+        </Grid>
         <Border Grid.Row="0" 
                 Grid.Column="0" 
                 Style="{StaticResource PurpleGradientBorderStyle}">
@@ -136,12 +148,12 @@
                                 Orientation="Horizontal" 
                                 VerticalAlignment="Center" 
                                 Margin="0,5,0,5">
-                        
+
                         <TextBlock Text="Columns:" 
                                    FontSize="14" 
                                    VerticalAlignment="Center" 
                                    Margin="5,0,10,0"
-                                    Foreground="White"/>
+                                   Foreground="White"/>
                         <ListBox Width="150" Height="200" FontSize="15"
                                  ItemsSource="{Binding DatasetNumericColumnNames}"
                                  SelectionMode="Multiple"
@@ -212,7 +224,7 @@
                                     Margin="0 5 0 0" 
                                     Orientation="Horizontal" 
                                     VerticalAlignment="Center">
-                            
+
                             <TextBlock Text="Distance metrics:" 
                                        FontSize="14" 
                                        Width="105" 
@@ -262,9 +274,9 @@
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <TextBlock Text="Neurons in layer:" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0"/>
                                             <TextBox Width="50" Height="25" FontSize="15" Text="{Binding NeuronCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                            <i:Interaction.Behaviors>
-                                                <behaviors:NumericInputBehaviorNeuronCount/>
-                                            </i:Interaction.Behaviors>
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:NumericInputBehaviorNeuronCount/>
+                                                </i:Interaction.Behaviors>
                                             </TextBox>
                                         </StackPanel>
                                     </DataTemplate>
@@ -347,7 +359,7 @@
                         <StackPanel Grid.Row="1" 
                                     Orientation="Horizontal" 
                                     Margin="10">
-                            
+
                             <Button Content="Add if condition" 
                                     Height="35" 
                                     Width="Auto" 
