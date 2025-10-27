@@ -35,6 +35,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly CreateViewModel<ResultsViewModel> _resultsFactory;
         private readonly MainViewModel _mainViewModel;
         private readonly UserSample _userSample;
+        private bool _isLoading;
         private bool _isKnnChecked;
         private bool _isLogisticRegressionChecked;
         private bool _isBayesChecked;
@@ -49,7 +50,6 @@ namespace ExpertSystem.WPF.ViewModels
         private string _selectedResultColumn;
         private ObservableCollection<string> _datasetColumnNames;
         private ObservableCollection<string> _datasetNumericColumnNames;
-        private ObservableCollection<string> _datasetTextColumnNames;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         private ObservableCollection<string> _uniqueNamesFromClassifyingColumn = new ObservableCollection<string>();
         public ObservableCollection<string> Operators => IfThenOperators.Operators;
@@ -89,7 +89,7 @@ namespace ExpertSystem.WPF.ViewModels
             _userSample = userSample;
 
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
-            DisplayDatasetAsDataFrameAndStatisticsCommand = new DisplayDatasetAsDataFrameAndStatisticsCommand(datasetService, dataFrameDialogService, dataStatisticsService);
+            DisplayDatasetAsDataFrameAndStatisticsCommand = new DisplayDatasetAsDataFrameAndStatisticsCommand(datasetService, dataFrameDialogService, dataStatisticsService, this);
             LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
             AddSampleCommand = new AddSampleCommand(this);
             RemoveIfConditionCommand = new RemoveIfConditionCommand(this);
@@ -139,31 +139,31 @@ namespace ExpertSystem.WPF.ViewModels
         }
         private void SubscribeToGroup(IfThenConditionGroup group)
         {
-            group.Conditions.CollectionChanged += Conditions_CollectionChanged;
+            group.Conditions.CollectionChanged += ConditionsCollectionChanged;
 
             foreach (var condition in group.Conditions)
             {
-                condition.PropertyChanged += Condition_PropertyChanged;
+                condition.PropertyChanged += ConditionPropertyChanged;
             }
         }
 
         private void UnsubscribeFromGroup(IfThenConditionGroup group)
         {
-            group.Conditions.CollectionChanged -= Conditions_CollectionChanged;
+            group.Conditions.CollectionChanged -= ConditionsCollectionChanged;
 
             foreach (var condition in group.Conditions)
             {
-                condition.PropertyChanged -= Condition_PropertyChanged;
+                condition.PropertyChanged -= ConditionPropertyChanged;
             }
         }
 
-        private void Conditions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void ConditionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
             {
                 foreach (IfThenCondition condition in e.NewItems)
                 {
-                    condition.PropertyChanged += Condition_PropertyChanged;
+                    condition.PropertyChanged += ConditionPropertyChanged;
                 }
             }
 
@@ -171,7 +171,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 foreach (IfThenCondition condition in e.OldItems)
                 {
-                    condition.PropertyChanged -= Condition_PropertyChanged;
+                    condition.PropertyChanged -= ConditionPropertyChanged;
                 }
             }
 
@@ -179,10 +179,23 @@ namespace ExpertSystem.WPF.ViewModels
             OnPropertyChanged(nameof(CanGenerateResult));
         }
 
-        private void Condition_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void ConditionPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(nameof(CanGenerateResultIfThen));
             OnPropertyChanged(nameof(CanGenerateResult));
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                }
+            }
         }
 
         public bool IsKnnChecked
@@ -372,8 +385,9 @@ namespace ExpertSystem.WPF.ViewModels
             set
             {
                 _selectedDataset = value;
-                OnPropertyChanged(nameof(SelectedDataset));
+                OnPropertyChanged(nameof(SelectedDataset)); 
                 LoadDatasetColumnNamesCommand.Execute(_selectedDataset);
+                OnPropertyChanged(nameof(IsLoading));
                 _userSample.UserSamples.Clear();
                 SelectedColumnsForAnalysis.Clear();
             }
@@ -426,15 +440,6 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 _datasetNumericColumnNames = value;
                 OnPropertyChanged(nameof(DatasetNumericColumnNames));
-            }
-        }
-        public ObservableCollection<string> DatasetTextColumnNames
-        {
-            get => _datasetTextColumnNames;
-            set
-            {
-                _datasetTextColumnNames = value;
-                OnPropertyChanged(nameof(DatasetTextColumnNames));
             }
         }
 

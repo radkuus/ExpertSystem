@@ -105,15 +105,19 @@ namespace ExpertSystem.EntityFramework.Services
                     var filePath = Path.Combine(projectDir, "Datasets", currentUserName, fileName);
                     if (File.Exists(filePath)) 
                     {
-                        var dataTable = new DataTable();
-                        using (var reader = new StreamReader(filePath))
-                        using (var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture))
-                        using (var dr = new CsvHelper.CsvDataReader(csv))
-                        {
-                            dataTable.Load(dr);
-                        }
+                        return await Task.Run(() =>
+                            {
+                                var dataTable = new DataTable();
+                                using (var reader = new StreamReader(filePath))
+                                using (var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture))
+                                using (var dr = new CsvHelper.CsvDataReader(csv))
+                                {
+                                    dataTable.Load(dr);
+                                }
 
-                        return dataTable;
+                                return dataTable;
+                            } );
+                        
                     }
                     else
                     {
@@ -137,53 +141,31 @@ namespace ExpertSystem.EntityFramework.Services
         {
             var dataTable = await GetDatasetAsDataTable(datasetId);
 
-            bool IsNumericColumn(DataColumn column)
+            return await Task.Run(() =>
             {
-                foreach (DataRow row in column.Table.Rows)
+                bool IsNumericColumn(DataColumn column)
                 {
-                    if (row.IsNull(column)) continue;
-
-                    var valueStr = row[column].ToString();
-                    if (!double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                    foreach (DataRow row in column.Table.Rows)
                     {
-                        return false;
+                        if (row.IsNull(column)) continue;
+
+                        var valueStr = row[column].ToString();
+                        if (!double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                        {
+                            return false;
+                        }
                     }
+                    return true;
                 }
-                return true;
-            }
 
-            var numericColumns = dataTable.Columns.Cast<DataColumn>()
-                .Where(IsNumericColumn)
-                .Select(col => col.ColumnName);
+                var numericColumns = dataTable.Columns.Cast<DataColumn>()
+                    .Where(IsNumericColumn)
+                    .Select(col => col.ColumnName);
 
-            return new ObservableCollection<string>(numericColumns);
+                return new ObservableCollection<string>(numericColumns);
+            });
         }
 
-        public async Task<ObservableCollection<string>> GetDatasetTextColumnNames(int datasetId)
-        {
-            var dataTable = await GetDatasetAsDataTable(datasetId);
-
-            bool IsTextColumn(DataColumn column)
-            {
-                foreach (DataRow row in column.Table.Rows)
-                {
-                    if (row.IsNull(column)) continue;
-
-                    var valueStr = row[column].ToString();
-                    if (double.TryParse(valueStr, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            var textColumns = dataTable.Columns.Cast<DataColumn>()
-                .Where(IsTextColumn)
-                .Select(col => col.ColumnName);
-
-            return new ObservableCollection<string>(textColumns);
-        }
 
         public async Task<ObservableCollection<string>> GetUniqueNamesFromClassifyingColumn(int datasetId, string columnName)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,13 +34,23 @@ namespace ExpertSystem.WPF.Commands
         {
             if (parameter is Dataset dataset)
             {
-                var datasetColumnNames = await _datasetService.GetDatasetColumnNames(dataset.Id);
-                var datasetNumericColumnNames = await _datasetService.GetDatasetNumericColumnNames(dataset.Id);
-                var datasetTextColumnNames = await _datasetService.GetDatasetTextColumnNames(dataset.Id);
-                _analysisViewModel.DatasetColumnNames = datasetColumnNames;
-                _analysisViewModel.DatasetNumericColumnNames = datasetNumericColumnNames;
-                _analysisViewModel.DatasetTextColumnNames = datasetTextColumnNames;
+                try
+                {
+                    _analysisViewModel.IsLoading = true;
+
+                    var datasetColumnNames = await _datasetService.GetDatasetColumnNames(dataset.Id);
+                    var datasetNumericColumnNames = await _datasetService.GetDatasetNumericColumnNames(dataset.Id);
+
+                    await Task.Delay(2000);
+                    _analysisViewModel.DatasetColumnNames = datasetColumnNames;
+                    _analysisViewModel.DatasetNumericColumnNames = datasetNumericColumnNames;
+                }
+                finally
+                {
+                    _analysisViewModel.IsLoading = false;
+                }
             }
+                
         }
     }
 }
