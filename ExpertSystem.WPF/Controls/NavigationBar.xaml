@@ -41,20 +41,24 @@
             <RadioButton Grid.Column="0" Content="Home"
                          Command="{Binding UpdateCurrentViewModelCommand}"
                          CommandParameter="{x:Static navigator:ViewType.Home}"
-                         IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.Home}, Mode=TwoWay}"/>
+                         IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.Home}, Mode=TwoWay}"
+                         IsEnabled="{Binding IsNotGenerating}"/>
             <RadioButton Grid.Column="1" Content="Analysis"
                          Command="{Binding UpdateCurrentViewModelCommand}"
                          CommandParameter="{x:Static navigator:ViewType.Analysis}"
-                         IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.Analysis}, Mode=TwoWay}"/>
+                         IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.Analysis}, Mode=TwoWay}"
+                         IsEnabled="{Binding IsNotGenerating}"/>
             <RadioButton Grid.Column="2" Content="History"
-                        Command="{Binding UpdateCurrentViewModelCommand}"
-                        CommandParameter="{x:Static navigator:ViewType.History}"
-                        IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.History}, Mode=TwoWay}"/>
+                         Command="{Binding UpdateCurrentViewModelCommand}"
+                         CommandParameter="{x:Static navigator:ViewType.History}"
+                         IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.History}, Mode=TwoWay}"
+                         IsEnabled="{Binding IsNotGenerating}"/>
             <RadioButton Grid.Column="3" Content="Results"
                          Command="{Binding UpdateCurrentViewModelCommand}"
                          CommandParameter="{x:Static navigator:ViewType.Results}"
                          IsChecked="{Binding CurrentViewType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static navigator:ViewType.Results}, Mode=TwoWay}"
-                         Visibility="{Binding AreResultsGenerated, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                         Visibility="{Binding AreResultsGenerated, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         IsEnabled="{Binding IsNotGenerating}"/>
 
             <Border Grid.Column="4" Background="Transparent" 
                     MouseLeftButtonDown="DragAreaMouse"/>

@@ -11,6 +11,8 @@ public class MainViewModel : BaseViewModel
     private readonly INavigator _navigator;
     private readonly IAuthenticator _authenticator;
     private bool _areResultsGenerated;
+    private bool _isNotGenerating;
+
     public bool IsUserLoggedIn => _authenticator.IsUserLoggedIn;
     public bool IsAdminLoggedIn => _authenticator.IsAdminLoggedIn;
 
@@ -34,6 +36,7 @@ public class MainViewModel : BaseViewModel
         _authenticator = authenticator;
         _viewModelAbstractFactory = viewModelAbstractFactory;
         _areResultsGenerated = false;
+        _isNotGenerating = true;
         _navigator.StateChanged += Navigator_StateChanged;
         _authenticator.StateChanged += Authenticator_StateChanged;
 
@@ -66,5 +69,16 @@ public class MainViewModel : BaseViewModel
             _areResultsGenerated = value;
             OnPropertyChanged(nameof(AreResultsGenerated));
         }
+    }
+
+    public bool IsNotGenerating
+    {
+        get => _isNotGenerating;
+        set
+        {
+            _isNotGenerating = value;
+            OnPropertyChanged(nameof(IsNotGenerating));
+        }
+
     }
 }

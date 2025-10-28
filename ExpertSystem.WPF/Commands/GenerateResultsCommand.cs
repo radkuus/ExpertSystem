@@ -64,6 +64,7 @@ namespace ExpertSystem.WPF.Commands
             {
                 _viewModel.LoadingMessage = "Generating results";
                 _viewModel.IsLoading = true;
+                _mainViewModel.IsNotGenerating = false;
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
@@ -304,6 +305,7 @@ namespace ExpertSystem.WPF.Commands
             finally
             {
                 _viewModel.IsLoading = false;
+                _mainViewModel.IsNotGenerating = true;
             }
         }
 
