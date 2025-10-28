@@ -41,6 +41,7 @@ namespace ExpertSystem.WPF.ViewModels
         private bool _isBayesChecked;
         private bool _isNeuralNetworkChecked;
         private bool _isIfThenChecked;
+        private string _loadingMessage;
         private string _selectedNeighbours;
         private string _selectedLayers;
         private string _selectedTrainingSetPercentage;
@@ -197,6 +198,20 @@ namespace ExpertSystem.WPF.ViewModels
                 }
             }
         }
+
+        public string LoadingMessage
+        {
+            get => _loadingMessage;
+            set
+            {
+                if (_loadingMessage != value)
+                {
+                    _loadingMessage = value;
+                    OnPropertyChanged(nameof(LoadingMessage));
+                }
+            }
+        }
+
 
         public bool IsKnnChecked
         {

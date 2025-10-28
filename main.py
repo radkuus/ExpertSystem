@@ -74,9 +74,9 @@ def server_status():
 
 def prepare_dataset(training_size, data, analysis_columns, target_column):
     
-    full_columns = analysis_columns + [target_column]
+    columns = analysis_columns + [target_column]
     
-    df = pd.DataFrame(data, columns=full_columns)
+    df = pd.DataFrame(data, columns=columns)
 
     
     for col in df.columns:
@@ -87,14 +87,11 @@ def prepare_dataset(training_size, data, analysis_columns, target_column):
     X = df[analysis_columns]
     y = df[target_column]
 
-
-    if training_size == 101: # specjalny warunek dla modelu ifthen
+    if training_size == 101:
         X_test = df[analysis_columns]
         y_test = df[target_column]
-
         le = LabelEncoder()
         y_test = le.fit_transform(y_test)
-
         return X_test, y_test, le
 
     le = LabelEncoder()
@@ -108,13 +105,13 @@ def prepare_dataset(training_size, data, analysis_columns, target_column):
 def prepare_user_samples(user_samples, X_train):
     ## teraz inputem jest json, więc po prostu przekształcam go na dataframe i zostawiam kolumny dgodne z X_train.columns (wybór uzytkownika)
     ## zmieniam przecinki na kropki 
-    samples_df = pd.DataFrame(user_samples)
-    samples_df = samples_df[X_train.columns]
-    for col in samples_df.columns:
-        samples_df[col] = samples_df[col].astype(str).str.replace(",", ".")
-        samples_df[col] = pd.to_numeric(samples_df[col], errors="coerce")
+    user_samples_df = pd.DataFrame(user_samples)
+    user_samples_df = user_samples_df[X_train.columns]
+    for col in user_samples_df.columns:
+        user_samples_df[col] = user_samples_df[col].astype(str).str.replace(",", ".")
+        user_samples_df[col] = pd.to_numeric(user_samples_df[col], errors="coerce")
 
-    return samples_df
+    return user_samples_df
 
 
 

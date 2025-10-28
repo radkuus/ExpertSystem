@@ -37,9 +37,9 @@
               VerticalAlignment="Stretch"
               Panel.ZIndex="999">
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                <TextBlock Text="{Binding LoadingMessage}" VerticalAlignment="Center" FontSize="40" FontWeight="SemiBold" Foreground="White"/>
                 <ProgressBar IsIndeterminate="True" Width="250" Height="50"/>
-                <TextBlock Text="Loading data..." VerticalAlignment="Center" FontSize="40" FontWeight="SemiBold" Foreground="White"/>
             </StackPanel>
         </Grid>
         <Border Grid.Row="0" 
@@ -237,7 +237,6 @@
                                 <ComboBoxItem Content="Euclidean"/>
                                 <ComboBoxItem Content="Manhattan"/>
                                 <ComboBoxItem Content="Chebyshev"/>
-                                <ComboBoxItem Content="Minkowski "/>
                             </ComboBox>
                         </StackPanel>
                     </Grid>

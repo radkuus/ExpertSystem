@@ -10,6 +10,7 @@ using ExpertSystem.Domain.Models;
 using ExpertSystem.Domain.Services;
 using ExpertSystem.WPF.ViewModels;
 using ExpertSystem.WPF.Views;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -42,6 +43,7 @@ namespace ExpertSystem.WPF.Commands
             {
                 if (parameter is Dataset dataset)
                 {
+                    _analysisViewModel.LoadingMessage = "Loading data";
                     _analysisViewModel.IsLoading = true;
                     var dataTable = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                     if (dataTable != null)

@@ -36,6 +36,7 @@ namespace ExpertSystem.WPF.Commands
             {
                 try
                 {
+                    _analysisViewModel.LoadingMessage = "Loading data";
                     _analysisViewModel.IsLoading = true;
 
                     var datasetColumnNames = await _datasetService.GetDatasetColumnNames(dataset.Id);

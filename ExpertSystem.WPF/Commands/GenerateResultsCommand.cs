@@ -62,6 +62,8 @@ namespace ExpertSystem.WPF.Commands
 
             try
             {
+                _viewModel.LoadingMessage = "Generating results";
+                _viewModel.IsLoading = true;
                 var dataset = _viewModel.SelectedDataset;
                 var df = await _datasetService.GetDatasetAsDataTable(dataset.Id);
                 var columns = _viewModel.DatasetColumnNames;
@@ -103,10 +105,6 @@ namespace ExpertSystem.WPF.Commands
                     }
                     data.Add(rowData);
                 }
-
-
-
-                MessageBox.Show("Generating results"); // tymczasowe
 
                 // KNN
                 if (_viewModel.IsKnnChecked)
@@ -302,6 +300,10 @@ namespace ExpertSystem.WPF.Commands
             catch (Exception ex)
             {
                 MessageBox.Show($"Error: {ex.Message}");
+            }
+            finally
+            {
+                _viewModel.IsLoading = false;
             }
         }
 
