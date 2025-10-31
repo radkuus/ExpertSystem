@@ -94,17 +94,19 @@ public class ExperimentService : IExperimentService
                      ? JsonSerializer.Serialize(result.SamplesHistory)
                      : "{}"
             };
-            await _resultService.Create(modelResult);
-        }
 
-        if (decisionRules != null && decisionRules.Any())
-        {
-            foreach (var rule in decisionRules)
+            await _resultService.Create(modelResult);
+
+            if (modelType == ModelType.Own)
             {
-                rule.ExperimentID = createdExperiment.Id;
-                await _decisionRuleService.Create(rule);
+                foreach (var rule in decisionRules)
+                {
+                    rule.ConfigId = createdConfig.Id;
+                    await _decisionRuleService.Create(rule);
+                }
             }
         }
+
 
         return createdExperiment.Id;
     }

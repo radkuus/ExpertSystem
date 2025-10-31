@@ -106,9 +106,9 @@ namespace ExpertSystem.EntityFramework
                 .HasForeignKey(mc => mc.ExperimentId);
 
             modelBuilder.Entity<DecisionRule>()
-                .HasOne(dr => dr.Experiment)
-                .WithMany(e => e.DecisionRules)
-                .HasForeignKey(dr => dr.ExperimentID);
+                .HasOne(dr => dr.ModelConfiguration)
+                .WithMany(mc => mc.DecisionRules)
+                .HasForeignKey(dr => dr.ConfigId);
 
             modelBuilder.Entity<ModelResult>()
                 .HasOne(mr => mr.ModelConfiguration)

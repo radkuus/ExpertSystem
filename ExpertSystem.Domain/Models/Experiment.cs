@@ -15,6 +15,6 @@ namespace ExpertSystem.Domain.Models
         public Dataset Dataset { get; set; }
 
         public ICollection<ModelConfiguration> ModelConfigurations { get; set; }
-        public ICollection<DecisionRule> DecisionRules { get; set; }
+       
     }
 }

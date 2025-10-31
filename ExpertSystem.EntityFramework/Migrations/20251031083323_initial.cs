@@ -81,30 +81,6 @@ namespace ExpertSystem.EntityFramework.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DecisionRules",
-                columns: table => new
-                {
-                    RuleId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ExperimentID = table.Column<int>(type: "integer", nullable: false),
-                    Column = table.Column<string>(type: "text", nullable: false),
-                    Operator = table.Column<string>(type: "text", nullable: false),
-                    Threshold = table.Column<double>(type: "double precision", nullable: false),
-                    LogicOperator = table.Column<string>(type: "text", nullable: false),
-                    Result = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DecisionRules", x => x.RuleId);
-                    table.ForeignKey(
-                        name: "FK_DecisionRules_Experiments_ExperimentID",
-                        column: x => x.ExperimentID,
-                        principalTable: "Experiments",
-                        principalColumn: "ExperimentId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ModelConfigurations",
                 columns: table => new
                 {
@@ -130,6 +106,30 @@ namespace ExpertSystem.EntityFramework.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DecisionRules",
+                columns: table => new
+                {
+                    RuleId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ConfigId = table.Column<int>(type: "integer", nullable: false),
+                    Column = table.Column<string>(type: "text", nullable: false),
+                    Operator = table.Column<string>(type: "text", nullable: false),
+                    Threshold = table.Column<double>(type: "double precision", nullable: false),
+                    LogicOperator = table.Column<string>(type: "text", nullable: false),
+                    Result = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DecisionRules", x => x.RuleId);
+                    table.ForeignKey(
+                        name: "FK_DecisionRules_ModelConfigurations_ConfigId",
+                        column: x => x.ConfigId,
+                        principalTable: "ModelConfigurations",
+                        principalColumn: "ConfigId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ModelResults",
                 columns: table => new
                 {
@@ -141,7 +141,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     Precision = table.Column<int>(type: "integer", nullable: false),
                     Recall = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ConfusionMatrix = table.Column<int>(type: "jsonb", nullable: false),
+                    ConfusionMatrix = table.Column<string>(type: "jsonb", nullable: false),
                     SamplesHistory = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
@@ -161,9 +161,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DecisionRules_ExperimentID",
+                name: "IX_DecisionRules_ConfigId",
                 table: "DecisionRules",
-                column: "ExperimentID");
+                column: "ConfigId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Experiments_DatasetID",

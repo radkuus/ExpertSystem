@@ -22,13 +22,13 @@ namespace ExpertSystem.Domain.Models
     }
     public class DecisionRule : BaseObject
     {
-        public int ExperimentID { get; set; }
+        public int ConfigId { get; set; }
         public string Column { get; set; }
         public Operator Operator { get; set; }
         public double Threshold { get; set; }
         public LogicOperator LogicOperator { get; set; }
 
-        public Experiment Experiment { get; set; }
         public string Result { get; set; }
+        public ModelConfiguration ModelConfiguration { get; set; }
     }
 }

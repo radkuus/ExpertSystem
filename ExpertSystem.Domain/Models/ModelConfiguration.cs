@@ -30,6 +30,7 @@ namespace ExpertSystem.Domain.Models
 
         public Experiment Experiment { get; set; }
         public ICollection<ModelResult> ModelResults { get; set; }
+        public ICollection<DecisionRule> DecisionRules { get; set; }
 
     }
 }

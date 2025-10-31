@@ -13,6 +13,7 @@ namespace ExpertSystem.WPF.ViewModels
     public class ExperimentDetailsViewModel : BaseViewModel
     {
         public int ExperimentId { get; set; }
+        public int DecisionRuleConfigId {  get; set; }
         public string DatasetName { get; set; }
 
         private readonly GenericDataService<ModelConfiguration> _configService;
@@ -44,12 +45,19 @@ namespace ExpertSystem.WPF.ViewModels
 
             var relatedConfigs = configs.Where(c => c.ExperimentId == ExperimentId).ToList();  // np. pobieram wszystkie ustawienia dla ExperimentId = 5
 
+            
+            // przechodze przez wszystkie modele i tam, gdzie jest "Own" pobieram ConfigId w celu informacji, ktory model ma decisionrules (ifthen)
+            foreach (var modelConfig in relatedConfigs){
+                if (modelConfig.ModelType.ToString() == "Own") {
+                    DecisionRuleConfigId = modelConfig.Id;
+                }
+            }
             var relatedResults = results                                                       // zwraca wyniki, dla ktorych pokrywa się ConfigId z eksperymentami
                 .Where(r => relatedConfigs.Select(c => c.Id).Contains(r.ConfigId))             // np. ExpId = 5 dla ConfigId = 5 i 6, to zwraca results dla tych configów
                 .ToList();
 
             //tu potem zmien ExperimentId a nie ID
-            var relatedRules = rules.Where(c => c.ExperimentID == ExperimentId).ToList(); // zwraca warunki tylko dla tego eksperymenty (może być NULL jak dany eksperyment nie mial modelu Own
+            var relatedRules = rules.Where(c => c.ConfigId == DecisionRuleConfigId).ToList(); // zwraca warunki tylko dla tego konfigu 
             foreach (var r in relatedResults)
             {
                 var cfg = relatedConfigs.First(c => c.Id == r.ConfigId);

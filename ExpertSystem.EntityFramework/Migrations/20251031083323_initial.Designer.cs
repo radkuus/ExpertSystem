@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     [DbContext(typeof(ExpertSystemDbContext))]
-    [Migration("20251021195657_initial")]
+    [Migration("20251031083323_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ExperimentID")
+                    b.Property<int>("ConfigId")
                         .HasColumnType("integer");
 
                     b.Property<string>("LogicOperator")
@@ -85,7 +85,7 @@ namespace ExpertSystem.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExperimentID");
+                    b.HasIndex("ConfigId");
 
                     b.ToTable("DecisionRules");
                 });
@@ -170,7 +170,8 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<int>("ConfigId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ConfusionMatrix")
+                    b.Property<string>("ConfusionMatrix")
+                        .IsRequired()
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("CreatedAt")
@@ -238,13 +239,13 @@ namespace ExpertSystem.EntityFramework.Migrations
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.DecisionRule", b =>
                 {
-                    b.HasOne("ExpertSystem.Domain.Models.Experiment", "Experiment")
+                    b.HasOne("ExpertSystem.Domain.Models.ModelConfiguration", "ModelConfiguration")
                         .WithMany("DecisionRules")
-                        .HasForeignKey("ExperimentID")
+                        .HasForeignKey("ConfigId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Experiment");
+                    b.Navigation("ModelConfiguration");
                 });
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.Experiment", b =>
@@ -295,13 +296,13 @@ namespace ExpertSystem.EntityFramework.Migrations
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.Experiment", b =>
                 {
-                    b.Navigation("DecisionRules");
-
                     b.Navigation("ModelConfigurations");
                 });
 
             modelBuilder.Entity("ExpertSystem.Domain.Models.ModelConfiguration", b =>
                 {
+                    b.Navigation("DecisionRules");
+
                     b.Navigation("ModelResults");
                 });
 
