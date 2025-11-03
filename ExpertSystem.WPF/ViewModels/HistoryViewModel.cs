@@ -2,6 +2,7 @@
 using ExpertSystem.Domain.Services;
 using ExpertSystem.EntityFramework.Services;
 using ExpertSystem.WPF.Commands;
+using ExpertSystem.WPF.State.Authenticators;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace ExpertSystem.WPF.ViewModels
 {
     public class HistoryViewModel : BaseViewModel
     {
+        private readonly IAuthenticator _authenticator;
         private readonly GenericDataService<Experiment> _experimentService;
         private readonly GenericDataService<Dataset> _datasetService;
         private readonly GenericDataService<ModelConfiguration> _configService;
@@ -24,13 +26,15 @@ namespace ExpertSystem.WPF.ViewModels
 
         public ICommand ShowDetailsCommand { get; }
 
-        public HistoryViewModel(GenericDataService<Experiment> experimentService,
+        public HistoryViewModel(IAuthenticator authenticator,
+                                GenericDataService<Experiment> experimentService,
                                 GenericDataService<Dataset> datasetService,
                                 GenericDataService<ModelConfiguration> configService,
                                 GenericDataService<ModelResult> resultService,
                                 IDialogService dialogService,
                                 GenericDataService<DecisionRule> rulesService)
         {
+            _authenticator = authenticator;
             _experimentService = experimentService;
             _datasetService = datasetService;
             _configService = configService;
@@ -47,12 +51,11 @@ namespace ExpertSystem.WPF.ViewModels
         private async Task LoadData()
         {
             ExperimentsHistory.Clear();
-
-            var experiments = await _experimentService.GetAll();
-            var datasets = await _datasetService.GetAll();
+            var UserId = _authenticator.CurrentUser.Id;
+            var experiments = await _experimentService.GetAllByUserId(UserId);
+            var datasets = await _datasetService.GetAllByUserId(UserId);
             var configs = await _configService.GetAll();
             var results = await _resultService.GetAll();
-
             foreach (var exp in experiments)
             {
                 var dataset = datasets.FirstOrDefault(d => d.Id == exp.DatasetID);

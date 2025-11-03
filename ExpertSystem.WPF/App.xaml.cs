@@ -10,6 +10,7 @@ using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.ViewModels;
 using ExpertSystem.WPF.ViewModels.Factories;
 using Microsoft.AspNet.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
@@ -75,7 +76,10 @@ public partial class App : Application
         IServiceCollection services = new ServiceCollection();
 
         services.AddSingleton<IServerService, ServerService>();
-        services.AddSingleton<ExpertSystemDbContextFactory>();
+        //services.AddSingleton<ExpertSystemDbContextFactory>();
+        services.AddDbContextFactory<ExpertSystemDbContext>(options =>
+            options.UseNpgsql("Host=localhost;Username=postgres;Password=123;Database=ExpertSystemDB"));
+
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         //services.AddSingleton<IDataService<User>, GenericDataService<User>>();
         services.AddSingleton<IUserService, UserDataService>();
@@ -145,6 +149,7 @@ public partial class App : Application
 
         services.AddSingleton<CreateViewModel<HistoryViewModel>>(provider =>
             () => new HistoryViewModel(
+                provider.GetRequiredService<IAuthenticator>(),
                 provider.GetRequiredService<GenericDataService<Experiment>>(),
                 provider.GetRequiredService<GenericDataService<Dataset>>(),
                 provider.GetRequiredService<GenericDataService<ModelConfiguration>>(),

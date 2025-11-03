@@ -17,5 +17,7 @@ namespace ExpertSystem.Domain.Services
         Task<T> Update(int id, T entity);
 
         Task<bool> Delete(int id);
+
+        Task<IEnumerable<T>> GetAllByUserId(int userId);
     }
 }

@@ -20,10 +20,10 @@ namespace ExpertSystem.EntityFramework.Services
 
     public class DatasetService : IDatasetService
     {
-        private readonly ExpertSystemDbContextFactory _contextFactory;
+        private readonly IDbContextFactory<ExpertSystemDbContext> _contextFactory;
         private readonly IAuthenticator _authenticator;
 
-        public DatasetService(ExpertSystemDbContextFactory contextFactory, IAuthenticator authenticator)
+        public DatasetService(IDbContextFactory<ExpertSystemDbContext> contextFactory, IAuthenticator authenticator)
         {
             _contextFactory = contextFactory;
             _authenticator = authenticator;

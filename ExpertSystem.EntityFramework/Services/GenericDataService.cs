@@ -12,16 +12,16 @@ namespace ExpertSystem.EntityFramework.Services
 {
     public class GenericDataService<T> : IDataService<T> where T : BaseObject
     {
-        private readonly ExpertSystemDbContextFactory _contextFactory;
+        private readonly IDbContextFactory<ExpertSystemDbContext> _contextFactory;
 
-        public GenericDataService(ExpertSystemDbContextFactory contextFactory)
+        public GenericDataService(IDbContextFactory<ExpertSystemDbContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
 
         public async Task<T> Create(T entity)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 EntityEntry<T> entityEntry = await context.Set<T>().AddAsync(entity);
                 await context.SaveChangesAsync();
@@ -32,7 +32,7 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<bool> Delete(int id)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 T? entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
                 if (entity == null)
@@ -48,7 +48,7 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<T> Get(int id)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 T? entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
                 if (entity != null)
@@ -62,7 +62,7 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<IEnumerable<T>> GetAll()
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 IEnumerable<T> entities = await context.Set<T>().ToListAsync();
                 return entities;
@@ -78,6 +78,18 @@ namespace ExpertSystem.EntityFramework.Services
                 await context.SaveChangesAsync();
 
                 return entity;
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllByUserId(int userId)
+        {
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                var entities = await context.Set<T>()
+                    .Where(e => EF.Property<int>(e, "UserId") == userId)
+                    .ToListAsync();
+
+                return entities;
             }
         }
     }

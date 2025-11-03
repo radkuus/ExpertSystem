@@ -11,16 +11,16 @@ namespace ExpertSystem.EntityFramework.Services
 {
     public class UserDataService : GenericDataService<User>, IUserService
     {
-        private readonly ExpertSystemDbContextFactory _contextFactory;
+        private readonly IDbContextFactory<ExpertSystemDbContext> _contextFactory;
 
-        public UserDataService(ExpertSystemDbContextFactory contextFactory) : base(contextFactory)
+        public UserDataService(IDbContextFactory<ExpertSystemDbContext> contextFactory) : base(contextFactory)
         {
             _contextFactory = contextFactory;
         }
 
         public async Task<User> GetByEmail(string email)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 return await context.Users.FirstOrDefaultAsync(a => a.Email == email);
             }
@@ -28,7 +28,7 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<User> GetById(int id)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 return await context.Users.FirstOrDefaultAsync(a => a.Id == id);
             }
@@ -36,7 +36,7 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<User> GetByNickname(string nickname)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 return await context.Users.FirstOrDefaultAsync(a => a.Nickname == nickname);
             }
