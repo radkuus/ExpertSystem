@@ -82,19 +82,7 @@ namespace ExpertSystem.WPF.ViewModels
                     }
                 }
 
-                // deserializacja z JSONa outputów (SamplesHistory)
-                List<string>? outputs = null;
-                if (!string.IsNullOrEmpty(r.SamplesHistory))
-                {
-                    try
-                    {
-                        outputs = JsonSerializer.Deserialize<List<string>>(r.SamplesHistory);
-                    }
-                    catch
-                    {
-                        outputs = new List<string>();
-                    }
-                }
+                var outputs = r.SamplesHistory;
 
                 if (inputList != null && outputs != null && inputList.Count == outputs.Count)
                 {

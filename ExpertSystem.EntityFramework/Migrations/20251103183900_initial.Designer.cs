@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     [DbContext(typeof(ExpertSystemDbContext))]
-    [Migration("20251103100542_initial")]
+    [Migration("20251103183900_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -186,9 +186,8 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<int>("Recall")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SamplesHistory")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
+                    b.Property<List<string>>("SamplesHistory")
+                        .HasColumnType("text[]");
 
                     b.HasKey("Id");
 

@@ -17,7 +17,7 @@ namespace ExpertSystem.Domain.Models
         public int Recall { get; set; }
         public DateTime CreatedAt { get; set; }
         public string ConfusionMatrix { get; set; }
-        public string SamplesHistory { get; set; }
+        public List<string>? SamplesHistory { get; set; }
         public ModelConfiguration ModelConfiguration { get; set; }
     }
 }

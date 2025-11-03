@@ -87,12 +87,10 @@ public class ExperimentService : IExperimentService
                 CreatedAt = DateTime.UtcNow,
 
                 ConfusionMatrix = result.ConfusionMatrix != null
-                    ? JsonSerializer.Serialize(result.ConfusionMatrix) 
+                    ? JsonSerializer.Serialize(result.ConfusionMatrix)
                     : "{}",
 
-                SamplesHistory = result.SamplesHistory != null
-                     ? JsonSerializer.Serialize(result.SamplesHistory)
-                     : "{}"
+                SamplesHistory = result.SamplesHistory
             };
 
             await _resultService.Create(modelResult);

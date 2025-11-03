@@ -183,9 +183,8 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<int>("Recall")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SamplesHistory")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
+                    b.Property<List<string>>("SamplesHistory")
+                        .HasColumnType("text[]");
 
                     b.HasKey("Id");
 

@@ -142,7 +142,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     Recall = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ConfusionMatrix = table.Column<string>(type: "jsonb", nullable: false),
-                    SamplesHistory = table.Column<string>(type: "jsonb", nullable: false)
+                    SamplesHistory = table.Column<List<string>>(type: "text[]", nullable: true)
                 },
                 constraints: table =>
                 {

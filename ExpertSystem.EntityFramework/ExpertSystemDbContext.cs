@@ -70,7 +70,7 @@ namespace ExpertSystem.EntityFramework
 
             modelBuilder.Entity<ModelResult>()
                 .Property(mr => mr.SamplesHistory)
-                .HasColumnType("jsonb");
+                .HasColumnType("text[]");
 
             modelBuilder.Entity<ModelResult>()
                 .Property(mr => mr.ConfusionMatrix)
