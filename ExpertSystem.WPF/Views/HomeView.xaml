@@ -11,8 +11,6 @@
 
     <Grid Grid.IsSharedSizeScope="True"
           Background="{StaticResource BlueBackgroundBrush}">
-        
-
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,7 +22,7 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
+        <TextBlock Grid.Row="0" 
                    Text="{Binding Nickname, StringFormat='Hi {0}!'}" 
                    FontSize="30" 
                    FontWeight="Bold" 
@@ -33,9 +31,10 @@
                    Margin="10"
                    Foreground="White"/>
 
-        <Button Content="Logout" 
+        <Button Grid.Column="1" 
+                Margin="0, 15, 10, 10"
+                Content="Logout" 
                 Command="{Binding LogoutCommand}" 
-                Grid.Column="1" Margin="0, 15, 10, 10" 
                 HorizontalAlignment="Right" 
                 Height="Auto" 
                 Style="{StaticResource PinkBlueButton}" />
@@ -46,11 +45,60 @@
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="Auto" 
+                                   SharedSizeGroup="HeaderRow"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid Margin="10" Grid.Row="0">
+                <Grid Grid.Row="0" 
+                      Margin="10">
+
+                    <TextBlock Text="Welcome in Expert System Application" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center"
+                               Foreground="White"/>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      Margin="10">
+
+                    <TextBlock FontSize="15"
+                               TextWrapping="Wrap"
+                               Foreground="White">
+                               In this application you will be able to test different classifiers on your datasets.
+                               It offers a wide range of parameter selection options.
+                               You can also add your own samples and create your own model based on conditional if statements.
+                               <LineBreak/><LineBreak/>
+                               A brief description of how the models work:
+                               <LineBreak/>
+                               • <Run Text="KNN" FontWeight="Bold"/> - is a simple classification algorithm that assigns a class to a new data point based on the majority class among its k closest neighbors in the training set. It calculates the distance between the new point and all other points, selects the k nearest, and classifies the point according to the most frequent class among them.
+                               <LineBreak/>
+                               • <Run Text="Logistic Regression" FontWeight="Bold"/> - is a classification algorithm that predicts the probability that a data point belongs to a specific class. It calculates a linear combination of input features and applies a sigmoid function to map the result between 0 and 1. The output represents the probability of the positive class, and the final class is determined using a threshold, typically 0.5.
+                               <LineBreak/>
+                               • <Run Text="Bayes" FontWeight="Bold"/> - is a classification algorithm based on Bayes’ theorem. For each class, it calculates the mean and variance of the features, then uses the Gaussian probability density function to estimate the likelihood of a new data point belonging to each class. The class with the highest posterior probability is chosen as the prediction.
+                               <LineBreak/>
+                               • <Run Text="Neural Network" FontWeight="Bold"/> - a model inspired by the human brain, built of layers connected by nodes called neurons. Each neuron processes input data by applying weights, biases, and an activation function to produce an output. The network learns by adjusting these weights during training to minimize prediction error.
+                               <LineBreak/>
+                               • <Run Text="If=>then" FontWeight="Bold"/> - a model based on the if conditional statement with the possibility of adding several conditions connected by logical connective 'and'.
+                    </TextBlock>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" 
+                Grid.Column="1" 
+                Style="{StaticResource PurpleGradientBorderStyle}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" 
+                                   SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Margin="10" 
+                      Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -61,62 +109,31 @@
                                FontWeight="Bold" 
                                Grid.Column="0" 
                                VerticalAlignment="Center"
-                                Foreground="White"/>
-                    <Button Content="Add dataset" Command="{Binding AddDatasetCommand}" 
-                        Grid.Column="1" HorizontalAlignment="Center" 
-                        Style="{StaticResource CustomButtonStyle}" />
+                               Foreground="White"/>
+
+                    <Button Content="Add dataset" 
+                            Command="{Binding AddDatasetCommand}" 
+                            Grid.Column="1" 
+                            HorizontalAlignment="Center" 
+                            Style="{StaticResource CustomButtonStyle}" />
                 </Grid>
 
-                <ListView ItemsSource="{Binding UserDatasets}" Margin="10" Grid.Row="1">
+                <ListView ItemsSource="{Binding UserDatasets}" 
+                          Margin="10"
+                          Grid.Row="1">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
+                            <GridViewColumn Header="Name" 
+                                            DisplayMemberBinding="{Binding Name}" 
+                                            Width="auto"/>
                             <GridViewColumn Width="auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Remove" 
-                                            Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                            FontSize="12" Padding="5"
-                                            CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </Border>
-
-        <Border Grid.Row="1" 
-                Grid.Column="1" 
-                Style="{StaticResource PurpleGradientBorderStyle}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Grid Margin="10" Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Your Results" 
-                               FontSize="20" 
-                               FontWeight="Bold" 
-                               Grid.Column="0" 
-                               VerticalAlignment="Center"
-                                Foreground="White"/>
-                </Grid>
-
-                <ListView Margin="10" Grid.Row="1">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
-                            <GridViewColumn Width="auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
+                                                Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                FontSize="12" 
+                                                Padding="5"
+                                                CommandParameter="{Binding}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
