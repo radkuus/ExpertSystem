@@ -19,6 +19,7 @@ namespace ExpertSystem.EntityFramework.Services
         {
             _httpClient = new HttpClient
             {
+                Timeout = TimeSpan.FromMinutes(10),
                 BaseAddress = new Uri("http://localhost:8000/") 
             };
         }
