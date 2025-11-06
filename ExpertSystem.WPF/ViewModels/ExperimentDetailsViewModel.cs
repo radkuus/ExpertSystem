@@ -1,12 +1,21 @@
 ﻿using ExpertSystem.Domain.Models;
 using ExpertSystem.EntityFramework.Services;
 using ExpertSystem.WPF.ViewModels.Results;
+using LiveChartsCore;
+using LiveChartsCore.Defaults;
+using LiveChartsCore.Kernel.Sketches;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.CodeAnalysis;
 using Microsoft.Diagnostics.Runtime.Utilities;
 using Perfolizer;
+using SkiaSharp;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.Json;
+using System.Windows.Media;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace ExpertSystem.WPF.ViewModels
 {
@@ -60,12 +69,26 @@ namespace ExpertSystem.WPF.ViewModels
             var relatedRules = rules.Where(c => c.ConfigId == DecisionRuleConfigId).ToList(); // zwraca warunki tylko dla tego konfigu 
             foreach (var r in relatedResults)
             {
+                var matrixx = JsonSerializer.Deserialize<List<List<int>>>(r.ConfusionMatrix) ?? new();  // Deserializuje macierz pomyłek z jsona do List<List<int>>
                 var cfg = relatedConfigs.First(c => c.Id == r.ConfigId);
                 var modelVm = new ModelResultViewModel
                 {
                     Name = cfg.ModelType.ToString(),
                     ClassificationReport = GenerateClassificationReport(r, cfg, relatedRules),
-                    ConfusionMatrixText = "Empty for now"
+
+                    BarChartSeries = GenerateBarChartSeries(r),
+                    YAxesBarChartSeries = new ICartesianAxis[]
+                    {
+                        new Axis { MinLimit = 0, MaxLimit = 100, Labeler = value => $"{value}%" }
+                    },
+                    XAxesBarChartSeries = new ICartesianAxis[]
+                    {
+                        new Axis { Labels = ["F1 Score", "Precision", "Recall", "Accuracy"] }
+                    },
+
+                    ConfusionMatrixSeries = GenerateConfusionMatrixSeries(matrixx),
+                    //ConfusionMatrixYAxes = GenerateConfusionMatrixYAxes(result),
+                    //ConfusionMatrixXAxes = GenerateConfusionMatrixXAxes(result)
                 };
 
                 // deserializacja z JSONa inputów (Samples)
@@ -181,6 +204,52 @@ namespace ExpertSystem.WPF.ViewModels
             };
         }
 
+
+        private ISeries[] GenerateBarChartSeries(ModelResult result)
+        {
+            var series = new ISeries[]
+            {
+                new ColumnSeries<double>
+                {
+                    Values = [result.F1Score, result.Precision, result.Recall, result.Accuracy],
+                    Stroke = null,
+                    Fill = new SolidColorPaint(SKColors.CornflowerBlue),
+                    IgnoresBarPosition = false
+                }
+            };
+            return series;
+        }
+
+        private ISeries[] GenerateConfusionMatrixSeries(List<List<int>> matrix)
+        {
+            var series = new ISeries[]
+            {
+                new HeatSeries<WeightedPoint>
+                {
+                    HeatMap =
+                    [
+                        new SKColor(29, 185, 84).AsLvcColor(), // the smallest element is the "greenest" 
+                        SKColors.Red.AsLvcColor() // the largest element is the "warmest"
+                    ],
+                    Values = matrix
+                    .SelectMany((row, rowIndex) =>
+                        row.Select((value, colIndex) =>
+                        new WeightedPoint(rowIndex, colIndex, value)))
+                            .ToArray()
+                }
+            };
+            return series;
+        }
+
+        //private ICartesianAxis[] GenerateConfusionMatrixYAxes(ModelAnalysisResult result)
+        //{
+
+        //}
+
+        //private ICartesianAxis[] GenerateConfusionMatrixXAxes(ModelAnalysisResult result)
+        //{
+
+        //}
 
 
 
