@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="DataFrameView" Height="450" Width="800">
     <Grid>
-        <DataGrid ItemsSource="{Binding DataFrame}" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <DataGrid ItemsSource="{Binding DataFrame}"
+                  AutoGenerateColumns="True" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
