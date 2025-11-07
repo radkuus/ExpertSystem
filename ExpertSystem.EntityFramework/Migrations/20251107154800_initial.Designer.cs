@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     [DbContext(typeof(ExpertSystemDbContext))]
-    [Migration("20251107104336_initial")]
+    [Migration("20251107154800_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -124,6 +124,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<List<string>>("AnalysisColumns")
+                        .HasColumnType("text[]");
+
+                    b.Property<List<string>>("ClassLabels")
                         .HasColumnType("text[]");
 
                     b.Property<int>("ExperimentId")

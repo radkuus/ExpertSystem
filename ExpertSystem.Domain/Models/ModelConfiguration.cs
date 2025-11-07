@@ -24,6 +24,7 @@ namespace ExpertSystem.Domain.Models
         public string TargetColumn { get; set; }
         public string Hyperparameters { get; set; }
 
+        public List<string>? ClassLabels { get; set; }
         public int TrainingSize { get; set; }
         public string Samples { get; set; }
 

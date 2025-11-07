@@ -67,11 +67,12 @@ public class ExperimentService : IExperimentService
                 AnalysisColumns = analysisColumns,
                 TargetColumn = targetColumn,
                 TrainingSize = trainingSize,
+                ClassLabels = result.ClassLabels,
                 Hyperparameters = hyperparameters.ContainsKey(result.ModelName)
                 ? (hyperparameters[result.ModelName] ?? "{}")
                 : "{}",
                 Samples = samples.ContainsKey(result.ModelName)
-                ? JsonSerializer.Serialize(samples[result.ModelName])  
+                ? JsonSerializer.Serialize(samples[result.ModelName])
                 : "{}"
 
             };

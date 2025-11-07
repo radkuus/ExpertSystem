@@ -123,6 +123,9 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<List<string>>("AnalysisColumns")
                         .HasColumnType("text[]");
 
+                    b.Property<List<string>>("ClassLabels")
+                        .HasColumnType("text[]");
+
                     b.Property<int>("ExperimentId")
                         .HasColumnType("integer");
 

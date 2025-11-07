@@ -91,6 +91,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                     AnalysisColumns = table.Column<List<string>>(type: "text[]", nullable: true),
                     TargetColumn = table.Column<string>(type: "text", nullable: false),
                     Hyperparameters = table.Column<string>(type: "jsonb", nullable: false),
+                    ClassLabels = table.Column<List<string>>(type: "text[]", nullable: true),
                     TrainingSize = table.Column<int>(type: "integer", nullable: false),
                     Samples = table.Column<string>(type: "jsonb", nullable: false)
                 },

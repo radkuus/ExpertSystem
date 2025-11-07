@@ -64,6 +64,7 @@ class ModelOutput(BaseModel):
     recall: float
     accuracy: float
     confusion_matrix: List[List[int]]
+    class_labels: List[str]
     samples_history: List[str]
 
 
@@ -130,14 +131,16 @@ async def run_knn(input_data: KNNDatasetInput):
         knn = KNeighborsClassifier(n_neighbors=input_data.neighbors, metric=distance_metric)
         knn.fit(X_train, y_train)
         y_pred = knn.predict(X_test)
-
+        labels = le.classes_
+        print(labels)
         metrics = {
             "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=range(len(labels))).tolist(),
+            "class_labels": labels.tolist(),
             "samples_history": []           # domyslnie pusta lista
         }
 
@@ -148,7 +151,7 @@ async def run_knn(input_data: KNNDatasetInput):
 
             metrics["samples_history"] = [str(p) for p in prediction]
 
-
+        print(labels)
         print("KNN Response:", metrics)
 
         return ModelOutput(**metrics)
@@ -169,14 +172,15 @@ async def run_lr(input_data: LogisticRegressionInput):
         lr = LogisticRegression()
         lr.fit(X_train, y_train)
         y_pred = lr.predict(X_test)
-
+        labels = le.classes_
         metrics = {
             "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=range(len(labels))).tolist(),
+            "class_labels": labels.tolist(),
             "samples_history": []
         }
 
@@ -206,14 +210,15 @@ async def run_bayes(input_data: BayesDatasetInput):
         nb = GaussianNB()
         nb.fit(X_train, y_train)
         y_pred = nb.predict(X_test)
-
+        labels = le.classes_
         metrics = {
             "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=range(len(labels))).tolist(),
+            "class_labels": labels.tolist(),
             "samples_history": []
         }
 
@@ -265,13 +270,15 @@ async def run_NeuralNetwork(input_data: NeuralNetworkDatasetInput):
         else:
             y_pred = y_pred_prob.argmax(axis=1)
 
+        labels = le.classes_
         metrics = {
             "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=range(len(labels))).tolist(),
+            "class_labels": labels.tolist(),
             "samples_history": []
         }
 
@@ -372,19 +379,18 @@ async def run_IfThen(input_data: IfThenDatasetInput):
         if current_rule:
             rules.append(current_rule)
         
-        print(rules)
 
         y_pred = apply_rules(rules, X_test, classes)
         y_pred = le.transform(y_pred)
-        print(y_test,y_pred)
-
+        labels = le.classes_
         metrics = {
             "request_id": request_id,
             "f1": f1_score(y_test, y_pred, average='weighted'),
             "precision": precision_score(y_test, y_pred, average='weighted', zero_division=0),
             "recall": recall_score(y_test, y_pred, average='weighted', zero_division=0),
             "accuracy": accuracy_score(y_test, y_pred),
-            "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=range(len(labels))).tolist(),
+            "class_labels": labels.tolist(),
             "samples_history": []
         }
         

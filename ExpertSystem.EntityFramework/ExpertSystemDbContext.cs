@@ -68,6 +68,11 @@ namespace ExpertSystem.EntityFramework
                 .Property(mc => mc.AnalysisColumns)
                 .HasColumnType("text[]");
 
+            modelBuilder.Entity<ModelConfiguration>()
+                .Property(mc => mc.ClassLabels)
+                .HasColumnType("text[]");
+
+
             modelBuilder.Entity<ModelResult>()
                 .Property(mr => mr.SamplesHistory)
                 .HasColumnType("text[]");
