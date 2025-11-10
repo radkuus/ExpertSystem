@@ -1,4 +1,5 @@
-﻿using ExpertSystem.Domain.Models;
+﻿using BenchmarkDotNet.Configs;
+using ExpertSystem.Domain.Models;
 using ExpertSystem.EntityFramework.Services;
 using ExpertSystem.WPF.ViewModels.Results;
 using LiveChartsCore;
@@ -70,6 +71,8 @@ namespace ExpertSystem.WPF.ViewModels
             foreach (var r in relatedResults)
             {
                 var matrixx = JsonSerializer.Deserialize<List<List<int>>>(r.ConfusionMatrix) ?? new();  // Deserializuje macierz pomyłek z jsona do List<List<int>>
+                var modelConfig = await _configService.Get(r.ConfigId);
+                var outputLabels = modelConfig.ClassLabels;
                 var cfg = relatedConfigs.First(c => c.Id == r.ConfigId);
                 var modelVm = new ModelResultViewModel
                 {
@@ -87,8 +90,8 @@ namespace ExpertSystem.WPF.ViewModels
                     },
 
                     ConfusionMatrixSeries = GenerateConfusionMatrixSeries(matrixx),
-                    //ConfusionMatrixYAxes = GenerateConfusionMatrixYAxes(result),
-                    //ConfusionMatrixXAxes = GenerateConfusionMatrixXAxes(result)
+                    ConfusionMatrixYAxes = GenerateConfusionMatrixXYAxes(outputLabels),
+                    ConfusionMatrixXAxes = GenerateConfusionMatrixXYAxes(outputLabels)
                 };
 
                 // deserializacja z JSONa inputów (Samples)
@@ -241,17 +244,17 @@ namespace ExpertSystem.WPF.ViewModels
             return series;
         }
 
-        //private ICartesianAxis[] GenerateConfusionMatrixYAxes(ModelAnalysisResult result)
-        //{
-
-        //}
-
-        //private ICartesianAxis[] GenerateConfusionMatrixXAxes(ModelAnalysisResult result)
-        //{
-
-        //}
-
-
+        private ICartesianAxis[] GenerateConfusionMatrixXYAxes(List<string> classLabels)
+        {
+            var cartesianAxis = new ICartesianAxis[]
+            {
+                new Axis
+                {
+                    Labels = classLabels
+                }
+            };
+            return cartesianAxis;
+        }
 
     }
 

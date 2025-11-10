@@ -109,6 +109,8 @@
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <lvc:CartesianChart 
                                     Series="{Binding ConfusionMatrixSeries}" 
+                                    XAxes="{Binding ConfusionMatrixXAxes}"
+                                    YAxes="{Binding ConfusionMatrixYAxes}"
                                     MinHeight="10">
                                     
                                 </lvc:CartesianChart>

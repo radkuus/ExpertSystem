@@ -1,4 +1,5 @@
 ﻿using ExpertSystem.Domain.Models;
+using ExpertSystem.EntityFramework.Services;
 using ExpertSystem.WPF.State.Navigators;
 using ExpertSystem.WPF.ViewModels.Factories;
 using ExpertSystem.WPF.ViewModels.Results;
@@ -32,8 +33,10 @@ namespace ExpertSystem.WPF.ViewModels
         public void LoadResults(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples)
         {
             Models.Clear();
+            List<string> outputLabels;
             foreach (var result in results)
             {
+                outputLabels = result.ClassLabels ?? new List<string>();
                 var modelVm = new ModelResultViewModel
                 {
                     Name = result.ModelName ?? $"Model {Models.Count + 1}",
@@ -50,8 +53,8 @@ namespace ExpertSystem.WPF.ViewModels
                     },
 
                     ConfusionMatrixSeries = GenerateConfusionMatrixSeries(result),
-                    //ConfusionMatrixYAxes = GenerateConfusionMatrixYAxes(result),
-                    //ConfusionMatrixXAxes = GenerateConfusionMatrixXAxes(result)
+                    ConfusionMatrixYAxes = GenerateConfusionMatrixXYAxes(outputLabels),
+                    ConfusionMatrixXAxes = GenerateConfusionMatrixXYAxes(outputLabels)
                 };
 
                 samples.TryGetValue(result.ModelName, out var inputList);
@@ -131,15 +134,17 @@ namespace ExpertSystem.WPF.ViewModels
             return series;
         }
 
-        //private ICartesianAxis[] GenerateConfusionMatrixYAxes(ModelAnalysisResult result)
-        //{
-
-        //}
-
-        //private ICartesianAxis[] GenerateConfusionMatrixXAxes(ModelAnalysisResult result)
-        //{
-
-        //}
+        private ICartesianAxis[] GenerateConfusionMatrixXYAxes(List<string> classLabels)
+        {
+            var cartesianAxis = new ICartesianAxis[]
+            {
+                new Axis
+                {
+                    Labels = classLabels
+                }
+            };
+            return cartesianAxis;
+        }
 
     }
 
