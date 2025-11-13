@@ -8,8 +8,6 @@
         Title="DataFrameView" Height="450" Width="800">
     <Grid>
         <DataGrid ItemsSource="{Binding DataFrame}"
-                  AutoGenerateColumns="True" 
-                  HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Stretch"/>
+                  Style="{StaticResource StatisticsDataGridStyle}"/>
     </Grid>
 </Window>

@@ -5,13 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
         mc:Ignorable="d"
-        Title="DatasetStatisticsView" Height="220" Width="auto">
+        Title="DatasetStatisticsView" Height="450" Width="800">
+    
     <Grid>
         <DataGrid ItemsSource="{Binding StatisticsTable}" 
-                  AutoGenerateColumns="True" 
-                  HorizontalAlignment="Stretch" 
-                  VerticalAlignment="Stretch"
-                  CanUserAddRows="False"
-                  IsReadOnly="True"/>
+                  Style="{StaticResource StatisticsDataGridStyle}"/>
     </Grid>
 </Window>

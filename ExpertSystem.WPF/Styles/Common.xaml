@@ -28,6 +28,13 @@
         <GradientStop Color="#000000" Offset="0"/>
         <GradientStop Color="#0F2027" Offset="1"/>
     </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="BlueBackgroundBrushReversed"
+                     StartPoint="0,1" EndPoint="1,0"
+                     Opacity="0.98">
+        <GradientStop Color="#262626" Offset="0"/>
+        <GradientStop Color="#263A41" Offset="1"/>
+    </LinearGradientBrush>
 
     <!--Buttons-->
     <Style x:Key="WindowControlButton" TargetType="Button">
@@ -153,6 +160,38 @@
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <!--DataGrid-->
+
+    <Style x:Key="StatisticsDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource AquaBrush}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="10,5"/>
+    </Style>
+
+    <Style x:Key="StatisticsDataGridCellStyle" TargetType="DataGridCell">
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="StatisticsDataGridStyle" TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="True"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="Background" Value="{StaticResource BlueBackgroundBrush}"/>
+        <Setter Property="RowBackground" Value="{StaticResource BlueBackgroundBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource BlueBackgroundBrushReversed}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="GridLinesVisibility" Value="All"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource StatisticsDataGridColumnHeaderStyle}"/>
+        <Setter Property="CellStyle" Value="{StaticResource StatisticsDataGridCellStyle}"/>
     </Style>
 
 </ResourceDictionary>
