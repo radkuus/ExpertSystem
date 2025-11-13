@@ -39,6 +39,31 @@ namespace ExpertSystem.WPF.Views
         public LoginView()
         {
             InitializeComponent();
+            this.Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var window = Window.GetWindow(this);
+            if (window != null)
+            {
+                window.StateChanged += OnWindowStateChanged;
+                UpdateMaximizeIcon(window.WindowState);
+            }
+        }
+
+        private void OnWindowStateChanged(object sender, EventArgs e)
+        {
+            var window = sender as Window;
+            if (window != null)
+            {
+                UpdateMaximizeIcon(window.WindowState);
+            }
+        }
+
+        private void UpdateMaximizeIcon(WindowState state)
+        {
+            MaximizeButtonn.Content = state == WindowState.Maximized ? "❐" : "▢";
         }
 
         private void LoginButton(object sender, RoutedEventArgs e)
@@ -52,7 +77,10 @@ namespace ExpertSystem.WPF.Views
 
         private void DragAreaMouse(object sender, MouseButtonEventArgs e)
         {
-            Window.GetWindow(this)?.DragMove();
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                Window.GetWindow(this)?.DragMove();
+            }
         }
 
         private void MinimizeButton(object sender, RoutedEventArgs e)

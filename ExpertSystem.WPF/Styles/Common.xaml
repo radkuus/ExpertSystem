@@ -29,7 +29,7 @@
         <GradientStop Color="#0F2027" Offset="1"/>
     </LinearGradientBrush>
     
-    <LinearGradientBrush x:Key="BlueBackgroundBrushReversed"
+    <LinearGradientBrush x:Key="BlueBackgroundBrushPaler"
                      StartPoint="0,1" EndPoint="1,0"
                      Opacity="0.98">
         <GradientStop Color="#262626" Offset="0"/>
@@ -185,7 +185,7 @@
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="Background" Value="{StaticResource BlueBackgroundBrush}"/>
         <Setter Property="RowBackground" Value="{StaticResource BlueBackgroundBrush}"/>
-        <Setter Property="AlternatingRowBackground" Value="{StaticResource BlueBackgroundBrushReversed}"/>
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource BlueBackgroundBrushPaler}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="GridLinesVisibility" Value="All"/>
         <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>

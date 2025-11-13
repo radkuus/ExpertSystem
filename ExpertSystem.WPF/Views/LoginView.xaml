@@ -39,9 +39,12 @@
                         <Button Content="—" Width="46" Height="32" 
                         Click="MinimizeButton"
                         Style="{StaticResource WindowControlButton}"/>
-                        <Button Content="▢" Width="46" Height="32" 
-                        Click="MaximizeButton"
-                        Style="{StaticResource WindowControlButton}"/>
+                        <Button x:Name="MaximizeButtonn"
+                                Content="▢" 
+                                Width="46" 
+                                Height="32" 
+                                Click="MaximizeButton"
+                                Style="{StaticResource WindowControlButton}"/>
                         <Button Content="✕" Width="46" Height="32" 
                         Click="CloseButton"
                         Style="{StaticResource WindowControlButtonClose}"/>
