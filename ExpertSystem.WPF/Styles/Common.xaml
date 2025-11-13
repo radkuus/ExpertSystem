@@ -164,7 +164,7 @@
     
     <!--DataGrid-->
 
-    <Style x:Key="StatisticsDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+    <Style x:Key="CustomDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="Black"/>
         <Setter Property="Foreground" Value="{StaticResource AquaBrush}"/>
         <Setter Property="FontSize" Value="16"/>
@@ -173,11 +173,11 @@
         <Setter Property="Padding" Value="10,5"/>
     </Style>
 
-    <Style x:Key="StatisticsDataGridCellStyle" TargetType="DataGridCell">
+    <Style x:Key="CustomDataGridCellStyle" TargetType="DataGridCell">
         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
     </Style>
 
-    <Style x:Key="StatisticsDataGridStyle" TargetType="DataGrid">
+    <Style x:Key="CustomDataGridStyle" TargetType="DataGrid">
         <Setter Property="AutoGenerateColumns" Value="True"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -190,8 +190,8 @@
         <Setter Property="GridLinesVisibility" Value="All"/>
         <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
         <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
-        <Setter Property="ColumnHeaderStyle" Value="{StaticResource StatisticsDataGridColumnHeaderStyle}"/>
-        <Setter Property="CellStyle" Value="{StaticResource StatisticsDataGridCellStyle}"/>
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource CustomDataGridColumnHeaderStyle}"/>
+        <Setter Property="CellStyle" Value="{StaticResource CustomDataGridCellStyle}"/>
     </Style>
 
 </ResourceDictionary>

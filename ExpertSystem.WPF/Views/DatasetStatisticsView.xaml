@@ -9,6 +9,6 @@
     
     <Grid>
         <DataGrid ItemsSource="{Binding StatisticsTable}" 
-                  Style="{StaticResource StatisticsDataGridStyle}"/>
+                  Style="{StaticResource CustomDataGridStyle}"/>
     </Grid>
 </Window>
