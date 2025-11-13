@@ -36,6 +36,13 @@
         <GradientStop Color="#263A41" Offset="1"/>
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="PurpleGradientBrush"
+                 StartPoint="0,1" EndPoint="1,0"
+                 Opacity="0.98">
+        <GradientStop Color="#3A0160" Offset="0"/>
+        <GradientStop Color="#6F02B3" Offset="1"/> 
+    </LinearGradientBrush>
+
     <!--Buttons-->
     <Style x:Key="WindowControlButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>

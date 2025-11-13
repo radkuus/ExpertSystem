@@ -27,41 +27,104 @@
          Style="{StaticResource CustomButtonStyle}"/>
 
 
-        <DataGrid Grid.Row="1" 
-          VerticalAlignment="Stretch"
-          HorizontalAlignment="Stretch"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          AlternatingRowBackground="#FFF7FAFC"
-          RowBackground="White"
-          HeadersVisibility="Column"
-          ColumnHeaderHeight="34"
-          RowHeight="32"
-          GridLinesVisibility="None"
-          SelectionMode="Single"
-          SelectionUnit="FullRow"
-          Padding="6"
-          IsReadOnly="True"
-          ItemsSource="{Binding ExperimentsHistory}"
-          SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
+    <DataGrid   Grid.Row="1" 
+                Margin="5,0,5,0"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                AlternatingRowBackground="Transparent"
+                Background="Transparent"
+                Foreground="White"
+                HeadersVisibility="Column"
+                ColumnHeaderHeight="34"
+                RowHeight="32"
+                GridLinesVisibility="None"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                Padding="6"
+                IsReadOnly="True"
+                ItemsSource="{Binding ExperimentsHistory}"
+                SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="#FF818181"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FF818181"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource PurpleGradientBrush}"/>
+                            <Setter Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Background="{TemplateBinding Background}" 
+                            BorderThickness="0">
+                                    <ContentPresenter Margin="0,0,10,0"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding DateDisplay}" Width="1.5*" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Dataset" Binding="{Binding Dataset}" Width="1.5*" />
-                <DataGridTextColumn Header="Models" Binding="{Binding ModelsDisplay}" Width="2*" />
-                <DataGridTemplateColumn Header="Analyzed columns" Width="3*">
+                <DataGridTextColumn Header="Date" 
+                                    Binding="{Binding DateDisplay}" 
+                                    Width="125" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Dataset" 
+                                    Binding="{Binding Dataset}" 
+                                    Width="0.65*" />
+                <DataGridTextColumn Header="Models" 
+                                    Binding="{Binding ModelsDisplay}" 
+                                    Width="0.9*" />
+                <DataGridTemplateColumn Header="Analyzed columns" 
+                                        Width="1.15*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding AnalyzedColumns, Converter={StaticResource ListToStringConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Target column" Binding="{Binding TargetColumn}" Width="*"/>
-                <DataGridTextColumn Header="Training size (%)" Binding="{Binding TrainingSize}" Width="0.3*" />
-                <DataGridTemplateColumn Header="Samples" Width="0.3*">
+                <DataGridTextColumn Header="Target column" 
+                                    Binding="{Binding TargetColumn}" 
+                                    Width="0.45*"/>
+                <DataGridTextColumn Header="Training size" 
+                                    Binding="{Binding TrainingSize, StringFormat={}{0}%}" 
+                                    Width="0.4*" />
+                <DataGridTemplateColumn Header="Samples" 
+                                        Width="0.3*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="16" TextAlignment="Center"
+                            <TextBlock FontSize="16" 
+                                       TextAlignment="Center"
                            Text="{Binding HasSamples, Converter={StaticResource BoolToCheckMarkConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
