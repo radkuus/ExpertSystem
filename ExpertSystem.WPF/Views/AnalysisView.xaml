@@ -60,16 +60,27 @@
                                 Foreground="White"/>
                 </Grid>
 
-                <ListView ItemsSource="{Binding UserDatasets}" FontSize="15" Margin="5" Grid.Row="1" SelectedItem="{Binding SelectedDataset}">
+                <ListView ItemsSource="{Binding UserDatasets}" 
+                          FontSize="15" 
+                          Margin="5" 
+                          Grid.Row="1" 
+                          SelectedItem="{Binding SelectedDataset}"
+                          Style="{StaticResource DatasetListViewStyle}">
                     <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="auto"/>
-                            <GridViewColumn Width="auto">
+                        <GridView
+                            ColumnHeaderContainerStyle="{StaticResource DatasetGridViewColumnHeaderStyle}">
+                            
+                            <GridViewColumn Header="Name" 
+                                            DisplayMemberBinding="{Binding Name}" 
+                                            Width="auto"/>
+                            <GridViewColumn Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="View Details" 
                                                 Command="{Binding DataContext.DisplayDatasetAsDataFrameAndStatisticsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                FontSize="12" Padding="5"
+                                                FontSize="12" 
+                                                Padding="5"
+                                                Style="{StaticResource AddButtonStyle}"
                                                 CommandParameter="{Binding}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

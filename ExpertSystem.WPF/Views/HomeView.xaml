@@ -120,20 +120,26 @@
 
                 <ListView ItemsSource="{Binding UserDatasets}" 
                           Margin="10"
-                          Grid.Row="1">
+                          Grid.Row="1"
+                          Style="{StaticResource DatasetListViewStyle}">
                     <ListView.View>
-                        <GridView>
+                        <GridView 
+                            ColumnHeaderContainerStyle="{StaticResource DatasetGridViewColumnHeaderStyle}">
                             <GridViewColumn Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" 
                                             Width="auto"/>
-                            <GridViewColumn Width="auto">
+                            <GridViewColumn Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Remove" 
-                                                Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                FontSize="12" 
-                                                Padding="5"
-                                                CommandParameter="{Binding}"/>
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Button Content="Remove" 
+                                                    Command="{Binding DataContext.RemoveDatasetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                    FontSize="12" 
+                                                    Padding="5"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource RemoveButtonStyle}"
+                                                    HorizontalAlignment="Right"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
