@@ -84,7 +84,7 @@ namespace ExpertSystem.WPF.ViewModels
                     Models = models,
                     AnalyzedColumns = analyzedColumns,
                     TargetColumn = targetColumn,
-                    TrainingSize = trainingSize == 0 ? "-" : trainingSize.ToString(), // "-"dla "Own" 
+                    TrainingSize = trainingSize == 0 ? null : trainingSize.ToString(), // "-"dla "Own" 
                     HasSamples = hasSamples
                 });
             }

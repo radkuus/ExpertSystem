@@ -117,7 +117,7 @@
                                     Binding="{Binding TargetColumn}" 
                                     Width="0.45*"/>
                 <DataGridTextColumn Header="Training size" 
-                                    Binding="{Binding TrainingSize, StringFormat={}{0}%}" 
+                                    Binding="{Binding TrainingSize, StringFormat={}{0}%, TargetNullValue=''}" 
                                     Width="0.4*" />
                 <DataGridTemplateColumn Header="Samples" 
                                         Width="0.3*">

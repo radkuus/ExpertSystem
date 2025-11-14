@@ -173,7 +173,7 @@
                                  SelectionMode="Multiple"
                                  behaviors:ListBoxSelectedItemsBehavior.BindableSelectedItems="{Binding SelectedColumnsForAnalysis}"
                                  Background="Transparent"
-                                 BorderBrush="{StaticResource DarkBlueBrush}"
+                                 BorderBrush="{StaticResource PurpleGradientBrush}"
                                  BorderThickness="2">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
