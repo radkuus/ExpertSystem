@@ -90,8 +90,8 @@ namespace ExpertSystem.WPF.ViewModels
                     },
 
                     ConfusionMatrixSeries = GenerateConfusionMatrixSeries(matrixx),
-                    ConfusionMatrixYAxes = GenerateConfusionMatrixXYAxes(outputLabels),
-                    ConfusionMatrixXAxes = GenerateConfusionMatrixXYAxes(outputLabels)
+                    ConfusionMatrixXAxes = GenerateConfusionMatrixXAxes(outputLabels),
+                    ConfusionMatrixYAxes = GenerateConfusionMatrixYAxes(outputLabels)
                 };
 
                 // deserializacja z JSONa inputów (Samples)
@@ -244,12 +244,26 @@ namespace ExpertSystem.WPF.ViewModels
             return series;
         }
 
-        private ICartesianAxis[] GenerateConfusionMatrixXYAxes(List<string> classLabels)
+        private ICartesianAxis[] GenerateConfusionMatrixXAxes(List<string> classLabels)
         {
             var cartesianAxis = new ICartesianAxis[]
             {
                 new Axis
                 {
+                    Name = "Predicted Labels",
+                    Labels = classLabels
+                }
+            };
+            return cartesianAxis;
+        }
+
+        private ICartesianAxis[] GenerateConfusionMatrixYAxes(List<string> classLabels)
+        {
+            var cartesianAxis = new ICartesianAxis[]
+            {
+                new Axis
+                {
+                    Name = "True Labels",
                     Labels = classLabels
                 }
             };
