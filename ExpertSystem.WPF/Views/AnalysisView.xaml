@@ -171,7 +171,19 @@
                                  FontSize="15"
                                  ItemsSource="{Binding DatasetNumericColumnNames}"
                                  SelectionMode="Multiple"
-                                 behaviors:ListBoxSelectedItemsBehavior.BindableSelectedItems="{Binding SelectedColumnsForAnalysis}"/>
+                                 behaviors:ListBoxSelectedItemsBehavior.BindableSelectedItems="{Binding SelectedColumnsForAnalysis}"
+                                 Background="Transparent"
+                                 BorderBrush="{StaticResource DarkBlueBrush}"
+                                 BorderThickness="2">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Background" Value="Gray"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
                         <StackPanel Grid.Row="1" 
                                     Orientation="Vertical" 
                                     VerticalAlignment="Center"

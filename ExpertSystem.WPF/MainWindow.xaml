@@ -11,7 +11,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        ResizeMode="CanResizeWithGrip">
+        ResizeMode="CanResizeWithGrip"
+        Icon="/Images/ExpertSystemLogoGrey.png">
     <Border Background="White" 
             CornerRadius="0"
             BorderThickness="2">
