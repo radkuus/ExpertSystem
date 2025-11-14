@@ -24,5 +24,14 @@ namespace ExpertSystem.WPF.Views
         {
             InitializeComponent();
         }
+
+        private void SelectAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColumnsForAnalysisListBox.SelectAll();
+        }
+        private void UnselectAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            ColumnsForAnalysisListBox.UnselectAll();
+        }
     }
 }
