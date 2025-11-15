@@ -256,7 +256,8 @@
                                        Foreground="White"/>
                             <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
                                       SelectedValue="{Binding SelectedNeighbours, Mode=TwoWay}" 
-                                      SelectedValuePath="Content">
+                                      SelectedValuePath="Content"
+                                      Style="{StaticResource DarkComboBoxStyle}">
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="3"/>
                                 <ComboBoxItem Content="4"/>
@@ -275,9 +276,11 @@
                                        VerticalAlignment="Center" 
                                        Margin="0,0,10,0"  
                                        Foreground="White"/>
-                            <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
+                            <ComboBox Width="100" FontSize="15" 
+                                      IsEnabled="{Binding IsKnnChecked}" 
                                       SelectedValue="{Binding SelectedDistanceMetrics, Mode=TwoWay}" 
-                                      SelectedValuePath="Content">
+                                      SelectedValuePath="Content"
+                                      Style="{StaticResource DarkComboBoxStyle}">
                                 <ComboBoxItem Content="Euclidean"/>
                                 <ComboBoxItem Content="Manhattan"/>
                                 <ComboBoxItem Content="Chebyshev"/>
@@ -301,9 +304,11 @@
                                        VerticalAlignment="Center" 
                                        Margin="0,0,10,0"  
                                        Foreground="White"/>
-                            <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsNeuralNetworkChecked}" 
+                            <ComboBox Width="100" FontSize="15" 
+                                      IsEnabled="{Binding IsNeuralNetworkChecked}" 
                                       SelectedValue="{Binding SelectedLayers, Mode=TwoWay}" 
-                                      SelectedValuePath="Content">
+                                      SelectedValuePath="Content"
+                                      Style="{StaticResource DarkComboBoxStyle}">
                                 <ComboBoxItem Content="2"/>
                                 <ComboBoxItem Content="3"/>
                                 <ComboBoxItem Content="4"/>
@@ -316,7 +321,11 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <TextBlock Text="Neurons in layer:" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White"/>
-                                            <TextBox Width="50" Height="25" FontSize="15" Text="{Binding NeuronCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox Width="50" 
+                                                     Height="25" 
+                                                     FontSize="15" 
+                                                     Text="{Binding NeuronCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Style="{StaticResource DarkTextBoxStyle}">
                                                 <i:Interaction.Behaviors>
                                                     <behaviors:NumericInputBehaviorNeuronCount/>
                                                 </i:Interaction.Behaviors>
@@ -342,7 +351,12 @@
                                        VerticalAlignment="Center" 
                                        Margin="0,0,10,0"  
                                        Foreground="White"/>
-                            <TextBox Width="100" Height="25" FontSize="15" Text="{Binding SelectedTrainingSetPercentage,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MaxLength="4">
+                            <TextBox Width="100" 
+                                     Height="25" 
+                                     FontSize="15" 
+                                     Text="{Binding SelectedTrainingSetPercentage,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
+                                     MaxLength="4"
+                                     Style="{StaticResource DarkTextBoxStyle}">
                                 <i:Interaction.Behaviors>
                                     <behaviors:NumericInputBehaviorTrainingSetPercentage/>
                                 </i:Interaction.Behaviors>
@@ -365,9 +379,10 @@
                                        VerticalAlignment="Center" 
                                        Margin="0,0,10,0"  
                                        Foreground="White"/>
-                            <ComboBox Width="100" FontSize="15" 
+                            <ComboBox Width="150" FontSize="15" 
                                       ItemsSource="{Binding DatasetColumnNames}" 
-                                      SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"/>
+                                      SelectedItem="{Binding SelectedResultColumn, Mode=TwoWay}"
+                                      Style="{StaticResource DarkComboBoxStyle}"/>
                         </StackPanel>
                     </Grid>
 
@@ -482,18 +497,24 @@
 
                                                             <StackPanel Orientation="Horizontal" Margin="5"
                                                                         Visibility="{Binding SelectedType, Converter={StaticResource IfThenConditionTypeToVisibilityConverter}, ConverterParameter=if/and}">
-                                                                <ComboBox Width="100" Height="30" FontSize="15"
+                                                                <ComboBox Width="100" 
+                                                                          Height="30" 
+                                                                          FontSize="15"
                                                                           ItemsSource="{Binding DataContext.SelectedColumnsForAnalysis, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          SelectedItem="{Binding SelectedColumn}" />
+                                                                          SelectedItem="{Binding SelectedColumn}" 
+                                                                          Style="{StaticResource DarkComboBoxStyle}"/>
                                                                 <ComboBox Width="40" 
                                                                           Height="30" 
                                                                           FontSize="15"
                                                                           ItemsSource="{Binding DataContext.Operators, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          SelectedItem="{Binding SelectedOperator}" />
+                                                                          SelectedItem="{Binding SelectedOperator}" 
+                                                                          Style="{StaticResource DarkComboBoxStyle}"/>
                                                                 <TextBox Width="73" 
                                                                          Height="30" 
                                                                          FontSize="20" 
-                                                                          Text="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="6">
+                                                                         Text="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                                         MaxLength="6"
+                                                                         Style="{StaticResource DarkTextBoxStyle}">
                                                                     <i:Interaction.Behaviors>
                                                                         <behaviors:NumericInputBehaviorUserSample/>
                                                                     </i:Interaction.Behaviors>
@@ -502,9 +523,11 @@
 
                                                             <StackPanel Orientation="Horizontal" Margin="5"
                                                                         Visibility="{Binding SelectedType, Converter={StaticResource IfThenConditionTypeToVisibilityConverter}, ConverterParameter=then}">
-                                                                <ComboBox Width="100" Height="30" FontSize="15"
+                                                                <ComboBox Width="100" Height="30" 
+                                                                          FontSize="15"
                                                                           ItemsSource="{Binding DataContext.UniqueNamesFromClassifyingColumn, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                                          SelectedItem="{Binding SelectedClass}" />
+                                                                          SelectedItem="{Binding SelectedClass}" 
+                                                                          Style="{StaticResource DarkComboBoxStyle}"/>
                                                             </StackPanel>
                                                         </StackPanel>
                                                     </DataTemplate>
@@ -577,7 +600,9 @@
 
                                                         <TextBlock Text="{Binding ColumnName}" Grid.Column="0" Margin="0,0,5,0"/>
                                                         <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                                                 Grid.Column="1" Width="50">
+                                                                 Grid.Column="1" 
+                                                                 Width="50"
+                                                                 Style="{StaticResource DarkTextBoxStyle}">
                                                             <i:Interaction.Behaviors>
                                                                 <behaviors:NumericInputBehaviorUserSample/>
                                                             </i:Interaction.Behaviors>
