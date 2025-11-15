@@ -26,7 +26,7 @@ public class ShowDetailsCommand : ICommand
         _rulesService = rulesService;
     }
 
-    public bool CanExecute(object? parameter) => _historyVm.SelectedExperiment != null;
+    public bool CanExecute(object? parameter) => true;
 
     public async void Execute(object? parameter)
     {

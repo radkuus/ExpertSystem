@@ -182,7 +182,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="AddButtonStyle" TargetType="Button">
+    <Style x:Key="DetailsButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="#FF009900"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>

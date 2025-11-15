@@ -80,7 +80,7 @@
                                                 Command="{Binding DataContext.DisplayDatasetAsDataFrameAndStatisticsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                 FontSize="12" 
                                                 Padding="5"
-                                                Style="{StaticResource AddButtonStyle}"
+                                                Style="{StaticResource DetailsButtonStyle}"
                                                 CommandParameter="{Binding}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

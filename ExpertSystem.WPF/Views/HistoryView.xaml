@@ -15,37 +15,28 @@
     </UserControl.Resources>
 
     <Grid Background="{StaticResource BlueBackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
-
-        <Button Grid.Row="0"
-         Content="Show details"
-         Command="{Binding ShowDetailsCommand}"
-         CommandParameter="{Binding SelectedExperiment}"
-         Style="{StaticResource CustomButtonStyle}"/>
 
 
-    <DataGrid   Grid.Row="1" 
-                Margin="5,0,5,0"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                AlternatingRowBackground="Transparent"
-                Background="Transparent"
-                Foreground="White"
-                HeadersVisibility="Column"
-                ColumnHeaderHeight="34"
-                RowHeight="32"
-                GridLinesVisibility="None"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Padding="6"
-                IsReadOnly="True"
-                ItemsSource="{Binding ExperimentsHistory}"
-                SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
+
+        <DataGrid   Margin="10,0,10,0"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    AlternatingRowBackground="Transparent"
+                    Background="Transparent"
+                    Foreground="White"
+                    HeadersVisibility="Column"
+                    ColumnHeaderHeight="34"
+                    RowHeight="32"
+                    GridLinesVisibility="None"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Padding="10"
+                    IsReadOnly="True"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding ExperimentsHistory}"
+                    SelectedItem="{Binding SelectedExperiment, Mode=TwoWay}">
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
@@ -80,8 +71,8 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="DataGridCell">
                                 <Border Background="{TemplateBinding Background}" 
-                            BorderThickness="0">
-                                    <ContentPresenter Margin="0,0,10,0"/>
+                                        BorderThickness="0">
+                                    <ContentPresenter Margin="0,0,15,0"/>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -101,7 +92,7 @@
                                     Width="125" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Dataset" 
                                     Binding="{Binding Dataset}" 
-                                    Width="0.65*" />
+                                    Width="0.5*" />
                 <DataGridTextColumn Header="Models" 
                                     Binding="{Binding ModelsDisplay}" 
                                     Width="0.9*" />
@@ -115,17 +106,30 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Target column" 
                                     Binding="{Binding TargetColumn}" 
-                                    Width="0.45*"/>
+                                    Width="120"/>
                 <DataGridTextColumn Header="Training size" 
                                     Binding="{Binding TrainingSize, StringFormat={}{0}%, TargetNullValue=''}" 
-                                    Width="0.4*" />
+                                    Width="110" />
                 <DataGridTemplateColumn Header="Samples" 
-                                        Width="0.3*">
+                                        Width="65">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock FontSize="16" 
                                        TextAlignment="Center"
-                           Text="{Binding HasSamples, Converter={StaticResource BoolToCheckMarkConverter}}"/>
+                                       Text="{Binding HasSamples, Converter={StaticResource BoolToCheckMarkConverter}}"/>
+                            
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Details"
+                                    Command="{Binding DataContext.ShowDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource DetailsButtonStyle}"
+                                    Margin="5,2"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
