@@ -25,7 +25,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2.5*"/>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
@@ -187,16 +187,19 @@
                         <StackPanel Grid.Row="1" 
                                     Orientation="Vertical" 
                                     VerticalAlignment="Center"
-                                    Margin="15,5,5,5"> 
-                            
+                                    Margin="25,5,5,5">
+
                             <Button Content="Select All" 
                                     Click="SelectAllButton_Click"
-                                    Margin="0,0,0,8"/>
-                            
+                                    Width="75"
+                                    Margin="0,0,0,10"
+                                    Style="{StaticResource SelectButtonStyle}"/>
+
                             <Button Content="Unselect All" 
                                     Click="UnselectAllButton_Click"
-                                    Margin="0,8,0,0"/>
-                            
+                                    Width="75"
+                                    Margin="0,10,0,0"
+                                    Style="{StaticResource SelectButtonStyle}"/>    
                         </StackPanel>
                         
                     </StackPanel>
@@ -374,6 +377,7 @@
                             Margin="0,10,0,0" 
                             Padding="10,5" 
                             HorizontalAlignment="Center" 
+                            Style="{StaticResource CustomButtonStyle}"
                             IsEnabled="{Binding CanGenerateResult}"/>
                 </StackPanel>
             </Grid>
@@ -406,13 +410,17 @@
                                     FontSize="12" 
                                     Padding="5" 
                                     VerticalAlignment="Top" 
+                                    Margin="5,0"
+                                    Style="{StaticResource AddButtonStyle}"
                                     Command="{Binding AddIfConditionCommand}"/>
                             <Button Content="Add and condition" 
                                     Height="35" 
                                     Width="Auto" 
                                     FontSize="12" 
                                     Padding="5" 
-                                    VerticalAlignment="Top" 
+                                    VerticalAlignment="Top"
+                                    Margin="5,0"
+                                    Style="{StaticResource AddButtonStyle}"
                                     Command="{Binding AddAndConditionCommand}"/>
                             <Button Content="Remove if condition" 
                                     Height="35" 
@@ -420,6 +428,8 @@
                                     FontSize="12" 
                                     Padding="5" 
                                     VerticalAlignment="Top" 
+                                    Margin="5,0"
+                                    Style="{StaticResource RemoveButtonStyle}"
                                     Command="{Binding RemoveIfConditionCommand}"/>
                             <Button Content="Remove and condition" 
                                     Height="35" 
@@ -427,6 +437,8 @@
                                     FontSize="12" 
                                     Padding="5" 
                                     VerticalAlignment="Top" 
+                                    Margin="5,0"
+                                    Style="{StaticResource RemoveButtonStyle}"
                                     Command="{Binding RemoveAndConditionCommand}"/>
                             <Button Content="Add then" 
                                     Height="35" 
@@ -434,6 +446,8 @@
                                     FontSize="12" 
                                     Padding="5" 
                                     VerticalAlignment="Top"
+                                    Margin="5,0"
+                                    Style="{StaticResource AddButtonStyle}"
                                     Command="{Binding AddThenInConditionCommand}" 
                                     CommandParameter="{Binding SelectedDataset}"/>
                             <Button Content="Remove then" 
@@ -442,6 +456,8 @@
                                     FontSize="12" 
                                     Padding="5" 
                                     VerticalAlignment="Top" 
+                                    Margin="5,0"
+                                    Style="{StaticResource RemoveButtonStyle}"
                                     Command="{Binding RemoveThenInConditionCommand}"/>
                         </StackPanel>
 
@@ -520,9 +536,22 @@
                         </Grid>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                            <Button Content="Add" Height="35" Width="50" FontSize="12" Padding="5" 
-                                    VerticalAlignment="Top" Command="{Binding AddSampleCommand}"/>
-                            <Button Content="Remove" Height="35" Width="70" FontSize="12" Padding="5" 
+                            <Button Content="Add" 
+                                    Height="35" 
+                                    Width="50" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    VerticalAlignment="Top"
+                                    Margin="5,0"
+                                    Style="{StaticResource AddButtonStyle}"
+                                    Command="{Binding AddSampleCommand}"/>
+                            <Button Content="Remove" 
+                                    Height="35" 
+                                    Width="70" 
+                                    FontSize="12" 
+                                    Padding="5" 
+                                    Margin="5,0"
+                                    Style="{StaticResource RemoveButtonStyle}"
                                     VerticalAlignment="Top" Command="{Binding RemoveSampleCommand}"/>
                         </StackPanel>
 
