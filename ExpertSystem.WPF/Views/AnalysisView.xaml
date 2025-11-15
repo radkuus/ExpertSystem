@@ -65,10 +65,10 @@
                           Margin="5" 
                           Grid.Row="1" 
                           SelectedItem="{Binding SelectedDataset}"
-                          Style="{StaticResource DatasetListViewStyle}">
+                          Style="{StaticResource CustomListViewStyle}">
                     <ListView.View>
                         <GridView
-                            ColumnHeaderContainerStyle="{StaticResource DatasetGridViewColumnHeaderStyle}">
+                            ColumnHeaderContainerStyle="{StaticResource CustomGridViewColumnHeaderStyle}">
                             
                             <GridViewColumn Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" 

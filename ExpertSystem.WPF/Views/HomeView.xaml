@@ -121,10 +121,10 @@
                 <ListView ItemsSource="{Binding UserDatasets}" 
                           Margin="10"
                           Grid.Row="1"
-                          Style="{StaticResource DatasetListViewStyle}">
+                          Style="{StaticResource CustomListViewStyle}">
                     <ListView.View>
                         <GridView 
-                            ColumnHeaderContainerStyle="{StaticResource DatasetGridViewColumnHeaderStyle}">
+                            ColumnHeaderContainerStyle="{StaticResource CustomGridViewColumnHeaderStyle}">
                             <GridViewColumn Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" 
                                             Width="auto"/>

@@ -329,7 +329,7 @@
 
     <!--ListView-->
 
-    <Style x:Key="DatasetGridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
+    <Style x:Key="CustomGridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -364,7 +364,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="DatasetListViewStyle" TargetType="ListView">
+    <Style x:Key="CustomListViewStyle" TargetType="ListView">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource DatasetListViewItemStyle}"/>
@@ -481,7 +481,7 @@
         </Setter>
     </Style>
     
-    <!--TextBox-->
+    <!--TextBox and PasswordBox-->
 
     <Style x:Key="DarkTextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="#2D2D30"/>
@@ -506,6 +506,50 @@
                                   Focusable="false"
                                   HorizontalScrollBarVisibility="Hidden"
                                   VerticalScrollBarVisibility="Hidden"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#3E3E42"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="#007ACC"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#3E3E42"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="#007ACC"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" TargetName="border" Value="#252526"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="#3F3F46"/>
+                            <Setter Property="Foreground" Value="#656565"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DarkPasswordBoxStyle" TargetType="{x:Type PasswordBox}">
+        <Setter Property="Background" Value="#2D2D30"/>
+        <Setter Property="BorderBrush" Value="#3F3F46"/>
+        <Setter Property="Foreground" Value="#E0E0E0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CaretBrush" Value="#E0E0E0"/>
+        <Setter Property="SelectionBrush" Value="#007ACC"/>
+        <Setter Property="SelectionTextBrush" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                    <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    SnapsToDevicePixels="True"
+                    CornerRadius="3">
+                        <ScrollViewer x:Name="PART_ContentHost" 
+                              Focusable="false"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Hidden"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

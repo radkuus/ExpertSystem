@@ -77,11 +77,11 @@
                         <TextBox x:Name="userlogintb"
                                  FontSize="14"
                                  FontFamily="Tahoma"
-                                 Foreground="Black"
                                  BorderThickness="0,0,0,1"
                                  VerticalContentAlignment="Center"
                                  Padding="24,0,0,0"
-                                 Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding Nickname, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource DarkTextBoxStyle}"/>
 
                         <Image Source="/Images/UserIcon.png"
                                Width="14"
@@ -103,12 +103,12 @@
                     <Grid Height="28" Margin="0,5,0,0">
 
                         <PasswordBox x:Name="passwordpb"
-                                 FontSize="14"
-                                 FontFamily="Tahoma"
-                                 Foreground="Black"
-                                 BorderThickness="0,0,0,1"
-                                 VerticalContentAlignment="Center"
-                                 Padding="24,0,0,0"/>
+                                     FontSize="14"
+                                     FontFamily="Tahoma"
+                                     BorderThickness="0,0,0,1"
+                                     VerticalContentAlignment="Center"
+                                     Padding="24,0,0,0"
+                                     Style="{StaticResource DarkPasswordBoxStyle}"/>
 
                         <Image Source="/Images/PasswordIcon.png"
                                Width="14"
