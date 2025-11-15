@@ -8,117 +8,169 @@
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Window.Resources>
-        
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
-        <TextBlock Text="Results" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+    <Border Background="{StaticResource BlueBackgroundBrush}">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="1" ItemsSource="{Binding Models}" SelectedIndex="0">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
-                </DataTemplate>
-            </TabControl.ItemTemplate>
+            <TextBlock Text="Results" 
+                       Foreground="White"
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       Margin="0,0,0,10"/>
 
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <TabControl>
-                        <TabItem Header="Classification">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <StackPanel Margin="10">
-                                    <TextBlock Text="Classification Report"
-                                               FontWeight="Bold"
-                                               FontSize="14"
-                                               Margin="0,0,0,5"/>
+            <TabControl Grid.Row="1" 
+                        ItemsSource="{Binding Models}" 
+                        SelectedIndex="0"
+                        Background="Transparent"
+                        BorderBrush="{StaticResource PurpleGradientBrush}"
+                        ItemContainerStyle="{StaticResource CustomTabItemStyle}">
+                
+                <TabControl.ItemTemplate >
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
 
-                                    <TextBox Text="{Binding ClassificationReport}"
-                                             IsReadOnly="True"
-                                             FontFamily="Consolas"
-                                             TextWrapping="Wrap"
-                                             Margin="0,0,0,10"
-                                             MinHeight="100"/>
-
-                                    <lvc:CartesianChart 
-                                        Series="{Binding BarChartSeries}"
-                                        YAxes="{Binding YAxesBarChartSeries}"
-                                        XAxes="{Binding XAxesBarChartSeries}"
-                                        Height="300">
-                                    </lvc:CartesianChart>
-
-                                    <!--tylko, gdy HasSamples jest true-->
-                                    <StackPanel Visibility="{Binding HasSamples, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <TextBlock Text="Samples"
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <TabControl ItemContainerStyle="{StaticResource CustomTabItemStyle}"
+                                    BorderBrush="{StaticResource PurpleGradientBrush}"
+                                    Background="Transparent">
+                            <TabItem Header="Classification">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Margin="10">
+                                        <TextBlock Text="Classification Report"
                                                    FontWeight="Bold"
                                                    FontSize="14"
-                                                   Margin="0,10,0,5"/>
+                                                   Margin="0,0,0,5"
+                                                   Foreground="White"/>
 
-                                        <DataGrid ItemsSource="{Binding Samples}"
-                                                  AutoGenerateColumns="False"
-                                                  CanUserAddRows="False"
-                                                  IsReadOnly="True"
-                                                  Margin="0,0,0,10"
-                                                  MinHeight="150"
-                                                  RowHeight="NaN">
+                                        <TextBox Text="{Binding ClassificationReport}"
+                                                 Foreground="White"
+                                                 Background="Transparent"
+                                                 BorderBrush="{StaticResource PurpleGradientBrush}"
+                                                 IsReadOnly="True"
+                                                 FontFamily="Consolas"
+                                                 TextWrapping="Wrap"
+                                                 Margin="0,0,0,10"
+                                                 MinHeight="100"/>
 
-                                            <DataGrid.Columns>
-                                                <DataGridTemplateColumn Header="Sample" Width="Auto">
-                                                    <DataGridTemplateColumn.CellTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding SampleLabel}"
-                                                                       FontWeight="Bold"
-                                                                       TextWrapping="Wrap"
-                                                                       Margin="5,0,5,0"/>
-                                                        </DataTemplate>
-                                                    </DataGridTemplateColumn.CellTemplate>
-                                                </DataGridTemplateColumn>
+                                        <lvc:CartesianChart 
+                                            Series="{Binding BarChartSeries}"
+                                            YAxes="{Binding YAxesBarChartSeries}"
+                                            XAxes="{Binding XAxesBarChartSeries}"
+                                            Height="300">
+                                        </lvc:CartesianChart>
 
-                                                <DataGridTextColumn Header="Input"
-                                                                    Binding="{Binding SampleData}"
-                                                                    Width="2*">
-                                                    <DataGridTextColumn.ElementStyle>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="TextWrapping" Value="Wrap"/>
-                                                            <Setter Property="Margin" Value="5,0,5,0"/>
-                                                        </Style>
-                                                    </DataGridTextColumn.ElementStyle>
-                                                </DataGridTextColumn>
-                                                
-                                                <DataGridTextColumn Header="Output"
-                                                                    Binding="{Binding Output}"
-                                                                    Width="*">
-                                                    <DataGridTextColumn.ElementStyle>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="TextWrapping" Value="Wrap"/>
-                                                            <Setter Property="Margin" Value="5,0,5,0"/>
-                                                        </Style>
-                                                    </DataGridTextColumn.ElementStyle>
-                                                </DataGridTextColumn>
-                                            </DataGrid.Columns>
-                                        </DataGrid>
+                                        <!--tylko, gdy HasSamples jest true-->
+                                        <StackPanel Visibility="{Binding HasSamples, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="Samples"
+                                                       FontWeight="Bold"
+                                                       FontSize="14"
+                                                       Margin="0,10,0,5"/>
+
+                                            <DataGrid ItemsSource="{Binding Samples}"
+                                                      AutoGenerateColumns="False"
+                                                      CanUserAddRows="False"
+                                                      IsReadOnly="True"
+                                                      Margin="0,0,0,10"
+                                                      MinHeight="150"
+                                                      RowHeight="NaN"
+                                                      RowHeaderWidth="0"
+                                                      Background="Transparent"
+                                                      Foreground="White"
+                                                      BorderBrush="{StaticResource PurpleGradientBrush}"
+                                                      HorizontalGridLinesBrush="Transparent"
+                                                      VerticalGridLinesBrush="Transparent">
+                                                <DataGrid.Resources>
+                                                    <Style TargetType="DataGridColumnHeader">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="BorderBrush" Value="White"/>
+                                                        <Setter Property="FontSize" Value="16"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                        <Setter Property="Padding" Value="5,5,5,10"/>
+                                                    </Style>
+
+                                                    <Style TargetType="DataGridRow">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </Style>
+
+                                                    <Style TargetType="DataGridCell">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsSelected" Value="True">
+                                                                <Setter Property="Background" Value="Transparent"/>
+                                                                <Setter Property="Foreground" Value="White"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DataGrid.Resources>
+
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn Header="Sample" Width="Auto">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Text="{Binding SampleLabel}"
+                                                                           FontWeight="Bold"
+                                                                           TextWrapping="Wrap"
+                                                                           Margin="5,0,5,0"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+
+                                                    <DataGridTextColumn Header="Input"
+                                                                        Binding="{Binding SampleData}"
+                                                                        Width="2*">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                                                <Setter Property="Margin" Value="5,0,5,0"/>
+                                                            </Style>
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+
+                                                    <DataGridTextColumn Header="Output"
+                                                                        Binding="{Binding Output}"
+                                                                        Width="*">
+                                                        <DataGridTextColumn.ElementStyle>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                                                <Setter Property="Margin" Value="5,0,5,0"/>
+                                                            </Style>
+                                                        </DataGridTextColumn.ElementStyle>
+                                                    </DataGridTextColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
-                            </ScrollViewer>
-                        </TabItem>
+                                </ScrollViewer>
+                            </TabItem>
 
-                        <TabItem Header="Confusion Matrix">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <lvc:CartesianChart 
-                                    Series="{Binding ConfusionMatrixSeries}" 
-                                    XAxes="{Binding ConfusionMatrixXAxes}"
-                                    YAxes="{Binding ConfusionMatrixYAxes}"
-                                    MinHeight="10">
-                                    
-                                </lvc:CartesianChart>
-                            </ScrollViewer>
-                        </TabItem>
-                    </TabControl>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
-    </Grid>
+                            <TabItem Header="Confusion Matrix">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <lvc:CartesianChart 
+                                        Series="{Binding ConfusionMatrixSeries}" 
+                                        XAxes="{Binding ConfusionMatrixXAxes}"
+                                        YAxes="{Binding ConfusionMatrixYAxes}"
+                                        MinHeight="10">
+
+                                    </lvc:CartesianChart>
+                                </ScrollViewer>
+                            </TabItem>
+                        </TabControl>
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+        </Grid>
+    </Border>
 </Window>
