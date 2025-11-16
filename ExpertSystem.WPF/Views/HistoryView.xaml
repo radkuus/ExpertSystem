@@ -28,7 +28,7 @@
                     Foreground="White"
                     HeadersVisibility="Column"
                     ColumnHeaderHeight="34"
-                    RowHeight="32"
+                    MinRowHeight="32"
                     GridLinesVisibility="None"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
@@ -89,27 +89,52 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" 
                                     Binding="{Binding DateDisplay}" 
-                                    Width="125" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Dataset" 
-                                    Binding="{Binding Dataset}" 
-                                    Width="0.5*" />
-                <DataGridTextColumn Header="Models" 
-                                    Binding="{Binding ModelsDisplay}" 
-                                    Width="0.9*" />
+                                    Width="135" IsReadOnly="True"/>
+                
+                <DataGridTemplateColumn Header="Dataset" 
+                                        Width="0.5*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Dataset}" 
+                                       TextWrapping="Wrap"/>        
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Models" 
+                                        Width="0.9*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ModelsDisplay}" 
+                                       TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
                 <DataGridTemplateColumn Header="Analyzed columns" 
                                         Width="1.15*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding AnalyzedColumns, Converter={StaticResource ListToStringConverter}}" />
+                            <TextBlock Text="{Binding AnalyzedColumns, Converter={StaticResource ListToStringConverter}}" 
+                                       TextWrapping="Wrap"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Target column" 
-                                    Binding="{Binding TargetColumn}" 
-                                    Width="120"/>
+
+                <DataGridTemplateColumn Header="Target column" 
+                                        Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TargetColumn}" 
+                                       TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Training size" 
                                     Binding="{Binding TrainingSize, StringFormat={}{0}%, TargetNullValue=''}" 
                                     Width="110" />
+                
                 <DataGridTemplateColumn Header="Samples" 
                                         Width="65">
                     <DataGridTemplateColumn.CellTemplate>
@@ -129,7 +154,8 @@
                                     Command="{Binding DataContext.ShowDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource DetailsButtonStyle}"
-                                    Margin="5,2"/>
+                                    Margin="5,2"
+                                    Height="32"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
