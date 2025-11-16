@@ -118,11 +118,11 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     Values = [result.F1, result.Precision, result.Recall, result.Accuracy],
                     Stroke = null,
-                    Fill = new SolidColorPaint(SKColors.CornflowerBlue),
+                    Fill = new SolidColorPaint(SKColors.RoyalBlue),
                     IgnoresBarPosition = true,
                     DataLabelsSize = 14,
                     DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                    DataLabelsPosition = DataLabelsPosition.End,
+                    DataLabelsPosition = DataLabelsPosition.Middle,
                     DataLabelsFormatter = (point) => $"{point.Coordinate.PrimaryValue:P1}"
                 }
             };
