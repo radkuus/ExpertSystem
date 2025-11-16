@@ -14,6 +14,7 @@ using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 
 namespace ExpertSystem.WPF.ViewModels
 {
@@ -142,7 +143,7 @@ namespace ExpertSystem.WPF.ViewModels
                     Values = result.ConfusionMatrix
                     .SelectMany((row, rowIndex) =>
                         row.Select((value, colIndex) =>
-                        new WeightedPoint(rowIndex, colIndex, value)))
+                        new WeightedPoint(colIndex, result.ConfusionMatrix.Count - 1 - rowIndex, value)))
                             .ToArray(),
                     DataLabelsSize = 16,
                     DataLabelsPaint = new SolidColorPaint(SKColors.Black),
@@ -159,7 +160,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 new Axis
                 {
-                    Name = "True Labels",
+                    Name = "Predicted Labels",
                     Labels = classLabels,
                     NamePaint = new SolidColorPaint(SKColors.White),
                     LabelsPaint = new SolidColorPaint(SKColors.White)
@@ -174,8 +175,8 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 new Axis
                 {
-                    Name = "Predicted Labelss",
-                    Labels = classLabels,
+                    Name = "True Labelss",
+                    Labels = classLabels.AsEnumerable().Reverse().ToList(),
                     NamePaint = new SolidColorPaint(SKColors.White),
                     LabelsPaint = new SolidColorPaint(SKColors.White) 
                 }

@@ -252,8 +252,7 @@ namespace ExpertSystem.WPF.ViewModels
                     Values = matrix
                     .SelectMany((row, rowIndex) =>
                         row.Select((value, colIndex) =>
-                        new WeightedPoint(rowIndex, colIndex, value)))
-                            .ToArray(),
+                        new WeightedPoint(colIndex, matrix.Count - 1 - rowIndex, value))).ToArray(),
                     DataLabelsSize = 16,
                     DataLabelsPaint = new SolidColorPaint(SKColors.Black),
                     DataLabelsPosition = DataLabelsPosition.Middle,
@@ -269,7 +268,7 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 new Axis
                 {
-                    Name = "True Labels",
+                    Name = "Predicted Labels",
                     Labels = classLabels,
                     NamePaint = new SolidColorPaint(SKColors.White),
                     LabelsPaint = new SolidColorPaint(SKColors.White)
@@ -284,8 +283,8 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 new Axis
                 {
-                    Name = "Predicted Labels",
-                    Labels = classLabels,
+                    Name = "True Labels",
+                    Labels = classLabels.AsEnumerable().Reverse().ToList(),
                     NamePaint = new SolidColorPaint(SKColors.White),
                     LabelsPaint = new SolidColorPaint(SKColors.White)
                 }
