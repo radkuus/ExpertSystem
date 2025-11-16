@@ -6,6 +6,7 @@ using ExpertSystem.WPF.ViewModels.Results;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel.Sketches;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.Diagnostics.Runtime.Utilities;
@@ -121,14 +122,18 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     HeatMap = 
                     [
-                        new SKColor(29, 185, 84).AsLvcColor(), // the smallest element is the "greenest"
-                        SKColors.Red.AsLvcColor() // the largest element is the "warmest"
+                        SKColors.White.AsLvcColor(),
+                        SKColors.Blue.AsLvcColor()
                     ],
                     Values = result.ConfusionMatrix
                     .SelectMany((row, rowIndex) =>
                         row.Select((value, colIndex) =>
                         new WeightedPoint(rowIndex, colIndex, value)))
-                            .ToArray()
+                            .ToArray(),
+                    DataLabelsSize = 16,
+                    DataLabelsPaint = new SolidColorPaint(SKColors.Black),
+                    DataLabelsPosition = DataLabelsPosition.Middle,
+                    DataLabelsFormatter = (point) => ((WeightedPoint)point.Model!).Weight.ToString()
                 }
             };
             return series;
@@ -140,8 +145,10 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 new Axis
                 {
-                    Name = "Predicted Labels",
-                    Labels = classLabels
+                    Name = "True Labels",
+                    Labels = classLabels,
+                    NamePaint = new SolidColorPaint(SKColors.White),
+                    LabelsPaint = new SolidColorPaint(SKColors.White)
                 }
             };
             return cartesianAxis;
@@ -153,8 +160,10 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 new Axis
                 {
-                    Name = "True Labels",
-                    Labels = classLabels
+                    Name = "Predicted Labelss",
+                    Labels = classLabels,
+                    NamePaint = new SolidColorPaint(SKColors.White),
+                    LabelsPaint = new SolidColorPaint(SKColors.White) 
                 }
             };
             return cartesianAxis;
