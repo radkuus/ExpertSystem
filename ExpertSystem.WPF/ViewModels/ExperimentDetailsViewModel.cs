@@ -83,11 +83,21 @@ namespace ExpertSystem.WPF.ViewModels
                     BarChartSeries = GenerateBarChartSeries(r),
                     YAxesBarChartSeries = new ICartesianAxis[]
                     {
-                        new Axis { MinLimit = 0, MaxLimit = 100, Labeler = value => $"{value}%" }
+                        new Axis 
+                        { 
+                            MinLimit = 0, 
+                            MaxLimit = 100,
+                            Labeler = value => $"{value}%",
+                            LabelsPaint = new SolidColorPaint(SKColors.White)
+                        }
                     },
                     XAxesBarChartSeries = new ICartesianAxis[]
                     {
-                        new Axis { Labels = ["F1 Score", "Precision", "Recall", "Accuracy"] }
+                        new Axis 
+                        { 
+                            Labels = ["F1 Score", "Precision", "Recall", "Accuracy"],
+                            LabelsPaint = new SolidColorPaint(SKColors.White)
+                        }
                     },
 
                     ConfusionMatrixSeries = GenerateConfusionMatrixSeries(matrixx),
@@ -218,7 +228,11 @@ namespace ExpertSystem.WPF.ViewModels
                     Values = [result.F1Score, result.Precision, result.Recall, result.Accuracy],
                     Stroke = null,
                     Fill = new SolidColorPaint(SKColors.CornflowerBlue),
-                    IgnoresBarPosition = false
+                    IgnoresBarPosition = false,
+                    DataLabelsSize = 14,
+                    DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                    DataLabelsPosition = DataLabelsPosition.End,
+                    DataLabelsFormatter = (point) => $"{point.Coordinate.PrimaryValue/100:P1}"
                 }
             };
             return series;
