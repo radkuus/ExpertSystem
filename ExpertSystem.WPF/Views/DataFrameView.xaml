@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
         mc:Ignorable="d"
-        Title="DataFrameView" Height="450" Width="800">
+        Title="Dataset" Height="450" Width="800">
     <Grid>
         <DataGrid ItemsSource="{Binding DataFrame}"
+                  HeadersVisibility="Column"
                   Style="{StaticResource CustomDataGridStyle}"/>
     </Grid>
 </Window>
