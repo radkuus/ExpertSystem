@@ -4,23 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExpertSystem.WPF.Views"
-        xmlns:controls="clr-namespace:ExpertSystem.WPF.Controls"
         mc:Ignorable="d"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        ResizeMode="CanResizeWithGrip"
-        Title="Statistic" Height="500" Width="800">
+        Title="Statistic" Height="450" Width="800">
     
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <controls:TopBar Grid.Row="0"/>
-
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding StatisticsTable}" 
+        <DataGrid ItemsSource="{Binding StatisticsTable}" 
                   HeadersVisibility="Column"
                   Style="{StaticResource CustomDataGridStyle}"/>
     </Grid>
