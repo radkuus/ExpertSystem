@@ -141,6 +141,7 @@
                         <DataTemplate>
                             <TextBlock FontSize="16" 
                                        TextAlignment="Center"
+                                       VerticalAlignment="Center"
                                        Text="{Binding HasSamples, Converter={StaticResource BoolToCheckMarkConverter}}"/>
                             
                         </DataTemplate>
