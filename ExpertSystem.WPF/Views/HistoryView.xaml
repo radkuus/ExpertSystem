@@ -53,6 +53,7 @@
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="#FF818181"/>
@@ -67,12 +68,14 @@
                 <Style TargetType="DataGridCell">
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="DataGridCell">
                                 <Border Background="{TemplateBinding Background}" 
                                         BorderThickness="0">
-                                    <ContentPresenter Margin="0,0,15,0"/>
+                                    <ContentPresenter Margin="0,0,15,0"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -87,7 +90,7 @@
             </DataGrid.CellStyle>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" 
+                <DataGridTextColumn Header="Date"
                                     Binding="{Binding DateDisplay}" 
                                     Width="135" IsReadOnly="True"/>
                 
