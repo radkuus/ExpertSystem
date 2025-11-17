@@ -15,7 +15,7 @@ namespace ExpertSystem.EntityFramework.Migrations
         {
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:Enum:logic_operator", "and,or")
-                .Annotation("Npgsql:Enum:model_type", "knn,logistic_regression,bayes,neural_network,own")
+                .Annotation("Npgsql:Enum:model_type", "knn,logistic_regression,bayes,neural_network,if_then")
                 .Annotation("Npgsql:Enum:operator", "greater_than,equal,less_than");
 
             migrationBuilder.CreateTable(

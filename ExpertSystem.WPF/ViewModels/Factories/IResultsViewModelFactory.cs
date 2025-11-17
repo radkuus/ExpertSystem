@@ -9,7 +9,7 @@ namespace ExpertSystem.WPF.ViewModels.Factories
 {
     public interface IResultsViewModelFactory
     {
-        ResultsViewModel Create(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples);
+        ResultsViewModel Create(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples, Dictionary<string, string> hyperparameters, List<DecisionRule> decisionRules);
 
     }
 }

@@ -22,7 +22,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "logic_operator", new[] { "and", "or" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "logistic_regression", "bayes", "neural_network", "own" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "logistic_regression", "bayes", "neural_network", "if_then" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "operator", new[] { "greater_than", "equal", "less_than" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 

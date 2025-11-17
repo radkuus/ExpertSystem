@@ -59,7 +59,7 @@ namespace ExpertSystem.WPF.ViewModels
             
             // przechodze przez wszystkie modele i tam, gdzie jest "Own" pobieram ConfigId w celu informacji, ktory model ma decisionrules (ifthen)
             foreach (var modelConfig in relatedConfigs){
-                if (modelConfig.ModelType.ToString() == "Own") {
+                if (modelConfig.ModelType.ToString() == "IfThen") {
                     DecisionRuleConfigId = modelConfig.Id;
                 }
             }
@@ -152,7 +152,7 @@ namespace ExpertSystem.WPF.ViewModels
                 sb.AppendLine("");
             }
 
-            if (config.ModelType.ToString() == "Own")
+            if (config.ModelType.ToString() == "IfThen")
             {
                 sb.AppendLine(DecisionRulesView(rules));
             }

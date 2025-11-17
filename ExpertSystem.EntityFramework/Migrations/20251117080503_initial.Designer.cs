@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpertSystem.EntityFramework.Migrations
 {
     [DbContext(typeof(ExpertSystemDbContext))]
-    [Migration("20251107154800_initial")]
+    [Migration("20251117080503_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace ExpertSystem.EntityFramework.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "logic_operator", new[] { "and", "or" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "logistic_regression", "bayes", "neural_network", "own" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "model_type", new[] { "knn", "logistic_regression", "bayes", "neural_network", "if_then" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "operator", new[] { "greater_than", "equal", "less_than" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 

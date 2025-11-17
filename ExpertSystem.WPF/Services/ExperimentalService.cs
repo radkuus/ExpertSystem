@@ -56,7 +56,7 @@ public class ExperimentService : IExperimentService
                 "LogisticRegression" => ModelType.LogisticRegression,
                 "Bayes" => ModelType.Bayes,
                 "NeuralNetwork" => ModelType.NeuralNetwork,
-                "Own" => ModelType.Own,
+                "IfThen" => ModelType.IfThen,
                 _ => throw new ArgumentException($"Unknown model name: {result.ModelName}")
             };
 
@@ -96,7 +96,7 @@ public class ExperimentService : IExperimentService
 
             await _resultService.Create(modelResult);
 
-            if (modelType == ModelType.Own)
+            if (modelType == ModelType.IfThen)
             {
                 foreach (var rule in decisionRules)
                 {
