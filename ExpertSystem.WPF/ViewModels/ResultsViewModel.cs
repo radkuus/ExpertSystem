@@ -79,23 +79,21 @@ namespace ExpertSystem.WPF.ViewModels
 
                 if (inputList != null)
                 {
-                    if (inputList != null)
-                    {
-                        for (int i = 0; i < inputList.Count; i++)
-                        {
-                            var inputPairs = inputList[i].Select(kvp => $"{kvp.Key} = {kvp.Value}");
-                            string sampleLabel = $"Sample {i + 1}:";
-                            string sampleData = string.Join(", ", inputPairs);
-                            string output = i < outputs.Count ? outputs[i] : "—";
 
-                            modelVm.Samples.Add(new SampleResult
-                            {
-                                SampleLabel = sampleLabel,
-                                SampleData = sampleData,
-                                Output = output
-                            });
+                    for (int i = 0; i < inputList.Count; i++)
+                    {
+                        var inputPairs = inputList[i].Select(kvp => $"{kvp.Key} = {kvp.Value}");
+                        string sampleLabel = $"Sample {i + 1}:";
+                        string sampleData = string.Join(", ", inputPairs);
+                        string output = outputs[i];
+
+                        modelVm.Samples.Add(new SampleResult
+                        {
+                            SampleLabel = sampleLabel,
+                            SampleData = sampleData,
+                            Output = output
+                        });
                         }
-                    }
 
                 }
 
@@ -157,12 +155,12 @@ namespace ExpertSystem.WPF.ViewModels
                         }
                     }
 
-                    sb.AppendLine($" than {current.Result}");
+                    sb.AppendLine($" then {current.Result}");
                 }
                 else // jesli "OR"
                 {
                     var rule = rules[i];
-                    sb.AppendLine($"If {rule.Column} {ConvertOperator(rule.Operator)} {rule.Threshold} than {rule.Result}");
+                    sb.AppendLine($"If {rule.Column} {ConvertOperator(rule.Operator)} {rule.Threshold} then {rule.Result}");
                     i++;
                 }
             }
