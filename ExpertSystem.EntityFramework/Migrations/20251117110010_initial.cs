@@ -137,10 +137,10 @@ namespace ExpertSystem.EntityFramework.Migrations
                     ResultId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ConfigId = table.Column<int>(type: "integer", nullable: false),
-                    Accuracy = table.Column<int>(type: "integer", nullable: false),
-                    F1Score = table.Column<int>(type: "integer", nullable: false),
-                    Precision = table.Column<int>(type: "integer", nullable: false),
-                    Recall = table.Column<int>(type: "integer", nullable: false),
+                    Accuracy = table.Column<double>(type: "double precision", nullable: false),
+                    F1Score = table.Column<double>(type: "double precision", nullable: false),
+                    Precision = table.Column<double>(type: "double precision", nullable: false),
+                    Recall = table.Column<double>(type: "double precision", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ConfusionMatrix = table.Column<string>(type: "jsonb", nullable: false),
                     SamplesHistory = table.Column<List<string>>(type: "text[]", nullable: true)

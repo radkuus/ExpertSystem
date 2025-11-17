@@ -81,10 +81,10 @@ public class ExperimentService : IExperimentService
             var modelResult = new ModelResult
             {
                 ConfigId = createdConfig.Id,
-                Accuracy = (int)(result.Accuracy * 100),
-                F1Score = (int)(result.F1 * 100),
-                Precision = (int)(result.Precision * 100),
-                Recall = (int)(result.Recall * 100),
+                Accuracy = Math.Round(result.Accuracy *100, 2),
+                F1Score = Math.Round(result.F1 * 100, 2),
+                Precision = Math.Round(result.Precision * 100, 2),
+                Recall = Math.Round(result.Recall * 100, 2),
                 CreatedAt = DateTime.UtcNow,
 
                 ConfusionMatrix = result.ConfusionMatrix != null

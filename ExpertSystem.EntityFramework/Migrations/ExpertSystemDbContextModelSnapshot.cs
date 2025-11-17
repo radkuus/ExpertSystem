@@ -164,8 +164,8 @@ namespace ExpertSystem.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Accuracy")
-                        .HasColumnType("integer");
+                    b.Property<double>("Accuracy")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("ConfigId")
                         .HasColumnType("integer");
@@ -177,14 +177,14 @@ namespace ExpertSystem.EntityFramework.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("F1Score")
-                        .HasColumnType("integer");
+                    b.Property<double>("F1Score")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("Precision")
-                        .HasColumnType("integer");
+                    b.Property<double>("Precision")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("Recall")
-                        .HasColumnType("integer");
+                    b.Property<double>("Recall")
+                        .HasColumnType("double precision");
 
                     b.Property<List<string>>("SamplesHistory")
                         .HasColumnType("text[]");
