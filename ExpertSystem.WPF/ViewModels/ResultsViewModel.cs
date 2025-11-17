@@ -85,7 +85,7 @@ namespace ExpertSystem.WPF.ViewModels
                         var inputPairs = inputList[i].Select(kvp => $"{kvp.Key} = {kvp.Value}");
                         string sampleLabel = $"Sample {i + 1}:";
                         string sampleData = string.Join(", ", inputPairs);
-                        string output = i < outputs.Count ? outputs[i] : "—";
+                        string output = outputs[i];
 
                         modelVm.Samples.Add(new SampleResult
                         {
