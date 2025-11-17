@@ -268,12 +268,12 @@ namespace ExpertSystem.WPF.Commands
                     };
 
                     var response = await _apiService.PostAsync<ModelAnalysisResult>("/ifthen", request);
-                    response.ModelName = "Own";
+                    response.ModelName = "IfThen";
                     results.Add(response);
-                    hyperparameters["Own"] = null;
+                    hyperparameters["IfThen"] = null;
 
                     if (user_samples != null)
-                        samples["Own"] = user_samples;
+                        samples["IfThen"] = user_samples;
                 }
 
 
@@ -292,7 +292,7 @@ namespace ExpertSystem.WPF.Commands
                 );
 
                 var resultsVm = _resultsFactory();
-                resultsVm.LoadResults(results, samples);
+                resultsVm.LoadResults(results, samples, hyperparameters, decisionRules);
 
                 _navigator.CurrentViewModel = resultsVm;
                 _navigator.CurrentViewType = ViewType.Results;

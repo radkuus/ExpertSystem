@@ -16,10 +16,10 @@ namespace ExpertSystem.WPF.ViewModels.Factories
             _vmFactory = vmFactory;
         }
 
-        public ResultsViewModel Create(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples)
+        public ResultsViewModel Create(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples, Dictionary<string, string> hyperparameters, List<DecisionRule> decisionRules)
         {
             var vm = _vmFactory();
-            vm.LoadResults(results, samples);
+            vm.LoadResults(results, samples, hyperparameters, decisionRules);
             return vm;
         }
     }

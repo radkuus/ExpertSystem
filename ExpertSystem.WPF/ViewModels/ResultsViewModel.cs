@@ -32,17 +32,20 @@ namespace ExpertSystem.WPF.ViewModels
             Models = new ObservableCollection<ModelResultViewModel>();
         }
 
-        public void LoadResults(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples)
+        public void LoadResults(List<ModelAnalysisResult> results, Dictionary<string, List<Dictionary<string, string>>> samples, Dictionary<string, string> hyperparameters, List<DecisionRule> decisionRules)
         {
             Models.Clear();
             List<string> outputLabels;
             foreach (var result in results)
             {
                 outputLabels = result.ClassLabels ?? new List<string>();
+
+                hyperparameters.TryGetValue(result.ModelName, out var hyperparamsForModel);
+
                 var modelVm = new ModelResultViewModel
                 {
                     Name = result.ModelName ?? $"Model {Models.Count + 1}",
-                    ClassificationReport = GenerateClassificationReport(result),
+                    ClassificationReport = GenerateClassificationReport(result, hyperparamsForModel, decisionRules),
 
                     BarChartSeries = GenerateBarChartSeries(result),
                     YAxesBarChartSeries = new ICartesianAxis[]
@@ -100,15 +103,82 @@ namespace ExpertSystem.WPF.ViewModels
         }
     }
 
-        private string GenerateClassificationReport(ModelAnalysisResult result)
+        private string GenerateClassificationReport(ModelAnalysisResult result, string hyperparameters, List<DecisionRule> decisionRules)
         {
             var sb = new StringBuilder();
+            if (hyperparameters != null && hyperparameters != "{}")
+            {
+                string dictContent = string.Join(", ", hyperparameters);
+                sb.AppendLine($"For hyperparameters: {dictContent}");
+                sb.AppendLine("");
+            }
+            if (result.ModelName == "IfThen")
+            {
+                sb.AppendLine(DecisionRulesView(decisionRules));
+            }
+           
+
+
             sb.AppendLine($"F1 Score: {result.F1:F2}");
             sb.AppendLine($"Precision: {result.Precision:F2}");
             sb.AppendLine($"Recall: {result.Recall:F2}");
             sb.AppendLine($"Accuracy: {result.Accuracy:F2}");
             return sb.ToString();
         }
+
+        private string DecisionRulesView(List<DecisionRule> rules)
+        {
+            var sb = new StringBuilder();
+
+            int i = 0;
+            while (i < rules.Count)
+            {
+                var current = rules[i];
+
+                if (current.LogicOperator == LogicOperator.And)
+                {
+                    sb.Append("If ");
+
+                    while (i < rules.Count)
+                    {
+                        var rule = rules[i];
+                        sb.Append($"{rule.Column} {ConvertOperator(rule.Operator)} {rule.Threshold}");
+                        i++;
+
+                        if (i < rules.Count &&
+                           (rules[i].LogicOperator == LogicOperator.And || rules[i - 1].LogicOperator == LogicOperator.And)) // jeśli nastepny warunek (kolejny wiersz w bazie) ma AND
+                        {
+                            sb.Append(" AND ");
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    sb.AppendLine($" than {current.Result}");
+                }
+                else // jesli "OR"
+                {
+                    var rule = rules[i];
+                    sb.AppendLine($"If {rule.Column} {ConvertOperator(rule.Operator)} {rule.Threshold} than {rule.Result}");
+                    i++;
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private string ConvertOperator(Operator op)
+        {
+            return op switch
+            {
+                Operator.GreaterThan => ">",
+                Operator.Equal => "=",
+                Operator.LessThan => "<",
+            };
+        }
+
 
         private ISeries[] GenerateBarChartSeries(ModelAnalysisResult result)
         {

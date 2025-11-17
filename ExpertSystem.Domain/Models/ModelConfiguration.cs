@@ -12,7 +12,7 @@ namespace ExpertSystem.Domain.Models
         LogisticRegression,
         Bayes,
         NeuralNetwork,
-        Own
+        IfThen
     }
     public class ModelConfiguration : BaseObject
     {
