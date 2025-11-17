@@ -227,7 +227,7 @@ namespace ExpertSystem.WPF.ViewModels
                 {
                     Values = [result.F1Score, result.Precision, result.Recall, result.Accuracy],
                     Stroke = null,
-                    Fill = new SolidColorPaint(SKColors.RoyalBlue  ),
+                    Fill = new SolidColorPaint(SKColors.RoyalBlue),
                     IgnoresBarPosition = false,
                     DataLabelsSize = 14,
                     DataLabelsPaint = new SolidColorPaint(SKColors.White),

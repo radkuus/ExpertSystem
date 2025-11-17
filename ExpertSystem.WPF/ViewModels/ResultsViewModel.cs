@@ -9,6 +9,7 @@ using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.WPF;
 using Microsoft.Diagnostics.Runtime.Utilities;
 using SkiaSharp;
 using System.Collections.ObjectModel;
@@ -189,7 +190,7 @@ namespace ExpertSystem.WPF.ViewModels
                     Values = [result.F1, result.Precision, result.Recall, result.Accuracy],
                     Stroke = null,
                     Fill = new SolidColorPaint(SKColors.RoyalBlue),
-                    IgnoresBarPosition = true,
+                    IgnoresBarPosition = false,
                     DataLabelsSize = 14,
                     DataLabelsPaint = new SolidColorPaint(SKColors.White),
                     DataLabelsPosition = DataLabelsPosition.Middle,

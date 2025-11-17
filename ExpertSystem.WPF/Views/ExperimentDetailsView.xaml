@@ -64,6 +64,7 @@
                                             Series="{Binding BarChartSeries}"
                                             YAxes="{Binding YAxesBarChartSeries}"
                                             XAxes="{Binding XAxesBarChartSeries}"
+                                            TooltipPosition="Hidden"
                                             Height="300">
                                         </lvc:CartesianChart>
 
