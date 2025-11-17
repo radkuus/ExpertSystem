@@ -29,7 +29,8 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="3" Grid.RowSpan="3"
+        <Grid Grid.ColumnSpan="3" 
+              Grid.RowSpan="3"
               Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
               Background="#80000000" 
               IsHitTestVisible="True"
@@ -37,9 +38,18 @@
               VerticalAlignment="Stretch"
               Panel.ZIndex="999">
 
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
-                <TextBlock Text="{Binding LoadingMessage}" VerticalAlignment="Center" FontSize="40" FontWeight="SemiBold" Foreground="White"/>
-                <ProgressBar IsIndeterminate="True" Width="250" Height="50"/>
+            <StackPanel Orientation="Vertical" 
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Center" 
+                        Margin="10">
+                <TextBlock Text="{Binding LoadingMessage}" 
+                           VerticalAlignment="Center" 
+                           FontSize="40" 
+                           FontWeight="SemiBold"
+                           Foreground="White"/>
+                <ProgressBar IsIndeterminate="True" 
+                             Width="250" 
+                             Height="50"/>
             </StackPanel>
         </Grid>
         <Border Grid.Row="0" 
@@ -47,7 +57,8 @@
                 Style="{StaticResource PurpleGradientBorderStyle}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="Auto" 
+                                   SharedSizeGroup="HeaderRow"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -57,7 +68,7 @@
                                FontWeight="Bold" 
                                Grid.Column="0" 
                                VerticalAlignment="Center"
-                                Foreground="White"/>
+                               Foreground="White"/>
                 </Grid>
 
                 <ListView ItemsSource="{Binding UserDatasets}" 
@@ -97,7 +108,8 @@
                 Visibility="{Binding SelectedDataset, Converter={StaticResource NullToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="Auto" 
+                                   SharedSizeGroup="HeaderRow"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -119,10 +131,12 @@
                            FontSize="17"
                            Foreground="White"/>
 
-                <StackPanel Grid.Row="2" Margin="5,10,0,0">
+                <StackPanel Grid.Row="2" 
+                            Margin="5,10,0,0">
                     <StackPanel.Resources>
                         <Style TargetType="CheckBox">
-                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontSize" 
+                                    Value="14"/>
                         </Style>
                     </StackPanel.Resources>
 
@@ -177,10 +191,14 @@
                                  BorderThickness="2">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
-                                    <Setter Property="Background" Value="Gray"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                    <Setter Property="Padding" Value="5"/>
-                                    <Setter Property="Margin" Value="2"/>
+                                    <Setter Property="Background" 
+                                            Value="Gray"/>
+                                    <Setter Property="Foreground" 
+                                            Value="White"/>
+                                    <Setter Property="Padding" 
+                                            Value="5"/>
+                                    <Setter Property="Margin" 
+                                            Value="2"/>
                                 </Style>
                             </ListBox.ItemContainerStyle>
                         </ListBox>
@@ -214,7 +232,8 @@
                 Visibility="{Binding IsAnyModelAndColumnForAnalysisChecked, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" SharedSizeGroup="HeaderRow"/>
+                    <RowDefinition Height="Auto" 
+                                   SharedSizeGroup="HeaderRow"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -228,13 +247,16 @@
                                Foreground="White"/>
                 </Grid>
 
-                <StackPanel Grid.Row="1" Margin="5">
+                <StackPanel Grid.Row="1" 
+                            Margin="5">
                     <StackPanel.Resources>
                         <Style TargetType="CheckBox">
-                            <Setter Property="FontSize" Value="15"/>
+                            <Setter Property="FontSize" 
+                                    Value="15"/>
                         </Style>
                         <Style TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="17"/>
+                            <Setter Property="FontSize" 
+                                    Value="17"/>
                         </Style>
                     </StackPanel.Resources>
 
@@ -248,13 +270,18 @@
                                    Text="KNN" 
                                    Margin="0,0,0,5"  
                                    Foreground="White"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center">
                             <TextBlock Text="Neighbours:" 
-                                       FontSize="14" Width="105" 
+                                       FontSize="14" 
+                                       Width="105" 
                                        VerticalAlignment="Center" 
                                        Margin="0,0,10,0"  
                                        Foreground="White"/>
-                            <ComboBox Width="100" FontSize="15" IsEnabled="{Binding IsKnnChecked}" 
+                            <ComboBox Width="100"
+                                      FontSize="15" 
+                                      IsEnabled="{Binding IsKnnChecked}" 
                                       SelectedValue="{Binding SelectedNeighbours, Mode=TwoWay}" 
                                       SelectedValuePath="Content"
                                       Style="{StaticResource DarkComboBoxStyle}">
@@ -298,7 +325,10 @@
                                    Text="Neural Network" 
                                    Margin="0,10,0,0"  
                                    Foreground="White"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
+                        <StackPanel Grid.Row="1" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center" 
+                                    Margin="0,5,0,5">
                             <TextBlock Text="Layers:" 
                                        FontSize="14" 
                                        VerticalAlignment="Center" 
@@ -315,12 +345,21 @@
                                 <ComboBoxItem Content="5"/>
                             </ComboBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
-                            <ItemsControl Grid.Row="2" ItemsSource="{Binding NeuronCounts}">
+                        <StackPanel Grid.Row="2" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center"
+                                    Margin="0,5,0,5">
+                            <ItemsControl Grid.Row="2" 
+                                          ItemsSource="{Binding NeuronCounts}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                            <TextBlock Text="Neurons in layer:" FontSize="14" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White"/>
+                                        <StackPanel Orientation="Horizontal" 
+                                                    Margin="0,5,0,0">
+                                            <TextBlock Text="Neurons in layer:" 
+                                                       FontSize="14" 
+                                                       VerticalAlignment="Center" 
+                                                       Margin="0,0,5,0" 
+                                                       Foreground="White"/>
                                             <TextBox Width="50" 
                                                      Height="25" 
                                                      FontSize="15" 
@@ -373,7 +412,10 @@
                                    Text="Result column" 
                                    Margin="0,10,0,0"  
                                    Foreground="White"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5,0,5">
+                        <StackPanel Grid.Row="1" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center" 
+                                    Margin="0,5,0,5">
                             <TextBlock Text="Column:" 
                                        FontSize="14" 
                                        VerticalAlignment="Center" 
@@ -398,7 +440,9 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+        <Grid Grid.Row="1"
+              Grid.Column="0" 
+              Grid.ColumnSpan="3">
             <StackPanel>
                 <Border Style="{StaticResource PurpleGradientBorderStyle}"
                         Visibility="{Binding IsIfThenAndResultColumnChecked, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -410,9 +454,14 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
-                        <Grid Margin="5" Grid.Row="0">
-                            <TextBlock Text="Create your own conditions" FontSize="20" FontWeight="Bold" 
-                                       Grid.Column="0" VerticalAlignment="Center" Foreground="White"/>
+                        <Grid Margin="5" 
+                              Grid.Row="0">
+                            <TextBlock Text="Create your own conditions" 
+                                       FontSize="20"
+                                       FontWeight="Bold" 
+                                       Grid.Column="0" 
+                                       VerticalAlignment="Center" 
+                                       Foreground="White"/>
                         </Grid>
 
                         <StackPanel Grid.Row="1" 
@@ -476,7 +525,9 @@
                                     Command="{Binding RemoveThenInConditionCommand}"/>
                         </StackPanel>
 
-                        <ScrollViewer Grid.Row="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ScrollViewer Grid.Row="3" 
+                                      HorizontalScrollBarVisibility="Auto" 
+                                      VerticalScrollBarVisibility="Disabled">
                             <ItemsControl ItemsSource="{Binding IfThenConditions}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -551,8 +602,11 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
-                        <Grid Margin="5" Grid.Row="0">
-                            <TextBlock Text="Create your own samples" FontSize="20" FontWeight="Bold" 
+                        <Grid Margin="5"
+                              Grid.Row="0">
+                            <TextBlock Text="Create your own samples" 
+                                       FontSize="20"
+                                       FontWeight="Bold" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        Foreground="White"/>
@@ -588,7 +642,8 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                                    <StackPanel Margin="10" 
+                                                Grid.IsSharedSizeScope="True">
                                         <ItemsControl ItemsSource="{Binding}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
@@ -598,7 +653,9 @@
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock Text="{Binding ColumnName}" Grid.Column="0" Margin="0,0,5,0"/>
+                                                        <TextBlock Text="{Binding ColumnName}"
+                                                                   Grid.Column="0" 
+                                                                   Margin="0,0,5,0"/>
                                                         <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                                                  Grid.Column="1" 
                                                                  Width="50"
