@@ -156,10 +156,10 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 sb.AppendLine(DecisionRulesView(rules));
             }
-            sb.AppendLine($"F1 Score: {result.F1Score}" + "%");
-            sb.AppendLine($"Precision: {result.Precision}" + "%");
-            sb.AppendLine($"Recall: {result.Recall}" + "%");
-            sb.AppendLine($"Accuracy: {result.Accuracy}" + "%");
+            sb.AppendLine($"F1 Score: {result.F1Score :0.00}%");
+            sb.AppendLine($"Precision: {result.Precision :0.00}%");
+            sb.AppendLine($"Recall: {result.Recall :0.00}%");
+            sb.AppendLine($"Accuracy: {result.Accuracy :0.00}%");
             return sb.ToString();
         }
 
@@ -232,7 +232,7 @@ namespace ExpertSystem.WPF.ViewModels
                     DataLabelsSize = 14,
                     DataLabelsPaint = new SolidColorPaint(SKColors.White),
                     DataLabelsPosition = DataLabelsPosition.Middle,
-                    DataLabelsFormatter = (point) => $"{point.Coordinate.PrimaryValue/100:P1}"
+                    DataLabelsFormatter = (point) => $"{point.Coordinate.PrimaryValue/100:P2}"
                 }
             };
             return series;
