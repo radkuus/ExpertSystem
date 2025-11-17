@@ -46,7 +46,7 @@ namespace ExpertSystem.WPF.Commands
                 return false;
             }
 
-            return lastSample.All(entry => !string.IsNullOrWhiteSpace(entry.Value));
+            return lastSample.All(entry => !string.IsNullOrWhiteSpace(entry.Value) && !entry.Value.EndsWith("-") && !entry.Value.EndsWith(","));
         }
 
         public void Execute(object? parameter)

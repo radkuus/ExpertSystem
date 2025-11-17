@@ -523,19 +523,26 @@ namespace ExpertSystem.WPF.ViewModels
         public bool CanGenerateResult => (IsAnyModelWithoutIfThenChecked && IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples && CanGenerateResultIfThen) || 
                                          (!IsAnyModelWithoutIfThenChecked && IsIfThenChecked && !string.IsNullOrWhiteSpace(SelectedResultColumn) && CanGenerateResultIfThen && CanGenerateResultUserSamples) || 
                                          (IsAnyModelWithoutIfThenChecked && !IsIfThenChecked && AreDetailsChecked && CanGenerateResultUserSamples);
-        public bool CanGenerateResultUserSamples => _userSample.UserSamples.Count == 0 || _userSample.UserSamples.All(sample => sample.All(entry => !string.IsNullOrWhiteSpace(entry.Value)));
+        public bool CanGenerateResultUserSamples => _userSample.UserSamples.Count == 0 || 
+                                                    _userSample.UserSamples.All(sample => sample.All(entry => !string.IsNullOrWhiteSpace(entry.Value) && 
+                                                    !entry.Value.EndsWith("-") && 
+                                                    !entry.Value.EndsWith(",")));
         public bool CanGenerateResultIfThen => IfThenConditions.Count() != 0 &&
                     IfThenConditions.All(group => group.Conditions.Any((condition => condition.SelectedType == "then"))) &&
                     IfThenConditions.All(group => group.Conditions.All(condition => (condition.SelectedType == "If" &&
                     !string.IsNullOrWhiteSpace(condition.SelectedColumn) &&
                     !string.IsNullOrWhiteSpace(condition.SelectedOperator) &&
-                    !string.IsNullOrWhiteSpace(condition.SelectedValue) ||
+                    !string.IsNullOrWhiteSpace(condition.SelectedValue) &&
+                    !condition.SelectedValue.EndsWith(",") &&
+                    !condition.SelectedValue.EndsWith("-") ||
                     (condition.SelectedType == "then" &&
                     !string.IsNullOrWhiteSpace(condition.SelectedClass) ||
                     (condition.SelectedType == "and" &&
                     !string.IsNullOrWhiteSpace(condition.SelectedColumn) &&
                     !string.IsNullOrWhiteSpace(condition.SelectedOperator) &&
-                    !string.IsNullOrWhiteSpace(condition.SelectedValue))))));
+                    !string.IsNullOrWhiteSpace(condition.SelectedValue) &&
+                    !condition.SelectedValue.EndsWith(",") &&
+                    !condition.SelectedValue.EndsWith("-"))))));
 
         public UserSample UserSample => _userSample;
 
