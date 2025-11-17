@@ -11,10 +11,10 @@ namespace ExpertSystem.Domain.Models
     public class ModelResult : BaseObject
     {
         public int ConfigId { get; set; }
-        public int Accuracy { get; set; }
-        public int F1Score { get; set; }
-        public int Precision { get; set; }
-        public int Recall { get; set; }
+        public double Accuracy { get; set; }
+        public double F1Score { get; set; }
+        public double Precision { get; set; }
+        public double Recall { get; set; }
         public DateTime CreatedAt { get; set; }
         public string ConfusionMatrix { get; set; }
         public List<string>? SamplesHistory { get; set; }

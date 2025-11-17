@@ -119,10 +119,10 @@ namespace ExpertSystem.WPF.ViewModels
            
 
 
-            sb.AppendLine($"F1 Score: {result.F1:F2}");
-            sb.AppendLine($"Precision: {result.Precision:F2}");
-            sb.AppendLine($"Recall: {result.Recall:F2}");
-            sb.AppendLine($"Accuracy: {result.Accuracy:F2}");
+            sb.AppendLine($"F1 Score: {result.F1*100:0.00}" + "%");
+            sb.AppendLine($"Precision: {result.Precision*100:0.00}" + "%");
+            sb.AppendLine($"Recall: {result.Recall*100:0.00}" + "%");
+            sb.AppendLine($"Accuracy: {result.Accuracy*100:0.00}" + "%");
             return sb.ToString();
         }
 
