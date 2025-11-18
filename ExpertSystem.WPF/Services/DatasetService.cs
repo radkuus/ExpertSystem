@@ -101,14 +101,14 @@ namespace ExpertSystem.EntityFramework.Services
                 var baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 var projectDir = Directory.GetParent(baseDir).Parent.Parent.Parent.Parent.FullName;
                 var currentUserName = _authenticator.CurrentUser.Nickname;
-                var fileName = dataset.Name;
-                var filePath = Path.Combine(projectDir, "Datasets", currentUserName, fileName);
-                if (File.Exists(filePath)) 
+                var datasetName = dataset.Name;
+                var datasetPath = Path.Combine(projectDir, "Datasets", currentUserName, datasetName);
+                if (File.Exists(datasetPath)) 
                 {
                     return await Task.Run(() =>
                         {
                             var dataTable = new DataTable();
-                            using (var reader = new StreamReader(filePath))
+                            using (var reader = new StreamReader(datasetPath))
                             using (var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture))
                             using (var dr = new CsvHelper.CsvDataReader(csv))
                             {
@@ -121,7 +121,7 @@ namespace ExpertSystem.EntityFramework.Services
                 }
                 else
                 {
-                    throw new FileNotFoundException("CSV file not found.", filePath);
+                    throw new FileNotFoundException("CSV file not found.", datasetPath);
                 }
             }
             else
