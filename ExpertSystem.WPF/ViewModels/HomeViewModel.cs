@@ -66,7 +66,7 @@ namespace ExpertSystem.WPF.ViewModels
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             AddDatasetCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
             DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(authenticator, datasetService, datasetStore);
-            RemoveDatasetCommand = new RemoveDatasetCommand(this, null, authenticator, datasetService);
+            RemoveDatasetCommand = new RemoveDatasetCommand(this, authenticator, datasetService);
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
 
             _authenticator.StateChanged += () => CommandManager.InvalidateRequerySuggested();

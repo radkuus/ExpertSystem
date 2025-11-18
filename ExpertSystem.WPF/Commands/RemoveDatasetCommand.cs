@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
@@ -18,15 +17,13 @@ namespace ExpertSystem.WPF.Commands
     {
         private readonly IAuthenticator _authenticator;
         private readonly IDatasetService _datasetService;
-        private readonly HomeViewModel _homeViewModel;
-        private readonly AdminDatasetViewModel _adminDatasetViewModel;
+        private readonly HomeViewModel _viewModel;
 
-        public RemoveDatasetCommand(HomeViewModel homeViewModel, AdminDatasetViewModel adminDatasetViewModel, IAuthenticator authenticator, IDatasetService datasetService)
+        public RemoveDatasetCommand(HomeViewModel viewModel, IAuthenticator authenticator, IDatasetService datasetService)
         {
             _authenticator = authenticator;
             _datasetService = datasetService;
-            _homeViewModel = homeViewModel;
-            _adminDatasetViewModel = adminDatasetViewModel;
+            _viewModel = viewModel;
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -40,29 +37,8 @@ namespace ExpertSystem.WPF.Commands
         {
             if (parameter is Dataset dataset)
             {
-                
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
-                if (_authenticator.IsUserLoggedIn) 
-                {
-                    string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
-                    string datasetFilePath = Path.Combine(datasetsFolderDirectory, dataset.Name);
-
-                    await _datasetService.RemoveDataset(dataset.Id);
-                    _homeViewModel.UserDatasets.Remove(dataset);
-                    File.Delete(datasetFilePath);
-                }
-                else if (_authenticator.IsAdminLoggedIn)
-                {
-                    string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _adminDatasetViewModel.SelectedDataset.User.Nickname);
-                    string datasetFilePath = Path.Combine(datasetsFolderDirectory, dataset.Name);
-
-                    await _datasetService.RemoveDataset(dataset.Id);
-                    _adminDatasetViewModel.Datasets.Remove(dataset);
-                    File.Delete(datasetFilePath);
-                }
-
-                
+                await _datasetService.RemoveDataset(dataset.Id);
+                _viewModel.UserDatasets.Remove(dataset);
             }
         }
     }
