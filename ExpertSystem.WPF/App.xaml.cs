@@ -180,7 +180,7 @@ public partial class App : Application
                 services.GetRequiredService<CreateViewModel<LoginViewModel>>());
         });
 
-        services.AddSingleton<AdminDatasetViewModel>();
+        services.AddTransient<AdminDatasetViewModel>();
         services.AddSingleton<CreateViewModel<AdminDatasetViewModel>>(provider =>
             () => provider.GetRequiredService<AdminDatasetViewModel>()
         );
