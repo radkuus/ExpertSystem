@@ -17,18 +17,16 @@ namespace ExpertSystem.WPF.Commands
 {
     public class AddDatasetCommand : ICommand
     {
-        private readonly HomeViewModel _homeViewModel;
-        private readonly AdminDatasetViewModel _adminDatasetViewModel;
+        private readonly HomeViewModel _viewModel;
         private readonly IFileDialogService _fileDialogService;
         private readonly IDatasetService _datasetService;
         private readonly IAuthenticator _authenticator;
 
         public event EventHandler? CanExecuteChanged;
 
-        public AddDatasetCommand(HomeViewModel homeViewModel, AdminDatasetViewModel adminDatasetViewModel, IFileDialogService fileDialogService, IDatasetService datasetService, IAuthenticator authenticator)
+        public AddDatasetCommand(HomeViewModel viewModel, IFileDialogService fileDialogService, IDatasetService datasetService, IAuthenticator authenticator)
         {
-            _homeViewModel = homeViewModel;
-            _adminDatasetViewModel = adminDatasetViewModel;
+            _viewModel = viewModel;
             _fileDialogService = fileDialogService;
             _datasetService = datasetService;
             _authenticator = authenticator;
@@ -42,6 +40,11 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
+            if (!_authenticator.IsUserLoggedIn)
+            {
+                return;
+            }
+
             string filePath = _fileDialogService.OpenFileDialog(
                 "CSV files (*.csv)|*.csv|All files (*.*)|*.*");
 
@@ -50,23 +53,11 @@ namespace ExpertSystem.WPF.Commands
                 return;
             }
 
+            _viewModel.SelectedFilePath = filePath;
+            string fileName = Path.GetFileName(filePath);
 
-            string fileName;
-            var datasetUser = null as Domain.Models.User;
-            if (_authenticator.IsUserLoggedIn)
-            {
-                datasetUser = _authenticator.CurrentUser;
-                _homeViewModel.SelectedFilePath = filePath;
-                fileName = Path.GetFileName(filePath);
-            }
-            else
-            {
-                datasetUser = parameter as Domain.Models.User;
-                _adminDatasetViewModel.SelectedFilePath = filePath;
-                fileName = Path.GetFileName(filePath);
-            }
-
-            if (datasetUser == null || datasetUser.Id <= 0 || datasetUser.IsAdmin)
+            var currentUser = _authenticator.CurrentUser;
+            if (currentUser == null || currentUser.Id <= 0)
             {
                 return;
             }
@@ -89,18 +80,11 @@ namespace ExpertSystem.WPF.Commands
                 var dataset = new Dataset
                 {
                     Name = fileName,
-                    UserId = datasetUser.Id
+                    UserId = currentUser.Id
                 };
 
                 await _datasetService.AddDataset(dataset);
-                if (_homeViewModel!= null)
-                {
-                    _homeViewModel.DisplayUserDatasetsCommand.Execute(null);
-                }
-                if (_adminDatasetViewModel != null)
-                {
-                    _adminDatasetViewModel.DisplayAllDatasetsCommand.Execute(null);
-                }
+                _viewModel.DisplayUserDatasetsCommand.Execute(null);
             }
             catch (Exception ex)
             {

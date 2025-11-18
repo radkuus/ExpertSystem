@@ -47,7 +47,6 @@ namespace ExpertSystem.WPF.ViewModels
             DisplayAllDatasetsCommand = new DisplayAllDatasetsCommand(this, datasetService);
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             RemoveDatasetCommand = new RemoveDatasetCommand(null, this, authenticator, datasetService);
-            AddDatasetCommand = new AddDatasetCommand(null, this, fileDialogService, datasetService, authenticator);
 
 
 
