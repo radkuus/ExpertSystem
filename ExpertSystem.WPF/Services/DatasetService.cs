@@ -95,41 +95,38 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<DataTable> GetDatasetAsDataTable(int datasetId)
         {
-            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            var dataset = await GetDatasetById(datasetId);
+            if (dataset != null)
             {
-                var dataset = await GetDatasetById(datasetId);
-                if (dataset != null)
+                var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                var projectDir = Directory.GetParent(baseDir).Parent.Parent.Parent.Parent.FullName;
+                var currentUserName = _authenticator.CurrentUser.Nickname;
+                var fileName = dataset.Name;
+                var filePath = Path.Combine(projectDir, "Datasets", currentUserName, fileName);
+                if (File.Exists(filePath)) 
                 {
-                    var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                    var projectDir = Directory.GetParent(baseDir).Parent.Parent.Parent.Parent.FullName;
-                    var currentUserName = _authenticator.CurrentUser.Nickname;
-                    var fileName = dataset.Name;
-                    var filePath = Path.Combine(projectDir, "Datasets", currentUserName, fileName);
-                    if (File.Exists(filePath)) 
-                    {
-                        return await Task.Run(() =>
+                    return await Task.Run(() =>
+                        {
+                            var dataTable = new DataTable();
+                            using (var reader = new StreamReader(filePath))
+                            using (var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture))
+                            using (var dr = new CsvHelper.CsvDataReader(csv))
                             {
-                                var dataTable = new DataTable();
-                                using (var reader = new StreamReader(filePath))
-                                using (var csv = new CsvHelper.CsvReader(reader, CultureInfo.InvariantCulture))
-                                using (var dr = new CsvHelper.CsvDataReader(csv))
-                                {
-                                    dataTable.Load(dr);
-                                }
+                                dataTable.Load(dr);
+                            }
 
-                                return dataTable;
-                            } );
+                            return dataTable;
+                        } );
                         
-                    }
-                    else
-                    {
-                        throw new FileNotFoundException("CSV file not found.", filePath);
-                    }
                 }
                 else
                 {
-                    throw new FileNotFoundException("Dataset not found.");
+                    throw new FileNotFoundException("CSV file not found.", filePath);
                 }
+            }
+            else
+            {
+                throw new FileNotFoundException("Dataset not found.");
             }
         }
 
