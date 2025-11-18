@@ -156,10 +156,10 @@ namespace ExpertSystem.WPF.ViewModels
             {
                 sb.AppendLine(DecisionRulesView(rules));
             }
-            sb.AppendLine($"F1 Score: {result.F1Score :0.00}%");
-            sb.AppendLine($"Precision: {result.Precision :0.00}%");
-            sb.AppendLine($"Recall: {result.Recall :0.00}%");
-            sb.AppendLine($"Accuracy: {result.Accuracy :0.00}%");
+            sb.AppendLine($"F1 Score: {result.F1Score :0.##}%");
+            sb.AppendLine($"Precision: {result.Precision :0.##}%");
+            sb.AppendLine($"Recall: {result.Recall :0.##}%");
+            sb.AppendLine($"Accuracy: {result.Accuracy :0.##}%");
             return sb.ToString();
         }
 
