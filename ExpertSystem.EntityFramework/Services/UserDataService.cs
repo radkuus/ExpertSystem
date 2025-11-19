@@ -22,7 +22,7 @@ namespace ExpertSystem.EntityFramework.Services
         {
             await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                return await context.Users.FirstOrDefaultAsync(a => a.Email == email.ToLower());
+                return await context.Users.FirstOrDefaultAsync(a => a.Email == email);
             }
         }
 
@@ -38,7 +38,7 @@ namespace ExpertSystem.EntityFramework.Services
         {
             await using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                return await context.Users.FirstOrDefaultAsync(a => a.Nickname == nickname.ToLower());
+                return await context.Users.FirstOrDefaultAsync(a => a.Nickname == nickname);
             }
         }
     }

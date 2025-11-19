@@ -78,15 +78,18 @@ namespace ExpertSystem.EntityFramework.Services
             if (!isValid)
                 return validationResult;
 
+            string normalizedNickname = nickname.ToLower();
+            string normalizedEmail = email.ToLower();
+
             // check for duplicates 
-            User nicknameUser = await _userService.GetByNickname(nickname.ToLower());
+            User nicknameUser = await _userService.GetByNickname(normalizedNickname);
             if (nicknameUser != null)
             {
                 if (string.Equals(nicknameUser.Nickname, nickname, StringComparison.OrdinalIgnoreCase))
                     return RegistrationResult.NicknameAlreadyTaken;
             }
 
-            User emailUser = await _userService.GetByEmail(email.ToLower());
+            User emailUser = await _userService.GetByEmail(normalizedEmail);
             if (emailUser != null)
             {
                 if (string.Equals(emailUser.Email, email, StringComparison.OrdinalIgnoreCase))
@@ -99,9 +102,9 @@ namespace ExpertSystem.EntityFramework.Services
             // if everything good -> create new account
             User user = new User()
             {
-                Nickname = nickname,
+                Nickname = normalizedNickname,
                 PasswordHashed = passwordHashed,
-                Email = email,
+                Email = normalizedEmail,
                 IsAdmin = isAdmin
             };
 
