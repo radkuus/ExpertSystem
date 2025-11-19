@@ -49,9 +49,11 @@ namespace ExpertSystem.WPF.Commands
                 }
 
                 string filePath = _fileDialogService.OpenFileDialog(
-                    "CSV files (*.csv)|*.csv|All files (*.*)|*.*");
+                    "CSV files (*.csv)|*.csv");
 
-                if (string.IsNullOrEmpty(filePath))
+
+
+                if (string.IsNullOrEmpty(filePath) || !filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
