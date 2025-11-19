@@ -1,15 +1,17 @@
-﻿using System;
+﻿using ExpertSystem.Domain.Models;
+using ExpertSystem.Domain.Services;
+using ExpertSystem.WPF.State.Authenticators;
+using ExpertSystem.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using ExpertSystem.Domain.Models;
-using ExpertSystem.Domain.Services;
-using ExpertSystem.WPF.State.Authenticators;
-using ExpertSystem.WPF.ViewModels;
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -35,10 +37,25 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
-            if (parameter is Dataset dataset)
+            try
             {
-                await _datasetService.RemoveDataset(dataset.Id);
-                _viewModel.UserDatasets.Remove(dataset);
+                if (parameter is Dataset dataset)
+                {
+                    await _datasetService.RemoveDataset(dataset.Id);
+                    _viewModel.UserDatasets.Remove(dataset);
+
+                    string filePath = Path.Combine(
+                        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName,
+                        "Datasets",
+                        _authenticator.CurrentUser.Nickname,dataset.Name);
+
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

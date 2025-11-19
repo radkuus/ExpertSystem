@@ -8,9 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 
@@ -49,20 +51,32 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
-            var _datasetOwnerName = _adminDatasetviewModel.DatasetOwnerName;
-            var _datasetName = _adminDatasetviewModel.DatasetName;
-            var datasetToRemove = _adminDatasetviewModel.Datasets.FirstOrDefault(d => d.User.Nickname == _datasetOwnerName && d.Name == _datasetName);
+            var datasetOwnerName = _adminDatasetviewModel.DatasetOwnerName;
+            var datasetName = _adminDatasetviewModel.DatasetName;
+            var datasetToRemove = _adminDatasetviewModel.Datasets.FirstOrDefault(d => d.User.Nickname == datasetOwnerName && d.Name == datasetName);
 
             try
             {
-                await _datasetService.RemoveDatasetByUserAndName(_datasetOwnerName, _datasetName);
+                await _datasetService.RemoveDatasetByUserAndName(datasetOwnerName, datasetName);
                 _adminDatasetviewModel.Datasets.Remove(datasetToRemove);
+
+                string filePath = Path.Combine(
+                        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName,
+                        "Datasets",
+                        datasetOwnerName, datasetName);
+
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
             }
             catch (DatasetNotFoundException)
             {
                 _adminDatasetviewModel.ErrorMessage = "Dataset not found";
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
 
 
         }
