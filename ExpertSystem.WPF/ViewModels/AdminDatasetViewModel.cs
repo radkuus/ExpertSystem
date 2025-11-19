@@ -28,7 +28,7 @@ namespace ExpertSystem.WPF.ViewModels
 
         public ICommand LogoutCommand { get; }
         public ICommand DisplayAllDatasetsCommand { get; }
-        public ICommand RemoveDatasetCommand { get; }
+        public ICommand AdminRemoveDatasetCommand { get; }
         public ICommand AddDatasetCommand { get; }
 
         public AdminDatasetViewModel(IDatasetService datasetService,
@@ -46,6 +46,7 @@ namespace ExpertSystem.WPF.ViewModels
 
             DisplayAllDatasetsCommand = new DisplayAllDatasetsCommand(this, datasetService);
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
+            AdminRemoveDatasetCommand = new AdminRemoveDatasetCommand(this, datasetService);
 
 
 

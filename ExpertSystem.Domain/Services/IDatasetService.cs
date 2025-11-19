@@ -13,6 +13,7 @@ namespace ExpertSystem.Domain.Services
     {
         Task AddDataset(Dataset dataset);
         Task RemoveDataset(int datasetId);
+        Task RemoveDatasetByUserAndName(string userNickname, string datasetName);
         Task<List<Dataset>>GetUserDatasets(int userId);
         Task<List<Dataset>> GetAll();
         Task<Dataset> GetDatasetById(int datasetId);

@@ -1,4 +1,12 @@
-﻿using System;
+﻿using CsvHelper;
+using ExpertSystem.Domain.Exceptions;
+using ExpertSystem.Domain.Models;
+using ExpertSystem.Domain.Services;
+using ExpertSystem.EntityFramework;
+using ExpertSystem.WPF.State.Authenticators;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -7,13 +15,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsvHelper;
-using ExpertSystem.Domain.Models;
-using ExpertSystem.Domain.Services;
-using ExpertSystem.EntityFramework;
-using ExpertSystem.WPF.State.Authenticators;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ExpertSystem.EntityFramework.Services
 {
@@ -45,7 +46,7 @@ namespace ExpertSystem.EntityFramework.Services
                     context.Datasets.Add(dataset);
                     int affectedRows = await context.SaveChangesAsync();
                 }
-                catch (Exception ex)
+                catch (InvalidOperationException ex)
                 {
                     throw; 
                 }
@@ -85,11 +86,29 @@ namespace ExpertSystem.EntityFramework.Services
             using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 var dataset = await GetDatasetById(datasetId);
-                if (dataset != null)
+                if (dataset == null)
                 {
-                    context.Datasets.Remove(dataset);
-                    await context.SaveChangesAsync();
+                    throw new DatasetNotFoundException(datasetId);
                 }
+                context.Datasets.Remove(dataset);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveDatasetByUserAndName(string userNickname, string datasetName)
+        {
+            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            {
+                var dataset = await context.Datasets
+                    .FirstOrDefaultAsync(d => d.User.Nickname == userNickname && d.Name == datasetName);
+
+                if (dataset == null)
+                {
+                    throw new DatasetNotFoundException(userNickname, datasetName);
+                } 
+
+                context.Datasets.Remove(dataset);
+                await context.SaveChangesAsync();
             }
         }
 

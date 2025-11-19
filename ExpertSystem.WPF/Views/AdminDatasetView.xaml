@@ -45,7 +45,7 @@
                         Height="30" 
                         Width="90" 
                         Grid.Column="2"
-                        Command="{Binding RemoveDatasetCommand}"
+                        Command="{Binding AdminRemoveDatasetCommand}"
                         CommandParameter="{Binding SelectedDataset}"
                         Style="{StaticResource RemoveButtonStyle}"/>
             </Grid>
