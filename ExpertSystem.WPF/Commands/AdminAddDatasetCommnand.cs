@@ -91,10 +91,15 @@ namespace ExpertSystem.WPF.Commands
 
                 await _datasetService.AddDataset(dataset);
                 _adminDatasetViewModel.DisplayAllDatasetsCommand.Execute(null);
+                _adminDatasetViewModel.ErrorMessage = null;
             }
             catch (UserNotFoundException)
             {
                 _adminDatasetViewModel.ErrorMessage = "User not found";
+            }
+            catch (DatasetAlreadyExistsException)
+            {
+                _adminDatasetViewModel.ErrorMessage = "Dataset with this name already exists for this user";
             }
             catch (Exception ex)
             {

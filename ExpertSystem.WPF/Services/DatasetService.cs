@@ -41,7 +41,7 @@ namespace ExpertSystem.EntityFramework.Services
 
                     if (existingDataset != null)
                     {
-                        throw new InvalidOperationException($"The user with ID {dataset.UserId} already has a database named '{dataset.Name}'.");
+                        throw new DatasetAlreadyExistsException(dataset.UserId, dataset.Name);
                     }
                     context.Datasets.Add(dataset);
                     int affectedRows = await context.SaveChangesAsync();

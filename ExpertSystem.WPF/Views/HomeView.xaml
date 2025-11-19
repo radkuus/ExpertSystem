@@ -9,6 +9,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Grid Grid.IsSharedSizeScope="True"
           Background="{StaticResource BlueBackgroundBrush}">
 
@@ -99,6 +103,10 @@
 
                 <Grid Margin="10" 
                       Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -116,6 +124,18 @@
                             Grid.Column="1" 
                             HorizontalAlignment="Center" 
                             Style="{StaticResource CustomButtonStyle}" />
+
+
+                    <TextBlock  Grid.Row="1" 
+                                Grid.ColumnSpan="2" 
+                                Margin="0,5,0,5"
+                                HorizontalAlignment="Center"
+                                DataContext="{Binding ErrorMessageViewModel}"
+                                Foreground="Red"
+                                Text="{Binding Message}"
+                                TextWrapping="Wrap"
+                                Visibility="{Binding ShowMessage, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
                 </Grid>
 
                 <ListView ItemsSource="{Binding UserDatasets}" 

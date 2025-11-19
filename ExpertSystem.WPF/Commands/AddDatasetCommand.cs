@@ -1,17 +1,18 @@
-﻿using ExpertSystem.Domain.Services;
+﻿using ExpertSystem.Domain.Exceptions;
+using ExpertSystem.Domain.Models;
+using ExpertSystem.Domain.Services;
+using ExpertSystem.WPF.Services;
+using ExpertSystem.WPF.State.Authenticators;
 using ExpertSystem.WPF.ViewModels;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
-using System.IO;
-using ExpertSystem.WPF.Services;
-using ExpertSystem.WPF.State.Authenticators;
-using ExpertSystem.Domain.Models;
 
 namespace ExpertSystem.WPF.Commands
 {
@@ -40,41 +41,42 @@ namespace ExpertSystem.WPF.Commands
 
         public async void Execute(object? parameter)
         {
-            if (!_authenticator.IsUserLoggedIn)
-            {
-                return;
-            }
-
-            string filePath = _fileDialogService.OpenFileDialog(
-                "CSV files (*.csv)|*.csv|All files (*.*)|*.*");
-
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return;
-            }
-
-            _viewModel.SelectedFilePath = filePath;
-            string fileName = Path.GetFileName(filePath);
-
-            var currentUser = _authenticator.CurrentUser;
-            if (currentUser == null || currentUser.Id <= 0)
-            {
-                return;
-            }
-
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
-            string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
-
-            if (!Directory.Exists(datasetsFolderDirectory))
-            {
-                Directory.CreateDirectory(datasetsFolderDirectory);
-            }
-
-            string destPath = Path.Combine(datasetsFolderDirectory, fileName);
-
             try
             {
+                if (!_authenticator.IsUserLoggedIn)
+                {
+                    return;
+                }
+
+                string filePath = _fileDialogService.OpenFileDialog(
+                    "CSV files (*.csv)|*.csv|All files (*.*)|*.*");
+
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    return;
+                }
+
+                _viewModel.SelectedFilePath = filePath;
+                string fileName = Path.GetFileName(filePath);
+
+                var currentUser = _authenticator.CurrentUser;
+                if (currentUser == null || currentUser.Id <= 0)
+                {
+                    return;
+                }
+
+                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
+                string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
+
+                if (!Directory.Exists(datasetsFolderDirectory))
+                {
+                    Directory.CreateDirectory(datasetsFolderDirectory);
+                }
+
+                string destPath = Path.Combine(datasetsFolderDirectory, fileName);
+
+            
                 File.Copy(filePath, destPath, overwrite: true);
 
                 var dataset = new Dataset
@@ -85,6 +87,11 @@ namespace ExpertSystem.WPF.Commands
 
                 await _datasetService.AddDataset(dataset);
                 _viewModel.DisplayUserDatasetsCommand.Execute(null);
+                _viewModel.ErrorMessage = null;
+            }
+            catch (DatasetAlreadyExistsException)
+            {
+                _viewModel.ErrorMessage = "Dataset with this name already exists for this user";
             }
             catch (Exception ex)
             {

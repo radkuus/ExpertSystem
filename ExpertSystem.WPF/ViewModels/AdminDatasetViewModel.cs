@@ -113,9 +113,6 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-
-
-
         public MessageViewModel ErrorMessageViewModel { get; }
         public string ErrorMessage
         {

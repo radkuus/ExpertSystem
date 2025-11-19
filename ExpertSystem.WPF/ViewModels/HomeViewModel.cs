@@ -62,7 +62,8 @@ namespace ExpertSystem.WPF.ViewModels
             _navigator = navigator;
             _viewModelAbstractFactory = viewModelAbstractFactory;
             _datasetStore = datasetStore;
-            
+
+            ErrorMessageViewModel = new MessageViewModel();
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             AddDatasetCommand = new AddDatasetCommand(this, fileDialogService, datasetService, authenticator);
             DisplayUserDatasetsCommand = new DisplayUserDatasetsCommand(authenticator, datasetService, datasetStore);
@@ -76,5 +77,11 @@ namespace ExpertSystem.WPF.ViewModels
         }
 
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
+
+        public MessageViewModel ErrorMessageViewModel { get; }
+        public string ErrorMessage
+        {
+            set => ErrorMessageViewModel.Message = value;
+        }
     }
 }
