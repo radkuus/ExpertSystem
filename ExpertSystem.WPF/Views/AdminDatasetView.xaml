@@ -37,7 +37,7 @@
                         Height="30" 
                         Width="90" 
                         Grid.Column="0"
-                        Command="{Binding AddDatasetCommand}"
+                        Command="{Binding AdminAddDatasetCommnand}"
                         CommandParameter="{Binding SelectedDataset.User}"
                         Style="{StaticResource AddButtonStyle}"/>
 

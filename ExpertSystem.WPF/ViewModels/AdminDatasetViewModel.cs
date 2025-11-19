@@ -19,6 +19,7 @@ namespace ExpertSystem.WPF.ViewModels
         private readonly IDatasetService _datasetService;
         private readonly INavigator _navigator;
         private readonly IAuthenticator _authenticator;
+        private readonly IUserService _userService;
         private readonly IFileDialogService _fileDialogService;
         private readonly CreateViewModel<LoginViewModel> _createLoginViewModel;
 
@@ -29,13 +30,14 @@ namespace ExpertSystem.WPF.ViewModels
         public ICommand LogoutCommand { get; }
         public ICommand DisplayAllDatasetsCommand { get; }
         public ICommand AdminRemoveDatasetCommand { get; }
-        public ICommand AddDatasetCommand { get; }
+        public ICommand AdminAddDatasetCommnand { get; }
 
         public AdminDatasetViewModel(IDatasetService datasetService,
             IAuthenticator authenticator,
             INavigator navigator,
             CreateViewModel<LoginViewModel> createLoginViewModel,
-            IFileDialogService fileDialogService)
+            IFileDialogService fileDialogService,
+            IUserService userService)
         {
             ErrorMessageViewModel = new MessageViewModel();
 
@@ -43,11 +45,12 @@ namespace ExpertSystem.WPF.ViewModels
             _authenticator = authenticator;
             _navigator = navigator;
             _fileDialogService = fileDialogService;
+            _userService = userService;
 
             DisplayAllDatasetsCommand = new DisplayAllDatasetsCommand(this, datasetService);
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             AdminRemoveDatasetCommand = new AdminRemoveDatasetCommand(this, datasetService);
-
+            AdminAddDatasetCommnand = new AdminAddDatasetCommnand(this, fileDialogService, datasetService, userService);
 
 
             DisplayAllDatasetsCommand.Execute(null);
