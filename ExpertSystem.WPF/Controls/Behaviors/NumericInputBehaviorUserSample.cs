@@ -72,6 +72,11 @@ namespace ExpertSystem.WPF.Controls.Behaviors
                 return true;
             }
 
+            if (text.StartsWith("-,"))
+            {
+                return false;
+            }
+
             if (!double.TryParse(text, out _))
             {
                 return false;
