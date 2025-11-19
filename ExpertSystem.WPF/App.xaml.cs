@@ -32,8 +32,14 @@ public partial class App : Application
         var serverService = serviceProvider.GetRequiredService<IServerService>();
         _ = AsyncStartServer(serverService);
 
+        var adminUsername = Environment.GetEnvironmentVariable("ADMIN_USERNAME");
+        var adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+        var adminEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL");
+
         IAuthenticationService authentication = serviceProvider.GetRequiredService<IAuthenticationService>();
-        authentication.Register("kamil", "Testowanko1", "Testowanko1", "kamil.kamil@gmail.com", true);
+        authentication.Register(adminUsername, adminPassword, adminPassword, adminEmail, true);
+        //authentication.Register("kamil", "Testowanko1", "Testowanko1", "kamil.kamil@gmail.com", true);
+
         Window window = serviceProvider.GetRequiredService<MainWindow>();
         window.Show();
 
