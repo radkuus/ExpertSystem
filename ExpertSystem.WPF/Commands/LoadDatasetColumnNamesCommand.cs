@@ -45,6 +45,18 @@ namespace ExpertSystem.WPF.Commands
                     await Task.Delay(2000);
                     _analysisViewModel.DatasetColumnNames = datasetColumnNames;
                     _analysisViewModel.DatasetNumericColumnNames = datasetNumericColumnNames;
+                    _analysisViewModel.ErrorMessage = null;
+                }
+                catch (Exception ex)
+                {
+                    var datasetToRemove = _analysisViewModel.UserDatasets
+                        .FirstOrDefault(d => d.Id == dataset.Id);
+                    if (datasetToRemove != null)
+                    {
+                        _analysisViewModel.UserDatasets.Remove(datasetToRemove);
+                    }
+                    await _datasetService.RemoveDataset(dataset.Id);
+                    _analysisViewModel.ErrorMessage = "Dataset not found in the folder";
                 }
                 finally
                 {

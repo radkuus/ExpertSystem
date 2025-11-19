@@ -89,6 +89,7 @@ namespace ExpertSystem.WPF.ViewModels
             _mainViewModel = mainViewModel;
             _userSample = userSample;
 
+            ErrorMessageViewModel = new MessageViewModel();
             UpdateCurrentViewModelCommand = new UpdateCurrentViewModelCommand(navigator, _viewModelAbstractFactory);
             DisplayDatasetAsDataFrameAndStatisticsCommand = new DisplayDatasetAsDataFrameAndStatisticsCommand(datasetService, dataFrameDialogService, dataStatisticsService, this);
             LoadDatasetColumnNamesCommand = new LoadDatasetColumnNamesCommand(datasetService, this);
@@ -600,6 +601,12 @@ namespace ExpertSystem.WPF.ViewModels
             OnPropertyChanged(nameof(IsAnyModelWithoutIfThenAndColumnForAnalysisChecked));
             OnPropertyChanged(nameof(IsIfThenAndResultColumnChecked));
             this.UserSample.UserSamples.Clear();
+        }
+
+        public MessageViewModel ErrorMessageViewModel { get; }
+        public string ErrorMessage
+        {
+            set => ErrorMessageViewModel.Message = value;
         }
 
     }
