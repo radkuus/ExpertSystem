@@ -57,7 +57,9 @@ namespace ExpertSystem.EntityFramework.Services
         {
             using(ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
-                var datasets = await context.Datasets.Where(x => x.UserId == userId).ToListAsync();
+                var datasets = await context.Datasets.Where(x => x.UserId == userId)
+                    .Include(u => u.User)
+                    .ToListAsync();
                 return datasets;
             }
         }

@@ -183,7 +183,8 @@ public partial class App : Application
                 services.GetRequiredService<IUserService>(),
                 services.GetRequiredService<IAuthenticator>(),
                 services.GetRequiredService<INavigator>(),
-                services.GetRequiredService<CreateViewModel<LoginViewModel>>());
+                services.GetRequiredService<CreateViewModel<LoginViewModel>>(),
+                services.GetRequiredService<IDatasetService>());
         });
 
         services.AddTransient<AdminDatasetViewModel>();

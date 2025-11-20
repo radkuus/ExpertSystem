@@ -21,6 +21,7 @@ namespace ExpertSystem.WPF.ViewModels
     public class AdminViewModel : BaseViewModel, IRegistrationData
     {
         private readonly IUserService _userService;
+        private readonly IDatasetService _datasetService;
         private readonly INavigator _navigator;
         private readonly IAuthenticator _authenticator;
         private readonly CreateViewModel<LoginViewModel> _createLoginViewModel;
@@ -36,18 +37,20 @@ namespace ExpertSystem.WPF.ViewModels
         public AdminViewModel(IUserService userService,
             IAuthenticator authenticator,
             INavigator navigator,
-            CreateViewModel<LoginViewModel> createLoginViewModel)
+            CreateViewModel<LoginViewModel> createLoginViewModel,
+            IDatasetService datasetService)
         {
             ErrorMessageViewModel = new MessageViewModel();
 
             _userService = userService;
+            _datasetService = datasetService;
             _createLoginViewModel = createLoginViewModel;
             _authenticator = authenticator;
             _navigator = navigator;
 
             DisplayUsersCommand = new DisplayUsersCommand(this, userService);
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
-            DeleteUserCommand = new DeleteUserCommand(this, userService);
+            DeleteUserCommand = new DeleteUserCommand(this, userService, datasetService);
             RegisterCommand = new RegisterCommand(this, authenticator, null);
             EditUserCommand = new EditUserCommand(this, authenticator);
 
