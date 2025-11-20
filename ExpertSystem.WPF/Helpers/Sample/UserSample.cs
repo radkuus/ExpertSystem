@@ -32,6 +32,5 @@ namespace ExpertSystem.WPF.Helpers.Sample
 
             UserSamples.Add(newSample);
         }
-
     }
 }

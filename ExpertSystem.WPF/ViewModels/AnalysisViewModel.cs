@@ -53,6 +53,7 @@ namespace ExpertSystem.WPF.ViewModels
         private ObservableCollection<string> _datasetNumericColumnNames;
         private ObservableCollection<string> _selectedModels = new ObservableCollection<string>();
         private ObservableCollection<string> _uniqueNamesFromClassifyingColumn = new ObservableCollection<string>();
+        public UserSample UserSample => _userSample;
         public ObservableCollection<string> Operators => IfThenOperators.Operators;
         public ObservableCollection<Dataset> UserDatasets => _datasetStore.UserDatasets;
         public ObservableCollection<IfThenConditionGroup> IfThenConditions { get; set; } = new ObservableCollection<IfThenConditionGroup>();
@@ -544,8 +545,6 @@ namespace ExpertSystem.WPF.ViewModels
                     !string.IsNullOrWhiteSpace(condition.SelectedValue) &&
                     !condition.SelectedValue.EndsWith(",") &&
                     !condition.SelectedValue.EndsWith("-"))))));
-
-        public UserSample UserSample => _userSample;
 
         private void UpdateNeuronCounts()
         {
