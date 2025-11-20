@@ -48,7 +48,7 @@ namespace ExpertSystem.WPF.ViewModels
             _authenticator = authenticator;
             _navigator = navigator;
 
-            DisplayUsersCommand = new DisplayUsersCommand(this, userService);
+            DisplayUsersCommand = new DisplayUsersCommand(this, userService, authenticator);
             LogoutCommand = new LogoutCommand(createLoginViewModel, authenticator, navigator);
             DeleteUserCommand = new DeleteUserCommand(this, userService, datasetService);
             RegisterCommand = new RegisterCommand(this, authenticator, null);

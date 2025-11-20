@@ -54,7 +54,7 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<User> Login(string nickname, string password)
         {
-            User storedUser = await _userService.GetByNickname(nickname);
+            User storedUser = await _userService.GetByNickname(nickname.ToLower());
 
             if (storedUser == null)
             {
@@ -174,8 +174,8 @@ namespace ExpertSystem.EntityFramework.Services
             User updatedUser = new User
             {
                 Id = id,
-                Nickname = nickname ?? existingUser.Nickname,
-                Email = email ?? existingUser.Email,
+                Nickname = nickname.ToLower() ?? existingUser.Nickname,
+                Email = email.ToLower() ?? existingUser.Email,
                 PasswordHashed = password != null ? _passwordHasher.HashPassword(password) : existingUser.PasswordHashed,
                 IsAdmin = existingUser.IsAdmin
             };

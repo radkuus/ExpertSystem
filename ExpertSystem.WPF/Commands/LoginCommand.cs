@@ -21,14 +21,16 @@ namespace ExpertSystem.WPF.Commands
         private readonly IAuthenticator _authenticator;
         private readonly IRenavigator _goToHomeRenavigator;
         private readonly IRenavigator _goToAdminRenavigator;
+        private readonly INavigator _navigator;
 
         public LoginCommand(LoginViewModel loginViewModel, IAuthenticator authenticator, 
-            IRenavigator goToHomeRenavigator, IRenavigator goToAdminRenavigator)
+            IRenavigator goToHomeRenavigator, IRenavigator goToAdminRenavigator, INavigator navigator)
         {
             _loginViewModel = loginViewModel;
             _authenticator = authenticator;
             _goToHomeRenavigator = goToHomeRenavigator;
             _goToAdminRenavigator = goToAdminRenavigator;
+            _navigator = navigator;
         }
 
         public override async Task ExecuteAsync(object? parameter)
@@ -39,10 +41,12 @@ namespace ExpertSystem.WPF.Commands
                 if (_authenticator.IsUserLoggedIn)
                 {
                     _goToHomeRenavigator.Renavigate();
+                    _navigator.CurrentViewType = ViewType.Home;
                 }
                 else if (_authenticator.IsAdminLoggedIn)
                 {
                     _goToAdminRenavigator.Renavigate();
+                    _navigator.CurrentViewType = ViewType.AdminUsers;
                 }
 
             }

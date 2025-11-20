@@ -201,7 +201,8 @@ public partial class App : Application
                 services.GetRequiredService<IAuthenticator>(),
                 services.GetRequiredService<ViewModelFactoryRenavigator<HomeViewModel>>(),
                 services.GetRequiredService<ViewModelFactoryRenavigator<RegisterViewModel>>(),
-                services.GetRequiredService<ViewModelFactoryRenavigator<AdminViewModel>>());
+                services.GetRequiredService<ViewModelFactoryRenavigator<AdminViewModel>>(),
+                services.GetRequiredService<INavigator>());
         });
 
         services.AddSingleton<IDatasetStore, DatasetStore>();
