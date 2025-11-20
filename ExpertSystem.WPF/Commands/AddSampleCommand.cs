@@ -46,11 +46,12 @@ namespace ExpertSystem.WPF.Commands
                 return false;
             }
 
-            return lastSample.All(entry => !string.IsNullOrWhiteSpace(entry.Value) && 
+            return lastSample.All(entry => !string.IsNullOrWhiteSpace(entry.Value) &&
                                            !entry.Value.EndsWith("-") &&
                                            !entry.Value.EndsWith(",") &&
                                            !entry.Value.StartsWith(",") &&
-                                           !entry.Value.StartsWith("-,"));
+                                           !entry.Value.StartsWith("-,") &&
+                                           !(entry.Value.StartsWith("0") && entry.Value.ElementAtOrDefault(1) != ','));
         }
 
         public void Execute(object? parameter)
