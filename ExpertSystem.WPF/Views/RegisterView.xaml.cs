@@ -71,7 +71,15 @@ namespace ExpertSystem.WPF.Views
             if (RegisterCommand != null)
             {
                 var passwordData = (passwordpb.Password, password2pb.Password);
-                RegisterCommand.Execute(passwordData);
+                try
+                {
+                    RegisterCommand.Execute(passwordData);
+                }
+                finally
+                {
+                    passwordpb.Clear();
+                    password2pb.Clear();
+                }
             }
         }
 

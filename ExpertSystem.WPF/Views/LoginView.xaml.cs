@@ -68,10 +68,17 @@ namespace ExpertSystem.WPF.Views
 
         private void LoginButton(object sender, RoutedEventArgs e)
         {
-            if(LoginCommand != null)
+            if (LoginCommand != null)
             {
                 string password = passwordpb.Password;
-                LoginCommand.Execute(password);
+                try
+                {
+                    LoginCommand.Execute(password);
+                }
+                finally
+                {
+                    passwordpb.Clear();
+                }
             }
         }
 

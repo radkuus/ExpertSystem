@@ -78,20 +78,35 @@ namespace ExpertSystem.WPF.Views
             if (RegisterCommand != null)
             {
                 var passwordData = (passwordpb.Password, password2pb.Password);
-                await RegisterCommand.ExecuteAsync(passwordData);
-                await DisplayUsersCommand.ExecuteAsync(null);
+                try
+                {
+                    await RegisterCommand.ExecuteAsync(passwordData);
+                    await DisplayUsersCommand.ExecuteAsync(null);
+                }
+                finally
+                {
+                    passwordpb.Clear();
+                    password2pb.Clear();
+                }
             }
         }
 
-        public Tuple<string, string> PasswordTuple =>
-            Tuple.Create(passwordpb.Password, password2pb.Password);
         private async void EditButton(object sender, RoutedEventArgs e)
         {
-            var (password1, password2) = PasswordTuple;
             if (EditUserCommand != null)
             {
-                await EditUserCommand.ExecuteAsync(PasswordTuple);
-                await DisplayUsersCommand.ExecuteAsync(null);
+                var passwordData = Tuple.Create(passwordpb.Password, password2pb.Password);
+
+                try
+                {
+                    await EditUserCommand.ExecuteAsync(passwordData);
+                    await DisplayUsersCommand.ExecuteAsync(null);
+                }
+                finally
+                {
+                    passwordpb.Clear();
+                    password2pb.Clear();
+                }
             }
         }
 
