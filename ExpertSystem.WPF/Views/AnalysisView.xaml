@@ -449,8 +449,7 @@
                             Margin="0,10,0,0" 
                             Padding="10,5" 
                             HorizontalAlignment="Center" 
-                            Style="{StaticResource CustomButtonStyle}"
-                            IsEnabled="{Binding CanGenerateResult}"/>
+                            Style="{StaticResource CustomButtonStyle}"/>
                 </StackPanel>
             </Grid>
         </Border>
