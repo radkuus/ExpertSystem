@@ -68,6 +68,7 @@
                 <GridView ColumnHeaderContainerStyle="{StaticResource CustomGridViewColumnHeaderStyle}">
                         <GridViewColumn Header="Nickname" DisplayMemberBinding="{Binding Nickname}" Width="auto"/>
                         <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="auto"/>
+                    <GridViewColumn Header="IsAdmin" DisplayMemberBinding="{Binding IsAdmin}" Width="auto"/>
                     </GridView>
                 </ListView.View>
         </ListView>
