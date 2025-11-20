@@ -55,6 +55,10 @@ namespace ExpertSystem.WPF.Commands
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
             finally
             {
                 _analysisViewModel.IsLoading = false;
