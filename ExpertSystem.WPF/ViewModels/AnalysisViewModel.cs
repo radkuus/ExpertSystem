@@ -528,7 +528,9 @@ namespace ExpertSystem.WPF.ViewModels
         public bool CanGenerateResultUserSamples => _userSample.UserSamples.Count == 0 || 
                                                     _userSample.UserSamples.All(sample => sample.All(entry => !string.IsNullOrWhiteSpace(entry.Value) && 
                                                     !entry.Value.EndsWith("-") && 
-                                                    !entry.Value.EndsWith(",")));
+                                                    !entry.Value.EndsWith(",") &&
+                                                    !entry.Value.StartsWith(",") &&
+                                                    !entry.Value.StartsWith("-,")));
         public bool CanGenerateResultIfThen => IfThenConditions.Count() != 0 &&
                     IfThenConditions.All(group => group.Conditions.Any((condition => condition.SelectedType == "then"))) &&
                     IfThenConditions.All(group => group.Conditions.All(condition => (condition.SelectedType == "If" &&
@@ -536,6 +538,8 @@ namespace ExpertSystem.WPF.ViewModels
                     !string.IsNullOrWhiteSpace(condition.SelectedOperator) &&
                     !string.IsNullOrWhiteSpace(condition.SelectedValue) &&
                     !condition.SelectedValue.EndsWith(",") &&
+                    !condition.SelectedValue.StartsWith(",") &&
+                    !condition.SelectedValue.StartsWith("-,") &&
                     !condition.SelectedValue.EndsWith("-") ||
                     (condition.SelectedType == "then" &&
                     !string.IsNullOrWhiteSpace(condition.SelectedClass) ||
@@ -544,6 +548,8 @@ namespace ExpertSystem.WPF.ViewModels
                     !string.IsNullOrWhiteSpace(condition.SelectedOperator) &&
                     !string.IsNullOrWhiteSpace(condition.SelectedValue) &&
                     !condition.SelectedValue.EndsWith(",") &&
+                    !condition.SelectedValue.StartsWith(",") &&
+                    !condition.SelectedValue.StartsWith("-,") &&
                     !condition.SelectedValue.EndsWith("-"))))));
 
         private void UpdateNeuronCounts()
