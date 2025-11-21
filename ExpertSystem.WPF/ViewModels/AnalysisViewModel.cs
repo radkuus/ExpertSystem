@@ -597,10 +597,11 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        public void RaiseAreDetailsChangedAndCanGenerateResult()
+        public void RaiseAreDetailsChangedCanGenerateResultAndCanViewUserSample()
         {
             OnPropertyChanged(nameof(AreDetailsChecked));
             OnPropertyChanged(nameof(CanGenerateResult));
+            OnPropertyChanged(nameof(CanViewUserSample));
         }
 
         private void UpdateColumnsForAnalysis()

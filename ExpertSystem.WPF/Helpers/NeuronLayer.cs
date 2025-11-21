@@ -26,7 +26,7 @@ namespace ExpertSystem.WPF.Auxiliary
             {
                 _neuronCount = value;
                 OnPropertyChanged(nameof(NeuronCount));
-                _analysisViewModel?.RaiseAreDetailsChangedAndCanGenerateResult();
+                _analysisViewModel?.RaiseAreDetailsChangedCanGenerateResultAndCanViewUserSample();
 
             }
         }
