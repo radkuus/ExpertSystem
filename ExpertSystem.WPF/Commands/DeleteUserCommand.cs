@@ -63,7 +63,7 @@ namespace ExpertSystem.WPF.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            return _adminViewModel.SelectedUser != null;
+            return (_adminViewModel.SelectedUser != null && _adminViewModel.SelectedUser.IsAdmin == false);
         }
     }
 }
