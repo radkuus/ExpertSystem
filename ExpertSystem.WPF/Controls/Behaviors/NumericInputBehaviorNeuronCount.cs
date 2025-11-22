@@ -28,6 +28,7 @@ namespace ExpertSystem.WPF.Controls.Behaviors
         {
             base.OnDetaching();
             AssociatedObject.PreviewTextInput -= OnPreviewTextInput;
+            AssociatedObject.PreviewKeyDown -= OnPreviewKeyDown;
             DataObject.RemovePastingHandler(AssociatedObject, OnPaste);
         }
 
