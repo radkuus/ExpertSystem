@@ -51,7 +51,7 @@ namespace ExpertSystem.WPF.Commands
                                            !entry.Value.EndsWith(",") &&
                                            !entry.Value.StartsWith(",") &&
                                            !entry.Value.StartsWith("-,") &&
-                                           !(entry.Value.StartsWith("0") && entry.Value.ElementAtOrDefault(1) != ','));
+                                           !(entry.Value != "0" && entry.Value.StartsWith("0") && entry.Value.ElementAtOrDefault(1) != ','));
         }
 
         public void Execute(object? parameter)

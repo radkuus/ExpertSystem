@@ -19,6 +19,7 @@ namespace ExpertSystem.WPF.Controls.Behaviors
         {
             base.OnAttached();
             AssociatedObject.PreviewTextInput += OnPreviewTextInput;
+            AssociatedObject.PreviewKeyDown += OnPreviewKeyDown;
             DataObject.AddPastingHandler(AssociatedObject, OnPaste);
         }
 
@@ -27,6 +28,14 @@ namespace ExpertSystem.WPF.Controls.Behaviors
             base.OnDetaching();
             AssociatedObject.PreviewTextInput -= OnPreviewTextInput;
             DataObject.RemovePastingHandler(AssociatedObject, OnPaste);
+        }
+
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
+            }
         }
 
         private void OnPreviewTextInput(object sender, TextCompositionEventArgs e)

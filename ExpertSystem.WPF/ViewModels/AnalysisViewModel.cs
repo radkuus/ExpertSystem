@@ -531,7 +531,7 @@ namespace ExpertSystem.WPF.ViewModels
                                                     !entry.Value.EndsWith(",") &&
                                                     !entry.Value.StartsWith(",") &&
                                                     !entry.Value.StartsWith("-,") &&
-                                                    !(entry.Value.StartsWith("0") && entry.Value.ElementAtOrDefault(1) != ',')));
+                                                    !(entry.Value != "0" && entry.Value.StartsWith("0") && entry.Value.ElementAtOrDefault(1) != ',')));
         public bool CanGenerateResultIfThen => IfThenConditions.Count() != 0 &&
                     IfThenConditions.All(group => group.Conditions.Any((condition => condition.SelectedType == "then"))) &&
                     IfThenConditions.All(group => group.Conditions.All(condition => (condition.SelectedType == "If" &&
@@ -542,7 +542,7 @@ namespace ExpertSystem.WPF.ViewModels
                     !condition.SelectedValue.StartsWith(",") &&
                     !condition.SelectedValue.StartsWith("-,") &&
                     !condition.SelectedValue.EndsWith("-") &&
-                    !(condition.SelectedValue.StartsWith("0") && condition.SelectedValue.ElementAtOrDefault(1) != ',') ||
+                    !(condition.SelectedValue != "0" && condition.SelectedValue.StartsWith("0") && condition.SelectedValue.ElementAtOrDefault(1) != ',') ||
                     (condition.SelectedType == "then" &&
                     !string.IsNullOrWhiteSpace(condition.SelectedClass) ||
                     (condition.SelectedType == "and" &&
@@ -553,7 +553,7 @@ namespace ExpertSystem.WPF.ViewModels
                     !condition.SelectedValue.StartsWith(",") &&
                     !condition.SelectedValue.StartsWith("-,") &&
                     !condition.SelectedValue.EndsWith("-") &&
-                    !(condition.SelectedValue.StartsWith("0") && condition.SelectedValue.ElementAtOrDefault(1) != ','))))));
+                    !(condition.SelectedValue != "0" && condition.SelectedValue.StartsWith("0") && condition.SelectedValue.ElementAtOrDefault(1) != ','))))));
 
         private void UpdateNeuronCounts()
         {
