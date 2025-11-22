@@ -516,7 +516,9 @@ namespace ExpertSystem.WPF.ViewModels
                 !IsNeuralNetworkChecked ||
                 (
                     !string.IsNullOrWhiteSpace(SelectedLayers) &&
-                    NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount))
+                    NeuronCounts.All(n => !string.IsNullOrWhiteSpace(n.NeuronCount) &&
+                    int.TryParse(n.NeuronCount, out int value) &&
+                    value > 0)
                 )
             )
             );
