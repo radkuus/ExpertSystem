@@ -19,5 +19,7 @@ namespace ExpertSystem.Domain.Services
         Task<bool> Delete(int id);
 
         Task<IEnumerable<T>> GetAllByUserId(int userId);
+
+        Task<bool> Any();
     }
 }

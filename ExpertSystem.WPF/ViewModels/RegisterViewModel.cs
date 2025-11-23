@@ -8,11 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ExpertSystem.Domain.Services;
 
 namespace ExpertSystem.WPF.ViewModels
 {
     public class RegisterViewModel : BaseViewModel, IRegistrationData
     {
+        private readonly IUserService _userService;
+        private readonly IAuthenticator _authenticator;
+
         private string _nickname;
         public string Nickname
         {
@@ -51,11 +55,14 @@ namespace ExpertSystem.WPF.ViewModels
             set => ErrorMessageViewModel.Message = value;
         }
 
-        public RegisterViewModel(IAuthenticator authenticator, IRenavigator goToLoginRenavigator)
+        public RegisterViewModel(IAuthenticator authenticator, IRenavigator goToLoginRenavigator, IUserService userService)
         {
+            _userService = userService;
+            _authenticator = authenticator;
+
             ErrorMessageViewModel = new MessageViewModel();
 
-            RegisterCommand = new RegisterCommand(this, authenticator, goToLoginRenavigator);
+            RegisterCommand = new RegisterCommand(this, authenticator, goToLoginRenavigator, userService);
             GoToViewLoginCommand = new RenavigateCommand(goToLoginRenavigator);
         }
     }

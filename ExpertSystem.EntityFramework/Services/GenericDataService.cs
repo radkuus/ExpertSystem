@@ -83,13 +83,21 @@ namespace ExpertSystem.EntityFramework.Services
 
         public async Task<IEnumerable<T>> GetAllByUserId(int userId)
         {
-            using (var context = _contextFactory.CreateDbContext())
+            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
             {
                 var entities = await context.Set<T>()
                     .Where(e => EF.Property<int>(e, "UserId") == userId)
                     .ToListAsync();
 
                 return entities;
+            }
+        }
+
+        public async Task<bool> Any()
+        {
+            using (ExpertSystemDbContext context = _contextFactory.CreateDbContext())
+            {
+                return await context.Set<T>().AnyAsync();
             }
         }
     }
