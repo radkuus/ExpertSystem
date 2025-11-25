@@ -16,14 +16,19 @@ namespace ExpertSystem.WPF.Converters
             string? type = value as string;
             string? param = parameter as string;
 
-            if (type == null || param == null) return Visibility.Collapsed;
-
+            if (type == null || param == null) 
+            {
+                return Visibility.Collapsed;
+            }
             if (param == "if/and" && (type == "If" || type == "and"))
+            {
                 return Visibility.Visible;
-
+            }    
             if (param == "then" && type == "then")
+            {
                 return Visibility.Visible;
-
+            }
+                
             return Visibility.Collapsed;
         }
 
