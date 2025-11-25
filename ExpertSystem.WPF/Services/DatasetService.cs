@@ -191,14 +191,14 @@ namespace ExpertSystem.EntityFramework.Services
         {
             var dataTable = await GetDatasetAsDataTable(datasetId);
 
-            var uniqueNames = dataTable
+            var uniqueColumnNames = dataTable
                 .AsEnumerable()
                 .Select(row => row[columnName]?.ToString())
                 .Where(value => !string.IsNullOrWhiteSpace(value))
                 .Distinct()
                 .ToList();
 
-            return new ObservableCollection<string>(uniqueNames);
+            return new ObservableCollection<string>(uniqueColumnNames);
         }
     }
 }
