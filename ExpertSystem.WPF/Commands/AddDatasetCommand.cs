@@ -48,10 +48,7 @@ namespace ExpertSystem.WPF.Commands
                     return;
                 }
 
-                string filePath = _fileDialogService.OpenFileDialog(
-                    "CSV files (*.csv)|*.csv");
-
-
+                string filePath = _fileDialogService.OpenFileDialog("CSV files (*.csv)|*.csv");
 
                 if (string.IsNullOrEmpty(filePath) || !filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                 {
@@ -78,7 +75,6 @@ namespace ExpertSystem.WPF.Commands
 
                 string destPath = Path.Combine(datasetsFolderDirectory, fileName);
 
-            
                 File.Copy(filePath, destPath, overwrite: true);
 
                 var dataset = new Dataset
@@ -97,7 +93,7 @@ namespace ExpertSystem.WPF.Commands
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

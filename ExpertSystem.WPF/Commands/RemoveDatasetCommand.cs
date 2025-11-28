@@ -47,7 +47,8 @@ namespace ExpertSystem.WPF.Commands
                     string filePath = Path.Combine(
                         Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName,
                         "Datasets",
-                        _authenticator.CurrentUser.Nickname,dataset.Name);
+                        _authenticator.CurrentUser.Nickname,
+                        dataset.Name);
 
                     if (File.Exists(filePath))
                         File.Delete(filePath);
@@ -55,7 +56,7 @@ namespace ExpertSystem.WPF.Commands
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
