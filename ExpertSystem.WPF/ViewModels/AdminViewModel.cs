@@ -81,8 +81,8 @@ namespace ExpertSystem.WPF.ViewModels
                 }
             }
         }
-
-        private string _nickname;
+        
+        private string _nickname = "";
         public string Nickname
         {
             get { return _nickname; }
@@ -93,7 +93,7 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        private string _email;
+        private string _email = "";
         public string Email
         {
             get { return _email; }
@@ -105,7 +105,7 @@ namespace ExpertSystem.WPF.ViewModels
         }
 
 
-        private string _password;
+        private string _password = "";
         public string Password
         {
             get { return _password; }
@@ -116,7 +116,7 @@ namespace ExpertSystem.WPF.ViewModels
             }
         }
 
-        private string _confirmPassword;
+        private string _confirmPassword = "";
         public string ConfirmPassword
         {
             get { return _confirmPassword; }

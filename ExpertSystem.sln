@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpertSystem.EntityFramewor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpertSystem.WPF", "ExpertSystem.WPF\ExpertSystem.WPF.csproj", "{84D77428-CBB1-430F-9CF9-1231A13C5DED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpertSystem.Tests", "ExpertSystem.Tests\ExpertSystem.Tests.csproj", "{3FB5F273-2315-498B-A05B-C845480821A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{84D77428-CBB1-430F-9CF9-1231A13C5DED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84D77428-CBB1-430F-9CF9-1231A13C5DED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84D77428-CBB1-430F-9CF9-1231A13C5DED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB5F273-2315-498B-A05B-C845480821A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB5F273-2315-498B-A05B-C845480821A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB5F273-2315-498B-A05B-C845480821A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB5F273-2315-498B-A05B-C845480821A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -165,8 +165,8 @@ namespace ExpertSystem.EntityFramework.Services
                 return EditResult.NoChangesDetected;
 
             // if given data is the same --> return
-            if (string.Equals(nickname, existingUser.Nickname, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(email, existingUser.Email, StringComparison.OrdinalIgnoreCase) &&
+            if ((string.IsNullOrEmpty(nickname) || string.Equals(nickname, existingUser.Nickname, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(email) || string.Equals(email, existingUser.Email, StringComparison.OrdinalIgnoreCase)) &&
                 string.IsNullOrEmpty(password))
                 return EditResult.NoChangesDetected;
 
@@ -174,8 +174,8 @@ namespace ExpertSystem.EntityFramework.Services
             User updatedUser = new User
             {
                 Id = id,
-                Nickname = nickname.ToLower() ?? existingUser.Nickname,
-                Email = email.ToLower() ?? existingUser.Email,
+                Nickname = nickname?.ToLower() ?? existingUser.Nickname,
+                Email = email?.ToLower() ?? existingUser.Email,
                 PasswordHashed = password != null ? _passwordHasher.HashPassword(password) : existingUser.PasswordHashed,
                 IsAdmin = existingUser.IsAdmin
             };
