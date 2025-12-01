@@ -6,6 +6,7 @@ using ExpertSystem.WPF.ViewModels;
 using SimpleTrader.WPF.Commands;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,7 +59,23 @@ namespace ExpertSystem.WPF.Commands
                 {
                     case EditResult.Success:
                         _adminViewModel.ErrorMessage = "Edition ended successfully.";
+                        string? oldNickname = _adminViewModel.SelectedUser.Nickname;
                         await ((BaseAsyncCommand)_adminViewModel.DisplayUsersCommand).ExecuteAsync(null);
+
+                        if (nicknameToEdit != null)
+                        {
+                            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                            string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
+                            string datasetsFolderPath = Path.Combine(projectDirectory, "Datasets");
+
+                            string oldFolderPath = Path.Combine(datasetsFolderPath, oldNickname);
+                            string newFolderPath = Path.Combine(datasetsFolderPath, nicknameToEdit);
+
+                            if (Directory.Exists(oldFolderPath) && !Directory.Exists(newFolderPath))
+                            {
+                                Directory.Move(oldFolderPath, newFolderPath);
+                            }
+                        }
                         break;
                     case EditResult.UserNotFound:
                         _adminViewModel.ErrorMessage = "User not found.";

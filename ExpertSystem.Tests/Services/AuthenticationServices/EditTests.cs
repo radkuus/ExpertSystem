@@ -469,7 +469,7 @@ namespace ExpertSystem.Tests.Services.AuthenticationServices
 
         #endregion
 
-        #region No Changes Detection
+        #region No Changes Detected
 
         [Test]
         public async Task Edit_WithAllNullFields_ReturnsNoChangesDetected()
