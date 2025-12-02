@@ -74,7 +74,7 @@
     </Style>
 
     <Style x:Key="CustomButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="#3dddc2"/>
+        <Setter Property="Background" Value="{StaticResource GreenBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="FontSize" Value="20"/>
@@ -106,7 +106,7 @@
     <Style x:Key="LoginRegisterButton" TargetType="Button">
         <Setter Property="Width" Value="150"/>
         <Setter Property="Height" Value="40"/>
-        <Setter Property="Background" Value="#3dddc2"/>
+        <Setter Property="Background" Value="{StaticResource GreenBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -145,7 +145,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#3dddc2"/>
+                            <Setter Property="Background" Value="{StaticResource GreenBlueBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
