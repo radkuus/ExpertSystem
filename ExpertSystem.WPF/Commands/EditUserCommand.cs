@@ -38,15 +38,10 @@ namespace ExpertSystem.WPF.Commands
                    ? (passwordData.Item1, passwordData.Item2)
                    : (string.Empty, string.Empty);
 
-
-
                 string? nicknameToEdit = string.IsNullOrEmpty(_adminViewModel.Nickname) ? null : _adminViewModel.Nickname;
                 string? emailToEdit = string.IsNullOrEmpty(_adminViewModel.Email) ? null : _adminViewModel.Email;
                 string? passwordToEdit = string.IsNullOrEmpty(password1) ? null : password1;
                 string? confirmPasswordToEdit = string.IsNullOrEmpty(password2) ? null : password2;
-
-                System.Diagnostics.Debug.WriteLine($"Raw: '{password1}', '{password2}'");
-                System.Diagnostics.Debug.WriteLine($"Final: '{passwordToEdit}', '{confirmPasswordToEdit}'");
 
                 EditResult editResult = await _authenticator.Edit(
                     _adminViewModel.SelectedUser.Id,
