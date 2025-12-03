@@ -53,6 +53,7 @@ namespace ExpertSystem.WPF.Commands
                 {
                     Directory.Delete(folderPath, recursive: true);
                 }
+                _adminViewModel.ErrorMessage = "";
                 _adminViewModel.SelectedUser = null;
             }
             catch (Exception ex)

@@ -59,6 +59,7 @@ namespace ExpertSystem.WPF.Commands
                 switch (registrationResult)
                 {
                     case RegistrationResult.Success:
+                        _registerViewModel.ErrorMessage = "";
                         if (_authenticator.CurrentUser == null)
                         {
                             _renavigator.Renavigate();
