@@ -67,6 +67,7 @@ namespace ExpertSystem.WPF.Commands
 
                 if (File.Exists(filePath))
                     File.Delete(filePath);
+                _adminDatasetviewModel.ErrorMessage = "";
             }
             catch (DatasetNotFoundException)
             {
