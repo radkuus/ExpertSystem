@@ -32,7 +32,7 @@ namespace ExpertSystem.EntityFramework.Services
             if (string.IsNullOrEmpty(password))
                 return (false, RegistrationResult.InvalidPasswordFormat);
 
-            var nicknameRegex = new Regex(@"^[a-zA-Z0-9][a-zA-Z0-9_-]{2,15}$");  // first character must be a letter or number, the rest must have min. 2 characters (max. 15)
+            var nicknameRegex = new Regex(@"^[a-zA-Z0-9][a-zA-Z0-9_-]{2,14}$");  // first character must be a letter or number, the rest must have min. 2 characters (max. 15)
             if (!nicknameRegex.IsMatch(nickname))
                 return (false, RegistrationResult.InvalidNicknameFormat);
 
@@ -121,7 +121,7 @@ namespace ExpertSystem.EntityFramework.Services
             // if nickname is NOT empty/null -> validation 
             if (!string.IsNullOrEmpty(nickname))
             {
-                var nicknameRegex = new Regex(@"^[a-zA-Z0-9][a-zA-Z0-9_-]{2,15}$");
+                var nicknameRegex = new Regex(@"^[a-zA-Z0-9][a-zA-Z0-9_-]{2,14}$");
                 if (!nicknameRegex.IsMatch(nickname))  // if not fit --> return 
                     return EditResult.InvalidNicknameFormat;
 
