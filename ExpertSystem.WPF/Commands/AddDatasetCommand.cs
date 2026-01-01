@@ -64,9 +64,11 @@ namespace ExpertSystem.WPF.Commands
                     return;
                 }
 
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
-                string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _authenticator.CurrentUser.Nickname);
+                string datasetsFolderDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "ExpertSystem",
+                    "Datasets",
+                    _authenticator.CurrentUser.Nickname);
 
                 if (!Directory.Exists(datasetsFolderDirectory))
                 {

@@ -45,7 +45,8 @@ namespace ExpertSystem.WPF.Commands
                     await _datasetService.RemoveDataset(dataset.Id);
                 }
                 string folderPath = Path.Combine(
-                    Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.FullName,
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "ExpertSystem",
                     "Datasets",
                     nickname);
 
