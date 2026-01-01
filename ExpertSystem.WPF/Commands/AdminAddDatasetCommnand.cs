@@ -69,9 +69,11 @@ namespace ExpertSystem.WPF.Commands
                     throw new UserNotFoundException(_adminDatasetViewModel.DatasetOwnerName);
                 }
 
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
-                string datasetsFolderDirectory = Path.Combine(projectDirectory, "Datasets", _adminDatasetViewModel.DatasetOwnerName);
+                string datasetsFolderDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "ExpertSystem",
+                    "Datasets",
+                    _adminDatasetViewModel.DatasetOwnerName);
 
                 if (!Directory.Exists(datasetsFolderDirectory))
                 {

@@ -59,9 +59,10 @@ namespace ExpertSystem.WPF.Commands
 
                         if (nicknameToEdit != null)
                         {
-                            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                            string projectDirectory = Directory.GetParent(baseDirectory).Parent.Parent.Parent.Parent.FullName;
-                            string datasetsFolderPath = Path.Combine(projectDirectory, "Datasets");
+                            string datasetsFolderPath = Path.Combine(
+                                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                                "ExpertSystem",
+                                "Datasets");
 
                             string oldFolderPath = Path.Combine(datasetsFolderPath, oldNickname);
                             string newFolderPath = Path.Combine(datasetsFolderPath, nicknameToEdit);

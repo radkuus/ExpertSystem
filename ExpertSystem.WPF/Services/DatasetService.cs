@@ -119,11 +119,15 @@ namespace ExpertSystem.EntityFramework.Services
             var dataset = await GetDatasetById(datasetId);
             if (dataset != null)
             {
-                var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                var projectDir = Directory.GetParent(baseDir).Parent.Parent.Parent.Parent.FullName;
                 var currentUserName = _authenticator.CurrentUser.Nickname;
                 var datasetName = dataset.Name;
-                var datasetPath = Path.Combine(projectDir, "Datasets", currentUserName, datasetName);
+                var datasetPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "ExpertSystem",
+                    "Datasets",
+                    currentUserName,
+                    datasetName);
+
                 if (File.Exists(datasetPath)) 
                 {
                     return await Task.Run(() =>
